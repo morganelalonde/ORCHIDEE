@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!-- =========================================================================================================== -->
+<!-- iodef.xml                                                                                                   -->
+<!--   Main configuration file for reading and writing files using XIOS                                          -->
+<!--   This file includes 2 mandatory files for ORCHIDEE:                                                        -->
+<!--      - context_orchidee.xml containing all specifications for writing of diagnostic output files            -->
+<!--      - context_input_orchidee.xml containing specifications for reading and interpolating input files.      -->
+<!--                                                                                                             -->
+<!-- $HeadURL$                           -->
+<!-- $Date$                                                     -->
+<!-- $Revision$                                                                                           -->
+<!-- =========================================================================================================== -->
+
+<simulation>
+
+  <!-- =========================================================================================================== -->
+  <!-- XIOS context                                                                                                -->
+  <!-- =========================================================================================================== -->
+  <context id="xios">
+    <variable_definition>
+	  <variable id="info_level"                type="int">1</variable>
+	  <variable id="using_server"              type="bool">false</variable>
+	  <variable id="using_oasis"               type="bool">false</variable>
+	  <variable id="oasis_codes_id"            type="string" >LMDZ,oceanx</variable>
+      </variable_definition>
+
+  </context>
+
+  <!-- =========================================================================================================== -->
+  <!-- ORCHIDEE context                                                                                            -->
+  <!-- The files context_orchidee.xml and context_input_orchidee.xml are included here.                            -->
+  <!-- These files need to exist in the run directory during run time.                                             -->
+  <!-- =========================================================================================================== -->
+  <context id="orchidee" src="./context_orchidee.xml"/>
+  <context id="orchidee" src="./context_input_orchidee.xml"/>
+
+  <!--  Add following file for the case ROUTING_METHOD=simple 
+  <context id="orchidee" src="./context_routing_orchidee.xml"/>
+  -->
+</simulation>
+
