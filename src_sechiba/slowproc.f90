@@ -1026,6 +1026,8 @@ CONTAINS
     REAL(r_std)                                           :: ks_default        !! Default  if impsoilt
     REAL(r_std)                                           :: clayfraction_default  !! Default  if impsoilt
     REAL(r_std)                                           :: sandfraction_default  !! Default  if impsoilt
+    REAL(r_std), DIMENSION(kjpindex)                      :: frac_imperv       !! Imperviousness fraction of each gridcell
+    REAL(r_std), DIMENSION(kjpindex)                      :: coeff_imperv      !! Imperviousness coefficient to modify Ks
     CHARACTER(LEN=4)                                      :: laistring         !! Temporary character string
     CHARACTER(LEN=80)                                     :: var_name          !! To store variables names for I/O
     CHARACTER(LEN=30), SAVE                               :: veget_str         !! update frequency for landuse
@@ -1363,6 +1365,11 @@ CONTAINS
        ENDIF
 
     ENDIF
+
+
+	 frac_imperv = 0
+    coeff_imperv = 1
+
 
     ! XIOS export of Ks before changing the vertical profile
     CALL xios_orchidee_send_field("ksref",ks) ! mm/d (for CMIP6, once)
