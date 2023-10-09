@@ -1367,8 +1367,8 @@ CONTAINS
     ENDIF
 
 
-	 !!frac_imperv(:) = 0.0
-    !!coeff_imperv(:) = 1.0
+	 frac_imperv(:) = 0.0_r_std
+    coeff_imperv(:) = 1.0_r_std
 
 
     ! XIOS export of Ks before changing the vertical profile
