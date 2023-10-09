@@ -1367,8 +1367,8 @@ CONTAINS
     ENDIF
 
 
-	 frac_imperv(:) = 0.0_r_std
-    coeff_imperv(:) = 1.0_r_std
+    frac_imperv(:) = zero
+    coeff_imperv(:) = un
 
 
     ! XIOS export of Ks before changing the vertical profile
@@ -3793,7 +3793,7 @@ CONTAINS
              avan(:) = avan_usda(njsc(:))
              mcr(:) = mcr_usda(njsc(:))
              mcs(:) = mcs_usda(njsc(:))
-             ks(:) = ks_usda(njsc(:)) * ks_imp(:)
+             ks(:) = ks_usda(njsc(:))
 !!$             mcfc(:) = mcf_usda(njsc(:))
 !!$             mcw(:) = mcw_usda(njsc(:))
              
