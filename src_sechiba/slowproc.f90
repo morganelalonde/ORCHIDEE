@@ -4871,6 +4871,7 @@ CONTAINS
     ! for irrigated_new case :
 
     REAL(r_std), DIMENSION(nbpt)                         :: imperviousness       !! fraction of imperviousness from map
+    REAL(r_std), DIMENSION(nbpt)                         :: aimperviousness           !! Availability of the imperviousness interpolation
     REAL(r_std)                          :: vmin, vmax       !! min/max values to use for the renormalization
     CHARACTER(LEN=80)                                    :: variablename     !! Variable to interpolate
     CHARACTER(LEN=80)                                    :: lonname, latname !! lon, lat names in input file
@@ -4940,7 +4941,7 @@ CONTAINS
     CALL interpweight_2Dcont(nbpt, 0, 0, lalo, resolution, neighbours,        &
       contfrac, filename, variablename, lonname, latname, vmin, vmax, nonegative, maskingtype,        &
       maskvals, namemaskvar, -1, fractype, 0., 0.,                                 &
-      imperviousness)
+      imperviousness, aimperviousness)
 
     IF (printlev_loc >= 5) WRITE(numout,*)'  slowproc_read after interpweight_2Dcont'
 
@@ -4949,7 +4950,7 @@ CONTAINS
     END IF
     frac_imperv(:) = imperviousness(:)
     ! Write diagnostics
-    !CALL xios_orchidee_send_field("frac_imperv",frac_imperv)
+    !CALL xios_orchidee_send_field("aimperviousness",aimperviousness)
 
     IF (printlev_loc >= 3) WRITE(numout,*) 'slowproc_imperviousness ended'
 
