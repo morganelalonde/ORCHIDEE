@@ -4905,7 +4905,7 @@ CONTAINS
     !
     !Config Key   = FRACTION_IMPERVIOUSNESS
     !Config Desc  = Name of file with frac_imperv
-    !Config If    = SELECT_SOURCE_IRRIG
+    !Config If    = DO_IMPERVIOUSNESS
     !Config Def   = imperviousness.nc
     !Config Help  = The name of the file to be opened to read an frac_imperv
     !Config         map is to be given here.
@@ -4913,7 +4913,7 @@ CONTAINS
     !
     filename = 'imperviousness.nc'
     CALL getin_p('FRACTION_IMPERVIOUSNESS',filename)
-    variablename = 'imperviousness'
+    variablename = 'Imperviousness' 
 
     IF (printlev_loc >= 1) WRITE(numout,*) "slowproc_imperviousness: Read and interpolate " &
          // TRIM(filename) // " for variable " // TRIM(variablename)
