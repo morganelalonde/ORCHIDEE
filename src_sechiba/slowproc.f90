@@ -1369,7 +1369,8 @@ CONTAINS
 
     frac_imperv(:) = zero
     coeff_imperv(:) = un
-
+    CALL slowproc_imperviousness(nbpt, lalo, neighbours,  resolution, contfrac, &
+     frac_imperv)
 
     ! XIOS export of Ks before changing the vertical profile
     CALL xios_orchidee_send_field("ksref",ks) ! mm/d (for CMIP6, once)
@@ -4948,7 +4949,7 @@ CONTAINS
     IF (printlev_loc >= 5) THEN
       WRITE(numout,*)'  slowproc_imperviousness before updating loop nbpt:', nbpt
     END IF
-    frac_imperv(:) = imperviousness(:)
+    frac_imperv(:) = imperviousness(:)/100
     ! Write diagnostics
     !CALL xios_orchidee_send_field("aimperviousness",aimperviousness)
 
