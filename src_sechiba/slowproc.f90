@@ -1369,8 +1369,7 @@ CONTAINS
 
     frac_imperv(:) = zero
     coeff_imperv(:) = un
-    CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac,         &
-         frac_imperv)
+    CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac, frac_imperv)
 
     ! XIOS export of Ks before changing the vertical profile
     CALL xios_orchidee_send_field("ksref",ks) ! mm/d (for CMIP6, once)
