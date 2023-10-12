@@ -4948,7 +4948,7 @@ CONTAINS
     IF (printlev_loc >= 5) THEN
       WRITE(numout,*)'  slowproc_imperviousness before updating loop nbpt:', nbpt
     END IF
-    frac_imperv(:) = imperviousness(:)/100
+    frac_imperv(:) = imperviousness(:)/100.
     ! Write diagnostics
     !CALL xios_orchidee_send_field("aimperviousness",aimperviousness)
 
