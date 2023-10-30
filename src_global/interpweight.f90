@@ -2132,11 +2132,6 @@ MODULE interpweight
       CALL interpweight_calc_resolution_in(lon, lat, iml, jml, mincos, R_Earth, pi, resol_in)
     END IF
 
-
-  WRITE(numout,*)'  YOU MUST END!'
-  STOP
-
-
 !   Computation of nbvmax
 !   In 'condveg_soilalb, slowproc_update' nbvmax=200
 
@@ -2185,6 +2180,9 @@ MODULE interpweight
     IF (printlev>=4) WRITE (numout,*) '  interpweight_2Dcont: read/allocate OK'
 
     outvar2D = zero
+
+   WRITE(numout,*)'  YOU MUST END!'
+   STOP
 ! Providing the interpolated grid point
 
     CALL interpweight_provide_interpolation2D(typefrac, nbpt, 0, 0, iml, jml, lml, tml,               &
