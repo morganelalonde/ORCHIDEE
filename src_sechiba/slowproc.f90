@@ -4935,13 +4935,14 @@ CONTAINS
     ! Name of the variable with the values for the mask in the input file (only if maskkingtype='var') (here not used)
     namemaskvar = ''
 
+      WRITE(numout,*)'  interpweight_2Dcont impervious ended'
+      STOP
+
     CALL interpweight_2Dcont(nbpt, 0, 0, lalo, resolution, neighbours,        &
       contfrac, filename, variablename, lonname, latname, vmin, vmax, nonegative, maskingtype,        &
       maskvals, namemaskvar, -1, fractype, 0., 0.,                                 &
       imperviousness, aimperviousness)
 
-      WRITE(numout,*)'  interpweight_2Dcont impervious ended'
-      STOP
     IF (printlev_loc >= 5) WRITE(numout,*)'  slowproc_read after interpweight_2Dcont'
 
     IF (printlev_loc >= 5) THEN
