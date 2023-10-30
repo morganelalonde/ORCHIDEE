@@ -1942,8 +1942,6 @@ MODULE interpweight
        ENDIF
     ENDIF
 
-      WRITE(numout,*)'  YOU MUST END!'
-      STOP
 ! Getting shape of input variable from input file
     inNdims = interpweight_get_varNdims_file(filename, varname)
     IF (is_root_prc) CALL flininfo(filename, iml, jml, lml, tml, fid)
@@ -2133,6 +2131,11 @@ MODULE interpweight
     IF (is_root_prc) THEN
       CALL interpweight_calc_resolution_in(lon, lat, iml, jml, mincos, R_Earth, pi, resol_in)
     END IF
+
+
+  WRITE(numout,*)'  YOU MUST END!'
+  STOP
+
 
 !   Computation of nbvmax
 !   In 'condveg_soilalb, slowproc_update' nbvmax=200
