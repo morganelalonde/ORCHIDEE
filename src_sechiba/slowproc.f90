@@ -4861,18 +4861,15 @@ CONTAINS
     !
     !  0.2 OUTPUT
     !
-    REAL(r_std), DIMENSION(nbpt), INTENT(out)          :: frac_imperv         !! Fraction of imperviousness per gridcell to modify ks in slowproc_init
+    REAL(r_std), DIMENSION(nbpt), INTENT(out)            :: frac_imperv         !! Fraction of imperviousness per gridcell to modify ks in slowproc_init
                                                                                 ! 
     !
     !  0.3 LOCAL
     CHARACTER(LEN=80) :: filename
     INTEGER(i_std) :: ib
-    !
-    ! for irrigated_new case :
-
     REAL(r_std), DIMENSION(nbpt)                         :: imperviousness       !! fraction of imperviousness from map
     REAL(r_std), DIMENSION(nbpt)                         :: aimperviousness           !! Availability of the imperviousness interpolation
-    REAL(r_std)                          :: vmin, vmax       !! min/max values to use for the renormalization
+    REAL(r_std)                                          :: vmin, vmax       !! min/max values to use for the renormalization
     CHARACTER(LEN=80)                                    :: variablename     !! Variable to interpolate
     CHARACTER(LEN=80)                                    :: lonname, latname !! lon, lat names in input file
     REAL(r_std), DIMENSION(nvm)                          :: variabletypevals !! Values for all the types of the variable
@@ -4943,6 +4940,8 @@ CONTAINS
       maskvals, namemaskvar, -1, fractype, 0., 0.,                                 &
       imperviousness, aimperviousness)
 
+      WRITE(numout,*)'  interpweight_2Dcont impervious ended'
+      STOP
     IF (printlev_loc >= 5) WRITE(numout,*)'  slowproc_read after interpweight_2Dcont'
 
     IF (printlev_loc >= 5) THEN
