@@ -1942,6 +1942,8 @@ MODULE interpweight
        ENDIF
     ENDIF
 
+      WRITE(numout,*)'  YOU MUST END!'
+      STOP
 ! Getting shape of input variable from input file
     inNdims = interpweight_get_varNdims_file(filename, varname)
     IF (is_root_prc) CALL flininfo(filename, iml, jml, lml, tml, fid)
