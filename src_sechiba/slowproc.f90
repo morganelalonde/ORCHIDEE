@@ -1396,7 +1396,7 @@ CONTAINS
     frac_imperv(:) = zero
     coeff_imperv(:) = un
     CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac, frac_imperv)
-
+    CALL xios_orchidee_send_field("impervfrac",frac_imperv)
    
 
 
@@ -5000,11 +5000,19 @@ CONTAINS
       WRITE(numout,*)'  slowproc_imperviousness before updating loop nbpt:', nbpt
     END IF
     frac_imperv(:) = imperviousness(:)/100.
-    CALL xios_orchidee_send_field("impervfrac",frac_imperv)
+    
     ! Write diagnostics
     !CALL xios_orchidee_send_field("aimperviousness",aimperviousness)
 
     IF (printlev_loc >= 3) WRITE(numout,*) 'slowproc_imperviousness ended'
+    DO ib=1,nbpt
+      WRITE(numout,*)'  morgane frac imperv1: ', frac_imperv(ib)
+      frac_imperv(ib) = MIN(frac_imperv(ib), 0.99 )
+      frac_imperv(ib) = MAX(frac_imperv(ib), 0.01 )
+      WRITE(numout,*)'  morgane frac imperv2: ', frac_imperv(ib)
+    ENDDO
+
+
 
   END SUBROUTINE slowproc_imperviousness 
 
