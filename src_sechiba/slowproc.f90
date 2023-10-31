@@ -1397,7 +1397,7 @@ CONTAINS
     coeff_imperv(:) = un
     CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac, frac_imperv)
 
-    CALL xios_orchidee_send_field("impervfrac",frac_imperv)
+   
 
 
 
@@ -5000,6 +5000,7 @@ CONTAINS
       WRITE(numout,*)'  slowproc_imperviousness before updating loop nbpt:', nbpt
     END IF
     frac_imperv(:) = imperviousness(:)/100.
+    CALL xios_orchidee_send_field("impervfrac",frac_imperv)
     ! Write diagnostics
     !CALL xios_orchidee_send_field("aimperviousness",aimperviousness)
 
