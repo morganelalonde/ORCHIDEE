@@ -2181,8 +2181,8 @@ MODULE interpweight
 
     outvar2D = zero
 
-   WRITE(numout,*)'  YOU MUST END!'
-   STOP
+
+! It is working at least until here
 ! Providing the interpolated grid point
 
     CALL interpweight_provide_interpolation2D(typefrac, nbpt, 0, 0, iml, jml, lml, tml,               &
@@ -2206,6 +2206,9 @@ MODULE interpweight
                ' Non-interpolated: ', COUNT(aoutvar == -1)
        END IF
     END IF
+
+   WRITE(numout,*)'  YOU MUST END!'
+   STOP
 
 ! Scaling to 1 the quality variable
     DO ip=1, nbpt
