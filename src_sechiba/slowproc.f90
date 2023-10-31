@@ -991,6 +991,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,nlut), INTENT(out)   :: nwdfraclut     !! Fraction of non woody vegetation in each landuse tile
     REAL(r_std), DIMENSION (kjpindex), INTENT(out)        :: reinf_slope    !! slope coef for reinfiltration 
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: ks             !! Hydraulic conductivity at saturation (mm {-1})
+    REAL(r_std), DIMENSION(kjpindex), INTENT (out)         :: frac_imperv    !! Imperviousness fraction of each gridcell
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: nvan           !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: avan           !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: mcr            !! Residual volumetric water content (m^{3} m^{-3})
@@ -1026,7 +1027,6 @@ CONTAINS
     REAL(r_std)                                           :: ks_default        !! Default  if impsoilt
     REAL(r_std)                                           :: clayfraction_default  !! Default  if impsoilt
     REAL(r_std)                                           :: sandfraction_default  !! Default  if impsoilt
-    REAL(r_std), DIMENSION(kjpindex)                      :: frac_imperv       !! Imperviousness fraction of each gridcell
     REAL(r_std), DIMENSION(kjpindex)                      :: coeff_imperv      !! Imperviousness coefficient to modify Ks
     CHARACTER(LEN=4)                                      :: laistring         !! Temporary character string
     CHARACTER(LEN=80)                                     :: var_name          !! To store variables names for I/O
