@@ -1926,6 +1926,7 @@ MODULE interpweight
 !_ ================================================================================================================================
     IF (printlev >= 3) WRITE(numout,*)"In interpweight_2Dcont filename: ",TRIM(filename),          &
       " varname:'" // TRIM(varname) // "'"
+      WRITE(numout,*)'MORGANE1'
 ! Allocating input data
     IF (is_root_prc) THEN
        IF (printlev >=5) THEN
@@ -1941,11 +1942,11 @@ MODULE interpweight
           WRITE (numout,'(" Number of global attributes in the file : ",I2)') nb_gat
        ENDIF
     ENDIF
-
+    WRITE(numout,*)'MORGANE2'
 ! Getting shape of input variable from input file
     inNdims = interpweight_get_varNdims_file(filename, varname)
     IF (is_root_prc) CALL flininfo(filename, iml, jml, lml, tml, fid)
-
+    WRITE(numout,*)'MORGANE3'
     InputDims: SELECT CASE (inNdims)
       CASE (2)
         CALL bcast(iml)
@@ -2022,17 +2023,17 @@ MODULE interpweight
 
     END SELECT InputDims
     CALL bcast(invar2D)
-
+    WRITE(numout,*)'MORGANE5'
     IF (printlev >= 5) WRITE(numout,*)'  interpweight_2Dcont getting variable ended!'
-
+    WRITE(numout,*)'MORGANE6'
 ! Getting longitudes/latitudes from input file
     inNLldims = interpweight_get_varNdims_file(filename, inlonname)
-
+    WRITE(numout,*)'MORGANE7'
     IF (inNLldims == 1) THEN
       ! Allocate memory for latitudes
       ALLOCATE(lon_in(iml), STAT=ALLOC_ERR)
       IF (ALLOC_ERR /= 0) CALL ipslerr_p(3,'interpweight_2Dcont','Problem in allocation of variable lon_in','','')
-
+      WRITE(numout,*)'MORGANE8'
       ALLOCATE(lat_in(jml), STAT=ALLOC_ERR)
       IF (ALLOC_ERR /= 0) CALL ipslerr_p(3,'interpweight_2Dcont','Problem in allocation of variable lat_in','','')
 
@@ -2042,7 +2043,7 @@ MODULE interpweight
       ENDIF
       CALL bcast(lon_in)
       CALL bcast(lat_in)
-
+      WRITE(numout,*)'MORGANE9'
       ALLOCATE(lon(iml,jml), STAT=ALLOC_ERR)
       IF (ALLOC_ERR /= 0) CALL ipslerr_p(3,'interpweight_2Dcont','Problem in allocation of variable lon','','')
       ALLOCATE(lat(iml,jml), STAT=ALLOC_ERR)
@@ -2061,7 +2062,7 @@ MODULE interpweight
       ! Allocate memory for latitudes
       ALLOCATE(lat(iml,jml), STAT=ALLOC_ERR)
       IF (ALLOC_ERR /= 0) CALL ipslerr_p(3,'interpweight_2Dcont','Pb in allocation for lat','','')
-
+      WRITE(numout,*)'MORGANE10'
       IF (is_root_prc) THEN
         CALL flinget(fid, TRIM(inlonname), iml, jml, 0, 0, 1, 1, lon)
         CALL flinget(fid, TRIM(inlatname), iml, jml, 0, 0, 1, 1, lat)
@@ -2069,12 +2070,12 @@ MODULE interpweight
     END IF
     CALL bcast(lon)
     CALL bcast(lat)
-
+    WRITE(numout,*)'MORGANE11'
     IF (is_root_prc) THEN
       ALLOCATE(resol_in(iml,jml,2), STAT=ALLOC_ERR)
       IF (ALLOC_ERR /= 0) CALL ipslerr(3,'interpweight_2Dcont','Problem in allocation of variable resol_in','','')
     END IF
-
+    WRITE(numout,*)'MORGANE12'
     IF (noneg) THEN
       IF (is_root_prc) THEN
         SELECT CASE (inNdims)
@@ -2088,7 +2089,7 @@ MODULE interpweight
       END IF
     END IF
     IF (printlev >= 5) WRITE(numout,*)'  interpweight_2Dcont modifying input ended!'
-
+    WRITE(numout,*)'MORGANE13'
     !
     ! Consider all points a priori
     !
@@ -2206,9 +2207,6 @@ MODULE interpweight
                ' Non-interpolated: ', COUNT(aoutvar == -1)
        END IF
     END IF
-
-   WRITE(numout,*)'  YOU MUST END!'
-   STOP
 
 ! Scaling to 1 the quality variable
     DO ip=1, nbpt
