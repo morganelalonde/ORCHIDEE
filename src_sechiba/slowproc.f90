@@ -4924,8 +4924,8 @@ CONTAINS
     ! Type of calculation of cell fractions
     fractype = 'default'
     ! Name of the longitude and latitude in the input file
-    lonname = 'lon'
-    latname = 'lat'
+    lonname = 'longitude'
+    latname = 'latitude'
     ! Should negative values be set to zero from input file?
     nonegative = .TRUE.
     ! Type of mask to apply to the input data (see header for more details)
