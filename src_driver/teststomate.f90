@@ -969,7 +969,7 @@ PROGRAM teststomate
                             soiltile,    reinf_slope, deadleaf_cover, assim_param_x,     &
                             lai_x,       frac_age_x,  height_x,       veget_x,           &
                             frac_nobio,  njsc,        veget_max_x,    tot_bare_soil,     &
-                            totfrac_nobio, qsintmax_x, co2_flux,      fco2_lu, temp_growth)
+                            totfrac_nobio, qsintmax_x, co2_flux,      fco2_lu, temp_growth, frac_imperv)
 
 !  Old interface to slowproc_main, before revision 2581
 !  CALL slowproc_main &
@@ -1132,7 +1132,7 @@ PROGRAM teststomate
        CALL slowproc_finalize (itau_fin,   kjpindex,    rest_id_sec, indices,    &
                                njsc,       lai_x,       height_x,    veget_x,    &
                                frac_nobio, veget_max_x, reinf_slope,             &
-                               assim_param_x, frac_age_x )
+                               assim_param_x, frac_age_x, frac_imperv )
 !!$  CALL slowproc_main &
 !!$ &  (itau_fin, kjpij, kjpindex, dt_force, date0, &
 !!$ &   ldrestart_read, ldrestart_write, &

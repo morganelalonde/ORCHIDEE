@@ -472,7 +472,7 @@ CONTAINS
                               frac_nobio,    njsc,         veget_max,      fraclut,           &
                               nwdfraclut,    tot_bare_soil,totfrac_nobio,  qsintmax,          &
                               temp_growth,   irrigated_next, irrig_frac,   fraction_aeirrig_sw, &
-                              reinf_slope_soil)
+                              reinf_slope_soil, frac_imperv)
     
     !! 1.4 Initialize diffusion coefficients
     CALL diffuco_initialize (kjit,    kjpindex, index,                  &
@@ -1416,7 +1416,7 @@ CONTAINS
                             frac_nobio, veget_max, reinf_slope,          &
                             ks,         nvan,      avan,     mcr,        &
                             mcs,        mcfc,      mcw,                  &
-                            assim_param, frac_age, fraction_aeirrig_sw)
+                            assim_param, frac_age, fraction_aeirrig_sw, frac_imperv)
     
     IF (printlev_loc>=3) WRITE (numout,*) 'sechiba_finalize done'
     
