@@ -850,7 +850,8 @@ CONTAINS
     REAL(r_std),DIMENSION (kjpindex), INTENT(in)         :: mcw            !! Volumetric water content at wilting point (m^{3} m^{-3})
     REAL(r_std),DIMENSION (kjpindex), INTENT(in)         :: fraction_aeirrig_sw    !! Fraction of area equipped for irrigation from surface water, of irrig_frac
                                                                                    !! 1.0 here corresponds to fraction of irrigated area, not grid cell
-     REAL(r_std),DIMENSION (kjpindex,nvm,npco2),INTENT (in):: assim_param  !! min+max+opt temperatures & vmax for photosynthesis (K, \mumol m^{-2} s^{-1})
+    REAL(r_std), DIMENSION(kjpindex), INTENT (in)        :: frac_imperv   !! Imperviousness fraction of each gridcell
+    REAL(r_std),DIMENSION (kjpindex,nvm,npco2),INTENT (in):: assim_param  !! min+max+opt temperatures & vmax for photosynthesis (K, \mumol m^{-2} s^{-1})
     REAL(r_std),DIMENSION (kjpindex,nvm,nleafages), INTENT(in):: frac_age  !! Age efficacity from STOMATE for isoprene
 !! 0.4 Local variables
     REAL(r_std)                                          :: tmp_day(1)     !! temporary variable for I/O
@@ -883,6 +884,10 @@ CONTAINS
           IF ( select_source_irrig ) THEN
                 CALL restput_p (rest_id, 'fraction_aeirrig_sw', nbp_glo, 1, 1, kjit, fraction_aeirrig_sw, 'scatter',  nbp_glo, index_g)
           ENDIF
+    ENDIF
+
+    IF ( do_imperviousness ) THEN
+          CALL restput_p (rest_id, 'frac_imperv', nbp_glo, 1, 1, kjit, frac_imperv, 'scatter',  nbp_glo, index_g)
     ENDIF
 
     DO jf = 1, nleafages
@@ -999,6 +1004,7 @@ CONTAINS
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: mcw            !! Volumetric water content at wilting point (m^{3} m^{-3})
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: fraction_aeirrig_sw    !! Fraction of area equipped for irrigation from surface water, of irrig_frac
                                                                                      !! 1.0 here corresponds to fraction of irrig. area, not grid cell
+    REAL(r_std), DIMENSION(kjpindex), INTENT (out)        :: frac_imperv       !! Imperviousness fraction of each gridcell
 
     INTEGER(i_std), DIMENSION(kjpindex), INTENT(out)      :: njsc           !! Index of the dominant soil textural class in the grid cell (1-nscm, unitless)
     
@@ -1026,7 +1032,6 @@ CONTAINS
     REAL(r_std)                                           :: ks_default        !! Default  if impsoilt
     REAL(r_std)                                           :: clayfraction_default  !! Default  if impsoilt
     REAL(r_std)                                           :: sandfraction_default  !! Default  if impsoilt
-    REAL(r_std), DIMENSION(kjpindex)                      :: frac_imperv       !! Imperviousness fraction of each gridcell
     REAL(r_std), DIMENSION(kjpindex)                      :: coeff_imperv      !! Imperviousness coefficient to modify Ks
     CHARACTER(LEN=4)                                      :: laistring         !! Temporary character string
     CHARACTER(LEN=80)                                     :: var_name          !! To store variables names for I/O
@@ -1389,16 +1394,17 @@ CONTAINS
 
 
 
-
-
-
-
-    frac_imperv(:) = zero
-    coeff_imperv(:) = un
-    CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac, frac_imperv)
-    CALL xios_orchidee_send_field("impervfrac",frac_imperv)
-   
-
+     
+    IF ( do_imperviousness ) THEN
+        var_name = frac_imperv
+        CALL restget_p (rest_id, var_name, nbp_glo, 1, 1, kjit, .TRUE., frac_imperv, "gather", nbp_glo, index_g)
+        frac_imperv(:) = zero
+        coeff_imperv(:) = un
+        IF ( ALL( irrigated_new(:) .EQ. val_exp ) ) THEN
+           CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac, frac_imperv)
+           CALL xios_orchidee_send_field("frac_imperv",frac_imperv)
+        ENDIF
+     ENDIF
 
 
 
