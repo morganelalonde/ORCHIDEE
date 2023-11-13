@@ -826,7 +826,7 @@ CONTAINS
                                 njsc,       lai,       height,   veget,      &
                                 frac_nobio, veget_max, reinf_slope,          &
                                 ks,  nvan, avan, mcr, mcs, mcfc, mcw,        &
-                                assim_param, frac_age, fraction_aeirrig_sw)
+                                assim_param, frac_age, fraction_aeirrig_sw, frac_imperv)
 
 !! 0.1 Input variables
     INTEGER(i_std), INTENT(in)                           :: kjit           !! Time step number
