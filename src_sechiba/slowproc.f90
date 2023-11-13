@@ -962,7 +962,7 @@ CONTAINS
        rest_id, lai, frac_age, veget, frac_nobio, totfrac_nobio, soiltile, fraclut, nwdfraclut, reinf_slope, &
        ks,  nvan, avan, mcr, mcs, mcfc, mcw, &
        veget_max, tot_bare_soil, njsc, &
-       height, lcanop, veget_update, veget_year, fraction_aeirrig_sw)
+       height, lcanop, veget_update, veget_year, fraction_aeirrig_sw, frac_imperv)
     
     !! INTERFACE DESCRIPTION
 
