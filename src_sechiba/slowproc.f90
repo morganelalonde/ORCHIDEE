@@ -292,7 +292,7 @@ CONTAINS
                                   frac_nobio,    njsc,         veget_max,      fraclut,           &
                                   nwdfraclut,    tot_bare_soil,totfrac_nobio,  qsintmax,          &
                                   temp_growth,   irrigated_next, irrig_frac_next, fraction_aeirrig_sw, &
-                                  reinf_slope_soil)
+                                  reinf_slope_soil, frac_imperv)
 
 !! 0.1 Input variables
     INTEGER(i_std), INTENT(in)                          :: kjit                !! Time step number
