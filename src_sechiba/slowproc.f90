@@ -886,9 +886,9 @@ CONTAINS
           ENDIF
     ENDIF
 
-    IF ( do_imperviousness ) THEN
+    !!IF ( do_imperviousness ) THEN
           CALL restput_p (rest_id, 'frac_imperv', nbp_glo, 1, 1, kjit, frac_imperv, 'scatter',  nbp_glo, index_g)
-    ENDIF
+    !!ENDIF
 
     DO jf = 1, nleafages
        ! variable name is somewhat complicated as ioipsl does not allow 3d variables for the moment...
@@ -1395,16 +1395,16 @@ CONTAINS
 
 
      
-    IF ( do_imperviousness ) THEN
+    !!IF ( do_imperviousness ) THEN
         var_name = frac_imperv
         CALL restget_p (rest_id, var_name, nbp_glo, 1, 1, kjit, .TRUE., frac_imperv, "gather", nbp_glo, index_g)
         frac_imperv(:) = zero
         coeff_imperv(:) = un
-        IF ( ALL( irrigated_new(:) .EQ. val_exp ) ) THEN
+        !!IF ( ALL( irrigated_new(:) .EQ. val_exp ) ) THEN
            CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac, frac_imperv)
            CALL xios_orchidee_send_field("frac_imperv",frac_imperv)
-        ENDIF
-     ENDIF
+        !!ENDIF
+     !!ENDIF
 
 
 
