@@ -342,7 +342,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex), INTENT (out)        :: irrig_frac_next!! Dynamic irrig. fraction, calculated in slowproc and passed to routing
     REAL(r_std),DIMENSION (kjpindex), INTENT(out)          :: fraction_aeirrig_sw  !! Fraction of area equipped for irrigation from surface water, of irrig_frac
                                                                                    !! 1.0 here corresponds to fraction of irrigated area, not grid cell
-
+    REAL(r_std), DIMENSION(kjpindex), INTENT (out)         :: frac_imperv       !! Imperviousness fraction of each gridcell
 !! 0.3 Local variables
     INTEGER(i_std)                                     :: ji, jsl
     REAL(r_std),DIMENSION (kjpindex,nslm)              :: land_frac         !! To ouput the clay/sand/silt fractions with a vertical dim
@@ -355,7 +355,7 @@ CONTAINS
          rest_id, lai, frac_age, veget, frac_nobio, totfrac_nobio, soiltile, fraclut, nwdfraclut, reinf_slope, &
          ks,  nvan, avan, mcr, mcs, mcfc, mcw, &
          veget_max, tot_bare_soil, njsc, &
-         height, lcanop, veget_update, veget_year, fraction_aeirrig_sw)
+         height, lcanop, veget_update, veget_year, fraction_aeirrig_sw, frac_imperv)
     
 
     !! 2. Define Time step in days for stomate
