@@ -1403,7 +1403,7 @@ CONTAINS
         frac_imperv(:) = zero
         coeff_imperv(:) = un
         !IF ( ALL( irrigated_new(:) .EQ. val_exp ) ) THEN
-           CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac, frac_imperv)
+           CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac)
            CALL xios_orchidee_send_field("frac_imperv",frac_imperv)
         !ENDIF
      !ENDIF
@@ -4905,8 +4905,7 @@ CONTAINS
   !_ ================================================================================================================================
 
 
-  SUBROUTINE slowproc_imperviousness(nbpt, lalo, neighbours,  resolution, contfrac,         &
-     frac_imperv)
+  SUBROUTINE slowproc_imperviousness(nbpt, lalo, neighbours,  resolution, contfrac)
 
     USE interpweight
 
