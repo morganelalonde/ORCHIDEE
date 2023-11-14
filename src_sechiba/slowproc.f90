@@ -85,7 +85,7 @@ MODULE slowproc
 !$OMP THREADPRIVATE(lcanop)
   INTEGER(i_std) , SAVE                              :: veget_year          !! year for vegetation update
 !$OMP THREADPRIVATE(veget_year)
-  REAL(r_std), ALLOCATABLE, DIMENSION(:)             :: frac_imperv       !! Imperviousness fraction of each gridcell
+  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: frac_imperv       !! Imperviousness fraction of each gridcell
 
 CONTAINS
 
