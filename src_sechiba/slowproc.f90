@@ -293,7 +293,7 @@ CONTAINS
                                   frac_nobio,    njsc,         veget_max,      fraclut,           &
                                   nwdfraclut,    tot_bare_soil,totfrac_nobio,  qsintmax,          &
                                   temp_growth,   irrigated_next, irrig_frac_next, fraction_aeirrig_sw, &
-                                  reinf_slope_soil, frac_imperv)
+                                  reinf_slope_soil)
 
 !! 0.1 Input variables
     INTEGER(i_std), INTENT(in)                          :: kjit                !! Time step number
@@ -355,7 +355,7 @@ CONTAINS
          rest_id, lai, frac_age, veget, frac_nobio, totfrac_nobio, soiltile, fraclut, nwdfraclut, reinf_slope, &
          ks,  nvan, avan, mcr, mcs, mcfc, mcw, &
          veget_max, tot_bare_soil, njsc, &
-         height, lcanop, veget_update, veget_year, fraction_aeirrig_sw, frac_imperv)
+         height, lcanop, veget_update, veget_year, fraction_aeirrig_sw)
     
 
     !! 2. Define Time step in days for stomate
@@ -826,7 +826,7 @@ CONTAINS
                                 njsc,       lai,       height,   veget,      &
                                 frac_nobio, veget_max, reinf_slope,          &
                                 ks,  nvan, avan, mcr, mcs, mcfc, mcw,        &
-                                assim_param, frac_age, fraction_aeirrig_sw, frac_imperv)
+                                assim_param, frac_age, fraction_aeirrig_sw)
 
 !! 0.1 Input variables
     INTEGER(i_std), INTENT(in)                           :: kjit           !! Time step number
@@ -961,7 +961,7 @@ CONTAINS
        rest_id, lai, frac_age, veget, frac_nobio, totfrac_nobio, soiltile, fraclut, nwdfraclut, reinf_slope, &
        ks,  nvan, avan, mcr, mcs, mcfc, mcw, &
        veget_max, tot_bare_soil, njsc, &
-       height, lcanop, veget_update, veget_year, fraction_aeirrig_sw, frac_imperv)
+       height, lcanop, veget_update, veget_year, fraction_aeirrig_sw)
     
     !! INTERFACE DESCRIPTION
 
