@@ -1004,7 +1004,6 @@ CONTAINS
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: mcw            !! Volumetric water content at wilting point (m^{3} m^{-3})
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: fraction_aeirrig_sw    !! Fraction of area equipped for irrigation from surface water, of irrig_frac
                                                                                      !! 1.0 here corresponds to fraction of irrig. area, not grid cell
-    REAL(r_std), DIMENSION(kjpindex), INTENT (out)        :: frac_imperv       !! Imperviousness fraction of each gridcell
 
     INTEGER(i_std), DIMENSION(kjpindex), INTENT(out)      :: njsc           !! Index of the dominant soil textural class in the grid cell (1-nscm, unitless)
     
@@ -1032,6 +1031,7 @@ CONTAINS
     REAL(r_std)                                           :: ks_default        !! Default  if impsoilt
     REAL(r_std)                                           :: clayfraction_default  !! Default  if impsoilt
     REAL(r_std)                                           :: sandfraction_default  !! Default  if impsoilt
+    REAL(r_std), DIMENSION(kjpindex)                      :: frac_imperv       !! Imperviousness fraction of each gridcell
     REAL(r_std), DIMENSION(kjpindex)                      :: coeff_imperv      !! Imperviousness coefficient to modify Ks
     CHARACTER(LEN=4)                                      :: laistring         !! Temporary character string
     CHARACTER(LEN=80)                                     :: var_name          !! To store variables names for I/O
