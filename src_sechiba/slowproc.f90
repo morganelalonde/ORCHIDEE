@@ -1088,6 +1088,10 @@ CONTAINS
        IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable laimap(1,1,1)','','')
     ENDIF
 
+    ! Allocation of impervious fraction
+    ALLOCATE(frac_imperv(kjpindex), STAT=ier)
+    IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable frac_imperv','','')
+
     !! 2. Read soil related variables
     ! Following the trunk, we remove the dependance of impsoilt to impveg; impsoilt overrules the restart
 
@@ -1914,6 +1918,7 @@ CONTAINS
     IF (ALLOCATED (irrigated_new)) DEALLOCATE (irrigated_new)
     IF (ALLOCATED (woodharvest)) DEALLOCATE (woodharvest)
     IF (ALLOCATED (frac_nobio_new)) DEALLOCATE (frac_nobio_new)
+    IF (ALLOCATED (frac_imperv)) DEALLOCATE (frac_imperv)
 
  ! 2. Clear all the variables in stomate 
 
