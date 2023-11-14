@@ -85,7 +85,7 @@ MODULE slowproc
 !$OMP THREADPRIVATE(lcanop)
   INTEGER(i_std) , SAVE                              :: veget_year          !! year for vegetation update
 !$OMP THREADPRIVATE(veget_year)
-  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: frac_imperv       !! Imperviousness fraction of each gridcell
+  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: frac_imperv         !! Imperviousness fraction of each gridcell
 
 CONTAINS
 
@@ -343,7 +343,6 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex), INTENT (out)        :: irrig_frac_next!! Dynamic irrig. fraction, calculated in slowproc and passed to routing
     REAL(r_std),DIMENSION (kjpindex), INTENT(out)          :: fraction_aeirrig_sw  !! Fraction of area equipped for irrigation from surface water, of irrig_frac
                                                                                    !! 1.0 here corresponds to fraction of irrigated area, not grid cell
-    REAL(r_std), DIMENSION(kjpindex), INTENT (out)         :: frac_imperv       !! Imperviousness fraction of each gridcell
 !! 0.3 Local variables
     INTEGER(i_std)                                     :: ji, jsl
     REAL(r_std),DIMENSION (kjpindex,nslm)              :: land_frac         !! To ouput the clay/sand/silt fractions with a vertical dim
@@ -851,7 +850,6 @@ CONTAINS
     REAL(r_std),DIMENSION (kjpindex), INTENT(in)         :: mcw            !! Volumetric water content at wilting point (m^{3} m^{-3})
     REAL(r_std),DIMENSION (kjpindex), INTENT(in)         :: fraction_aeirrig_sw    !! Fraction of area equipped for irrigation from surface water, of irrig_frac
                                                                                    !! 1.0 here corresponds to fraction of irrigated area, not grid cell
-    REAL(r_std), DIMENSION(kjpindex), INTENT (in)        :: frac_imperv   !! Imperviousness fraction of each gridcell
     REAL(r_std),DIMENSION (kjpindex,nvm,npco2),INTENT (in):: assim_param  !! min+max+opt temperatures & vmax for photosynthesis (K, \mumol m^{-2} s^{-1})
     REAL(r_std),DIMENSION (kjpindex,nvm,nleafages), INTENT(in):: frac_age  !! Age efficacity from STOMATE for isoprene
 !! 0.4 Local variables
@@ -1032,7 +1030,6 @@ CONTAINS
     REAL(r_std)                                           :: ks_default        !! Default  if impsoilt
     REAL(r_std)                                           :: clayfraction_default  !! Default  if impsoilt
     REAL(r_std)                                           :: sandfraction_default  !! Default  if impsoilt
-    REAL(r_std), DIMENSION(kjpindex)                      :: frac_imperv       !! Imperviousness fraction of each gridcell
     REAL(r_std), DIMENSION(kjpindex)                      :: coeff_imperv      !! Imperviousness coefficient to modify Ks
     CHARACTER(LEN=4)                                      :: laistring         !! Temporary character string
     CHARACTER(LEN=80)                                     :: var_name          !! To store variables names for I/O
@@ -4927,7 +4924,6 @@ CONTAINS
     !
     !  0.2 OUTPUT
     !
-    REAL(r_std), DIMENSION(nbpt), INTENT(out)            :: frac_imperv         !! Fraction of imperviousness per gridcell to modify ks in slowproc_init
                                                                                 ! 
     !
     !  0.3 LOCAL
