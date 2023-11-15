@@ -1410,11 +1410,11 @@ CONTAINS
            CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac)
            CALL xios_orchidee_send_field("frac_imperv",frac_imperv)
         !ENDIF
-        coeff_imperv(:) = -0.999999 * frac_imperv(:) + 1.0
+        coeff_imperv(:) = -0.999999 * frac_imperv(:) + un
         CALL xios_orchidee_send_field("coeff_imperv",coeff_imperv)
+        ks(:) = ks(:)*coeff_imperv(:)
      !ENDIF
-
-
+        
 
 
 
@@ -3862,7 +3862,7 @@ CONTAINS
              avan(:) = avan_usda(njsc(:))
              mcr(:) = mcr_usda(njsc(:))
              mcs(:) = mcs_usda(njsc(:))
-             ks(:) = ks_usda(njsc(:))*coeff_imperv(:)
+             ks(:) = ks_usda(njsc(:))
 !!$             mcfc(:) = mcf_usda(njsc(:))
 !!$             mcw(:) = mcw_usda(njsc(:))
              
