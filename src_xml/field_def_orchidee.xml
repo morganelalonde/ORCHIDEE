@@ -348,6 +348,7 @@
     <field id="ksat" name="ksat" long_name="Saturated Hydraulic conductivity (at each hydrologic node)" unit="10^(-6) m/s" grid_ref="grid_nslm" operation="once" freq_offset="0ts"> this*1000/86400 </field> <!-- ym check this value. jg why ?  -->
     <field id="ksref" name="ksref" long_name="Reference saturated hydraulic conductivity (before imposing a vertical profile)" unit="mm/d" operation="once" freq_offset="0ts" /> 
     <field id="frac_imperv" name="frac_imperv" long_name="the fraction of imperviousness (at each gridcell)" unit="fraction" operation="once" freq_offset="0ts" /> 
+    <field id="coeff_imperv" name="coeff_imperv" long_name="impervious coeff to modify ks (at each gridcell)" unit="-" operation="once" freq_offset="0ts" /> 
     <field id="alphavg" name="alphavg" long_name="Van Genuchten alpha parameter (at each hydrologic node)" unit="m(-1)" grid_ref="grid_nslm" operation="once" freq_offset="0ts"/> 
     <field id="nvg" name="nvg" long_name="Van Genuchten n parameter (at each hydrologic node)" unit="-" grid_ref="grid_nslm" operation="once" freq_offset="0ts"/>
 

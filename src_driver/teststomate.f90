@@ -1132,7 +1132,7 @@ PROGRAM teststomate
        CALL slowproc_finalize (itau_fin,   kjpindex,    rest_id_sec, indices,    &
                                njsc,       lai_x,       height_x,    veget_x,    &
                                frac_nobio, veget_max_x, reinf_slope,             &
-                               assim_param_x, frac_age_x, frac_imperv )
+                               assim_param_x, frac_age_x)
 !!$  CALL slowproc_main &
 !!$ &  (itau_fin, kjpij, kjpindex, dt_force, date0, &
 !!$ &   ldrestart_read, ldrestart_write, &

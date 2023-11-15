@@ -86,6 +86,9 @@ MODULE slowproc
   INTEGER(i_std) , SAVE                              :: veget_year          !! year for vegetation update
 !$OMP THREADPRIVATE(veget_year)
   REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: frac_imperv         !! Imperviousness fraction of each gridcell
+!$OMP THREADPRIVATE(imperviousness)
+  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: coeff_imperv      !! Imperviousness coefficient to modify Ks
+!$OMP THREADPRIVATE(imperviousness)
 
 CONTAINS
 
@@ -1030,7 +1033,6 @@ CONTAINS
     REAL(r_std)                                           :: ks_default        !! Default  if impsoilt
     REAL(r_std)                                           :: clayfraction_default  !! Default  if impsoilt
     REAL(r_std)                                           :: sandfraction_default  !! Default  if impsoilt
-    REAL(r_std), DIMENSION(kjpindex)                      :: coeff_imperv      !! Imperviousness coefficient to modify Ks
     CHARACTER(LEN=4)                                      :: laistring         !! Temporary character string
     CHARACTER(LEN=80)                                     :: var_name          !! To store variables names for I/O
     CHARACTER(LEN=30), SAVE                               :: veget_str         !! update frequency for landuse
@@ -1089,7 +1091,9 @@ CONTAINS
     ! Allocation of impervious fraction
     ALLOCATE(frac_imperv(kjpindex), STAT=ier)
     IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable frac_imperv','','')
-
+    ! Allocation of the coefficient of imperviousness to modify ks(texture )
+    ALLOCATE(coeff_imperv(kjpindex), STAT=ier)
+    IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable coeff_imperv','','')
     !! 2. Read soil related variables
     ! Following the trunk, we remove the dependance of impsoilt to impveg; impsoilt overrules the restart
 
@@ -1402,10 +1406,12 @@ CONTAINS
         CALL restget_p (rest_id, var_name, nbp_glo, 1, 1, kjit, .TRUE., frac_imperv, "gather", nbp_glo, index_g)
         frac_imperv(:) = zero
         coeff_imperv(:) = un
-        !IF ( ALL( irrigated_new(:) .EQ. val_exp ) ) THEN
+        !IF ( ALL( frac_imperv(:) .EQ. val_exp ) ) THEN
            CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac)
            CALL xios_orchidee_send_field("frac_imperv",frac_imperv)
         !ENDIF
+        coeff_imperv(:) = -0.999999 * frac_imperv(:) + 1.0
+        CALL xios_orchidee_send_field("coeff_imperv",coeff_imperv)
      !ENDIF
 
 
@@ -1917,7 +1923,7 @@ CONTAINS
     IF (ALLOCATED (woodharvest)) DEALLOCATE (woodharvest)
     IF (ALLOCATED (frac_nobio_new)) DEALLOCATE (frac_nobio_new)
     IF (ALLOCATED (frac_imperv)) DEALLOCATE (frac_imperv)
-
+    IF (ALLOCATED (coeff_imperv)) DEALLOCATE (coeff_imperv)
  ! 2. Clear all the variables in stomate 
 
     CALL stomate_clear 
@@ -3856,7 +3862,7 @@ CONTAINS
              avan(:) = avan_usda(njsc(:))
              mcr(:) = mcr_usda(njsc(:))
              mcs(:) = mcs_usda(njsc(:))
-             ks(:) = ks_usda(njsc(:))
+             ks(:) = ks_usda(njsc(:))*coeff_imperv(:)
 !!$             mcfc(:) = mcf_usda(njsc(:))
 !!$             mcw(:) = mcw_usda(njsc(:))
              
@@ -5013,10 +5019,8 @@ CONTAINS
 
     IF (printlev_loc >= 3) WRITE(numout,*) 'slowproc_imperviousness ended'
     DO ib=1,nbpt
-      WRITE(numout,*)'  morgane frac imperv1: ', frac_imperv(ib)
       frac_imperv(ib) = MIN(frac_imperv(ib), 0.99 )
       frac_imperv(ib) = MAX(frac_imperv(ib), 0.01 )
-      WRITE(numout,*)'  morgane frac imperv2: ', frac_imperv(ib)
     ENDDO
 
 
