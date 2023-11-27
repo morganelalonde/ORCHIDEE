@@ -1401,7 +1401,7 @@ CONTAINS
 
 
      
-    !IF ( do_imperviousness ) THEN
+    IF ( do_imperviousness ) THEN
         var_name = 'frac_imperv'
         CALL restget_p (rest_id, var_name, nbp_glo, 1, 1, kjit, .TRUE., frac_imperv, "gather", nbp_glo, index_g)
         frac_imperv(:) = zero
@@ -1413,7 +1413,7 @@ CONTAINS
         coeff_imperv(:) = -0.999999 * frac_imperv(:) + un
         CALL xios_orchidee_send_field("coeff_imperv",coeff_imperv)
         ks(:) = ks(:)*coeff_imperv(:)
-     !ENDIF
+     ENDIF
         
 
 
