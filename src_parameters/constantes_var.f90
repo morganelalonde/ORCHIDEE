@@ -61,6 +61,8 @@ MODULE constantes_var
 !$OMP THREADPRIVATE(do_floodplains)
   LOGICAL :: do_irrigation      !! activate computation of irrigation flux
 !$OMP THREADPRIVATE(do_irrigation)
+  LOGICAL :: do_imperviousness      !! activate representation of imperviousness
+!$OMP THREADPRIVATE(do_imperviousness)
   LOGICAL :: ok_sechiba         !! activate physic of the model
 !$OMP THREADPRIVATE(ok_sechiba)
   LOGICAL :: ok_stomate         !! activate carbon cycle

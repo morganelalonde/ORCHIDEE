@@ -116,6 +116,16 @@ CONTAINS
     !
     do_irrigation = .FALSE.
     IF ( river_routing ) CALL getin_p('DO_IRRIGATION', do_irrigation)
+
+        !Config Key   = DO_IMPERVIOUSNESS
+    !Config Desc  = Should we represent the imperviousness
+    !Config If    =  
+    !Config Def   = n
+    !Config Help  = better representation of urban processes
+    !Config Units = [FLAG]
+    !
+    do_imperviousness = .FALSE.
+    CALL getin_p('DO_IRRIGATION', do_irrigation)
     !
     !Config Key   = DO_FLOODPLAINS
     !Config Desc  = Should we include floodplains 

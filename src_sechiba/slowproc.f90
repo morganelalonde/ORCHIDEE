@@ -888,9 +888,9 @@ CONTAINS
           ENDIF
     ENDIF
 
-    !IF ( do_imperviousness ) THEN
+    IF ( do_imperviousness ) THEN
           CALL restput_p (rest_id, 'frac_imperv', nbp_glo, 1, 1, kjit, frac_imperv, 'scatter',  nbp_glo, index_g)
-    !ENDIF
+    ENDIF
 
     DO jf = 1, nleafages
        ! variable name is somewhat complicated as ioipsl does not allow 3d variables for the moment...
