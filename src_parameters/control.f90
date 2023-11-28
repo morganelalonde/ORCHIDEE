@@ -117,7 +117,7 @@ CONTAINS
     do_irrigation = .FALSE.
     IF ( river_routing ) CALL getin_p('DO_IRRIGATION', do_irrigation)
 
-        !Config Key   = DO_IMPERVIOUSNESS
+    !Config Key   = DO_IMPERVIOUSNESS
     !Config Desc  = Should we represent the imperviousness
     !Config If    =  
     !Config Def   = n
@@ -125,8 +125,8 @@ CONTAINS
     !Config Units = [FLAG]
     !
     do_imperviousness = .FALSE.
-    CALL getin_p('DO_IRRIGATION', do_irrigation)
-    !
+    CALL getin_p('DO_IMPERVIOUSNESS', do_imperviousness)
+
     !Config Key   = DO_FLOODPLAINS
     !Config Desc  = Should we include floodplains 
     !Config If    = RIVER_ROUTING 
