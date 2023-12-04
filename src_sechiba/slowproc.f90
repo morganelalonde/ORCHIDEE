@@ -1033,7 +1033,7 @@ CONTAINS
     REAL(r_std)                                           :: ks_default        !! Default  if impsoilt
     REAL(r_std)                                           :: clayfraction_default  !! Default  if impsoilt
     REAL(r_std)                                           :: sandfraction_default  !! Default  if impsoilt
-    REAL(r_std), DIMENSION(nbpt)                          :: height_buidings       !! fraction of imperviousness from map
+    REAL(r_std), DIMENSION(kjpindex)                      :: height_buidings       !! buildings height per grid cell
     CHARACTER(LEN=4)                                      :: laistring         !! Temporary character string
     CHARACTER(LEN=80)                                     :: var_name          !! To store variables names for I/O
     CHARACTER(LEN=30), SAVE                               :: veget_str         !! update frequency for landuse
@@ -5072,8 +5072,8 @@ CONTAINS
     !  0.3 LOCAL
     CHARACTER(LEN=80) :: filename
     INTEGER(i_std) :: ib
-    REAL(r_std), DIMENSION(nbpt), INTENT(out)            :: height_buidings       !! fraction of imperviousness from map
-    REAL(r_std), DIMENSION(nbpt)                         :: aheight_buidings           !! Availability of the imperviousness interpolation
+    REAL(r_std), DIMENSION(nbpt), INTENT(out)            :: height_buidings       !! buildings height per grid cell
+    REAL(r_std), DIMENSION(nbpt)                         :: aheight_buidings      !! Availability of the buildings height interpolation
     REAL(r_std)                                          :: vmin, vmax       !! min/max values to use for the renormalization
     CHARACTER(LEN=80)                                    :: variablename     !! Variable to interpolate
     CHARACTER(LEN=80)                                    :: lonname, latname !! lon, lat names in input file
