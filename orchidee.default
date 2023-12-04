@@ -129,8 +129,11 @@ RIVER_ROUTING =  y
 # DO_IRRIGATION ([FLAG]) :  Should we compute an irrigation flux  	{RIVER_ROUTING }
 DO_IRRIGATION =  n 
 
-# DO_IMPERVIOUSNESS ([FLAG]) :  Activate imperviousness? 	{OK_SECHIBA}
+# DO_IMPERVIOUSNESS ([FLAG]) :  Activate imperviousness 	{OK_SECHIBA}
 DO_IMPERVIOUSNESS = n
+
+# DO_HEIGHT_BUILDING ([FLAG]) :  Activate gridcell dependent buildings height 	{OK_SECHIBA}
+DO_HEIGHT_BUILDING = n
 
 # DO_FLOODPLAINS ([FLAG]  ) :  Should we include floodplains  	{RIVER_ROUTING }
 DO_FLOODPLAINS =  n 
@@ -1580,6 +1583,9 @@ FRACTION_AEI_SW_FILE =  AEI_SW_pct.nc
 
 # FRACTION_IMPERVIOUSNESS ([FILE]) :  Name of file with imperviousness 	{DO_IMPERVIOUSNESS}
 FRACTION_IMPERVIOUSNESS = imperviousness.nc
+
+# BUILDING_HEIGHT ([FILE]) :  Name of file with buildings height 	{DO_HEIGHT_BUILDING}
+BUILDING_HEIGHT = Height_buildings.nc
 
 # SOILALB_FILE ([FILE]) :  Name of file from which the bare soil albedo 	{NOT(IMPOSE_AZE)}
 SOILALB_FILE =  soils_param.nc 

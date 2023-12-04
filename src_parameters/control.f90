@@ -127,6 +127,16 @@ CONTAINS
     do_imperviousness = .FALSE.
     CALL getin_p('DO_IMPERVIOUSNESS', do_imperviousness)
 
+    !Config Key   = DO_HEIGHT_BUILDING
+    !Config Desc  = Should we have gridcell dependent buildings height
+    !Config If    =  
+    !Config Def   = n
+    !Config Help  = better representation of urban processes
+    !Config Units = [FLAG]
+    !
+    do_height_building = .FALSE.
+    CALL getin_p('DO_HEIGHT_BUILDING', do_height_building)
+
     !Config Key   = DO_FLOODPLAINS
     !Config Desc  = Should we include floodplains 
     !Config If    = RIVER_ROUTING 

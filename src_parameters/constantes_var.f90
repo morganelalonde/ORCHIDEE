@@ -63,6 +63,8 @@ MODULE constantes_var
 !$OMP THREADPRIVATE(do_irrigation)
   LOGICAL :: do_imperviousness      !! activate representation of imperviousness
 !$OMP THREADPRIVATE(do_imperviousness)
+  LOGICAL :: do_height_building      !! activate gridcell dependent buildings height
+!$OMP THREADPRIVATE(do_height_building)
   LOGICAL :: ok_sechiba         !! activate physic of the model
 !$OMP THREADPRIVATE(ok_sechiba)
   LOGICAL :: ok_stomate         !! activate carbon cycle
