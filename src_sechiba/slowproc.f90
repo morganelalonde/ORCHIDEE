@@ -1033,6 +1033,7 @@ CONTAINS
     REAL(r_std)                                           :: ks_default        !! Default  if impsoilt
     REAL(r_std)                                           :: clayfraction_default  !! Default  if impsoilt
     REAL(r_std)                                           :: sandfraction_default  !! Default  if impsoilt
+    REAL(r_std), DIMENSION(nbpt)                          :: height_buidings       !! fraction of imperviousness from map
     CHARACTER(LEN=4)                                      :: laistring         !! Temporary character string
     CHARACTER(LEN=80)                                     :: var_name          !! To store variables names for I/O
     CHARACTER(LEN=30), SAVE                               :: veget_str         !! update frequency for landuse
@@ -1405,7 +1406,9 @@ CONTAINS
            CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac)
            CALL xios_orchidee_send_field("frac_imperv",frac_imperv)
         !ENDIF
+        
         coeff_imperv(:) = -0.999999 * frac_imperv(:) + un
+        
         CALL xios_orchidee_send_field("coeff_imperv",coeff_imperv)
         ks(:) = ks(:)*coeff_imperv(:)
      ENDIF
@@ -1790,6 +1793,12 @@ CONTAINS
        DO jv = 1, nvm
           height(:,jv) = height_presc(jv)
        ENDDO
+       ! If urban config with wudapt info, update values for PFT16
+       ! IF (HEIGHT_BUILDINGS = y) THEN
+       CALL slowproc_height_buidings(kjpindex, lalo, neighbours,  resolution, contfrac)
+       height(:,16) = height_buidings(:)
+       ! ENDIF
+
     ENDIF
     
 
@@ -5021,6 +5030,144 @@ CONTAINS
 
 
   END SUBROUTINE slowproc_imperviousness 
+
+  !! ================================================================================================================================
+  !! SUBROUTINE   : slowproc_height_buidings
+  !!
+  !>\BRIEF        Function to read and interpolate imperviousness maps
+  !!
+  !! DESCRIPTION  : Function to read and interpolate imperviousness maps
+  !!
+  !! RECENT CHANGE(S): None
+  !!
+  !! MAIN OUTPUT VARIABLE(S): :: frac_imperv
+  !!
+  !! REFERENCE(S) : None
+  !!
+  !! FLOWCHART    : None
+  !! \n
+  !_ ================================================================================================================================
+
+
+  SUBROUTINE slowproc_height_buidings(nbpt, lalo, neighbours,  resolution, contfrac)
+
+    USE interpweight
+
+    IMPLICIT NONE
+
+    !  0.1 INPUT
+    !
+    INTEGER(i_std), INTENT(in)                             :: nbpt            !! Number of points for which the data needs
+                                                                              !! to be interpolated
+    REAL(r_std), DIMENSION(nbpt,2), INTENT(in)             :: lalo            !! Vector of latitude and longitudes (beware of the order !)
+    INTEGER(i_std), DIMENSION(nbpt,NbNeighb), INTENT(in)   :: neighbours      !! Vector of neighbours for each grid point
+                                                                              !! (1=North and then clockwise)
+    REAL(r_std), DIMENSION(nbpt,2), INTENT(in)             :: resolution      !! The size in km of each grid-box in X and Y
+    REAL(r_std), DIMENSION(nbpt), INTENT(in)               :: contfrac        !! Fraction of continent in the grid
+    !
+    !  0.2 OUTPUT
+    !
+                                                                                ! 
+    !
+    !  0.3 LOCAL
+    CHARACTER(LEN=80) :: filename
+    INTEGER(i_std) :: ib
+    REAL(r_std), DIMENSION(nbpt), INTENT(out)            :: height_buidings       !! fraction of imperviousness from map
+    REAL(r_std), DIMENSION(nbpt)                         :: aheight_buidings           !! Availability of the imperviousness interpolation
+    REAL(r_std)                                          :: vmin, vmax       !! min/max values to use for the renormalization
+    CHARACTER(LEN=80)                                    :: variablename     !! Variable to interpolate
+    CHARACTER(LEN=80)                                    :: lonname, latname !! lon, lat names in input file
+    REAL(r_std), DIMENSION(nvm)                          :: variabletypevals !! Values for all the types of the variable
+                                                                             !!   (variabletypevals(1) = -un, not used)
+    CHARACTER(LEN=50)                                    :: fractype         !! method of calculation of fraction
+                                                                             !!   'XYKindTime': Input values are kinds
+                                                                             !!     of something with a temporal
+                                                                             !!     evolution on the dx*dy matrix'
+    LOGICAL                                              :: nonegative       !! whether negative values should be removed
+    CHARACTER(LEN=50)                                    :: maskingtype      !! Type of masking
+                                                                             !!   'nomask': no-mask is applied
+                                                                             !!   'mbelow': take values below maskvals(1)
+                                                                             !!   'mabove': take values above maskvals(1)
+                                                                             !!   'msumrange': take values within 2 ranges;
+                                                                             !!      maskvals(2) <= SUM(vals(k)) <= maskvals(1)
+                                                                             !!      maskvals(1) < SUM(vals(k)) <= maskvals(3)
+                                                                             !!        (normalized by maskvals(3))
+                                                                             !!   'var': mask values are taken from a
+                                                                             !!     variable inside the file (>0)
+    REAL(r_std), DIMENSION(3)                            :: maskvals         !! values to use to mask (according to
+                                                                             !!   `maskingtype')
+    CHARACTER(LEN=250)                                   :: namemaskvar      !! name of the variable to use to mask
+    CHARACTER(LEN=250)                                   :: msg
+
+  !_ ================================================================================================================================
+
+    IF (printlev_loc >= 5) PRINT *,'  In slowproc_read HeightBuild'
+
+    !
+    !Config Key   = BUILDING_HEIGHT
+    !Config Desc  = Name of file with HeightBuild
+    !Config If    = DO_HEIGHT_BUILDING
+    !Config Def   = Height_buildings.nc
+    !Config Help  = The name of the file to be opened to read an HeightBuild
+    !Config         map is to be given here.
+    !Config Units = [FILE]
+    !
+    filename = 'Height_buildings.nc'
+    CALL getin_p('BUILDING_HEIGHT',filename)
+    variablename = 'HeightBuild' 
+
+    IF (printlev_loc >= 1) WRITE(numout,*) "slowproc_height_buidings: Read and interpolate " &
+         // TRIM(filename) // " for variable " // TRIM(variablename)
+
+    ! Assigning values to vmin, vmax
+    vmin = 1.
+    vmax = 1.
+
+    variabletypevals = -un
+
+    !! Variables for interpweight
+    ! Type of calculation of cell fractions
+    fractype = 'default'
+    ! Name of the longitude and latitude in the input file
+    lonname = 'lon'
+    latname = 'lat'
+    ! Should negative values be set to zero from input file?
+    nonegative = .TRUE.
+    ! Type of mask to apply to the input data (see header for more details)
+    maskingtype = 'mabove'
+    ! Values to use for the masking
+    maskvals = (/ 0.05, 0.05 , un /)
+    ! Name of the variable with the values for the mask in the input file (only if maskkingtype='var') (here not used)
+    namemaskvar = ''
+
+    CALL interpweight_2Dcont(nbpt, 0, 0, lalo, resolution, neighbours,        &
+      contfrac, filename, variablename, lonname, latname, vmin, vmax, nonegative, maskingtype,        &
+      maskvals, namemaskvar, -1, fractype, 0., 0.,                                 &
+      height_buidings, aheight_buidings)
+
+    IF (printlev_loc >= 3) WRITE(numout,*) 'slowproc_height_buidings ended'
+    DO ib=1,nbpt
+      height_buidings(ib) = MIN(height_buidings(ib), 0.99 )
+      height_buidings(ib) = MAX(height_buidings(ib), 0.01 )
+    ENDDO
+
+
+
+  END SUBROUTINE slowproc_height_buidings 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 END MODULE slowproc
