@@ -5049,7 +5049,7 @@ CONTAINS
   !_ ================================================================================================================================
 
 
-  SUBROUTINE slowproc_height_buidings(nbpt, lalo, neighbours,  resolution, contfrac)
+  SUBROUTINE slowproc_height_buidings(nbpt, lalo, neighbours,  resolution, contfrac, height_buidings)
 
     USE interpweight
 
