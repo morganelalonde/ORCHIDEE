@@ -1795,7 +1795,7 @@ CONTAINS
        ENDDO
        ! If urban config with wudapt info, update values for PFT16
        ! IF (DO_HEIGHT_BUILDING = y) THEN
-       CALL slowproc_height_buidings(kjpindex, lalo, neighbours,  resolution, contfrac)
+       CALL slowproc_height_buidings(kjpindex, lalo, neighbours,  resolution, contfrac, height_buidings)
        height(:,16) = height_buidings(:)
        ! ENDIF
 
@@ -5067,12 +5067,12 @@ CONTAINS
     !
     !  0.2 OUTPUT
     !
+    REAL(r_std), DIMENSION(nbpt), INTENT(out)            :: height_buidings       !! buildings height per grid cell
                                                                                 ! 
     !
     !  0.3 LOCAL
     CHARACTER(LEN=80) :: filename
     INTEGER(i_std) :: ib
-    REAL(r_std), DIMENSION(nbpt), INTENT(out)            :: height_buidings       !! buildings height per grid cell
     REAL(r_std), DIMENSION(nbpt)                         :: aheight_buidings      !! Availability of the buildings height interpolation
     REAL(r_std)                                          :: vmin, vmax       !! min/max values to use for the renormalization
     CHARACTER(LEN=80)                                    :: variablename     !! Variable to interpolate
