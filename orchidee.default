@@ -286,10 +286,10 @@ SECHIBA_LAI =  0., 8., 8., 4., 4.5, 4.5, 4., 4.5, 4., 2., 2., 2., 2., 0.
 LLAIMIN =  0., 8., 0., 4., 4.5, 0., 4., 0., 0., 0., 0., 0., 0., 0. 
 
 # SLOWPROC_HEIGHT ([m] ) :  prescribed height of vegetation  	{OK_SECHIBA}
-SLOWPROC_HEIGHT =  0., 30., 30., 20., 20., 20., 15., 15., 15., .5, .6, 1., 1., 0. 
+SLOWPROC_HEIGHT =  0., 30., 30., 20., 20., 20., 15., 15., 15., .5, .6, 1., 1., 20. 
 
 # Z0_OVER_HEIGHT ([-] ) :  factor to calculate roughness height from height of canopy  	{OK_SECHIBA}
-Z0_OVER_HEIGHT =  0., 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0. 
+Z0_OVER_HEIGHT =  0., 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625 
 
 # RATIO_Z0M_Z0H ([-]) :  Ratio between z0m and z0h 	{OK_SECHIBA}
 RATIO_Z0M_Z0H =  1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0  
@@ -1543,7 +1543,7 @@ SECHIBA_FRAC_NOBIO =  0.0
 SECHIBA_LAI =  0., 8., 8., 4., 4.5, 4.5, 4., 4.5, 4., 2., 2., 2., 2., 0. 
 
 # SLOWPROC_HEIGHT ([m]) :  Height for all vegetation types  	{OK_SECHIBA}
-SLOWPROC_HEIGHT =  0., 30., 30., 20., 20., 20., 15., 15., 15., .5, .6, 1.0, 1.0, 0. 
+SLOWPROC_HEIGHT =  0., 30., 30., 20., 20., 20., 15., 15., 15., .5, .6, 1.0, 1.0, 20. 
 
 # LAI_FILE ([FILE]) :  Name of file from which the vegetation map is to be read 	{LAI_MAP}
 LAI_FILE =  lai2D.nc 

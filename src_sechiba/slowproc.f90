@@ -1795,8 +1795,9 @@ CONTAINS
        ENDDO
        ! If urban config with wudapt info, update values for PFT16
        IF (DO_HEIGHT_BUILDING) THEN
-       CALL slowproc_height_buidings(kjpindex, lalo, neighbours,  resolution, contfrac, height_buidings)
-       height(:,14) = height_buidings(:)
+        CALL slowproc_height_buidings(kjpindex, lalo, neighbours,  resolution, contfrac, height_buidings)
+        jv = 16
+        height(:,jv) = height_buidings(:)
        ENDIF
 
     ENDIF
