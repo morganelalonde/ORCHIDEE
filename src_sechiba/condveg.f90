@@ -207,7 +207,7 @@ CONTAINS
     INTEGER                                          :: ier
     REAL(r_std), DIMENSION(kjpindex,2)               :: albedo_snow      !! Snow albedo for visible and near-infrared range(unitless)
     REAL(r_std), DIMENSION(kjpindex,2)               :: alb_bare         !! Mean bare soil albedo for visible and near-infrared 
-                                                                         !! range (unitless) 
+                                                                         !! range (unitless)  
     REAL(r_std), DIMENSION(kjpindex,2)               :: alb_veget        !! Mean vegetation albedo for visible and near-infrared 
 !                                                                        !! range (unitless) 
 !_ ================================================================================================================================
@@ -698,6 +698,12 @@ CONTAINS
                                                                            !! lakes, .. (unitless)
     REAL(r_std)                                         :: alb_nobio       !! Albedo of continental ice, lakes, etc. 
                                                                            !!(unitless ratio)
+    REAL(r_std), DIMENSION(kjpindex,2)                  :: alb_urban       !! Mean urban albedo for visible and near-infrared 
+                                                                           !! range (unitless)
+    REAL(r_std), DIMENSION(kjpindex,2)                  :: alb_urban_nc    !! Mean urban non constant albedo for visible and near-infrared 
+                                                                           !! range (unitless)
+    REAL(r_std), DIMENSION(kjpindex,2)                  :: alb_urban_c    ! ! Mean urban constant albedo for visible and near-infrared 
+                                                                           !! range (unitless)
     REAL(r_std),DIMENSION (nvm,2)                       :: alb_leaf_tmp    !! Variables for albedo values for all PFTs and 
     REAL(r_std),DIMENSION (nvm,2)                       :: snowa_aged_tmp  !! spectral domains (unitless) 
     REAL(r_std),DIMENSION (nvm,2)                       :: snowa_dec_tmp
@@ -745,7 +751,20 @@ CONTAINS
                 alb_bare(:,ks) = soilalb_moy(:,ks)
              ENDIF
           ENDIF
-          
+
+          ! 1.1.2 Calculation of urban albedo
+          IF ( alb_urban_modis) THEN
+             alb_urban(:,ks) = soilalb_bg(:,ks)
+          ELSE 
+             IF (do_alb_urban) THEN
+                CALL condveg_alb_urban(kjpindex, lalo, neighbours,  resolution, contfrac, alb_urban_nc)
+                alb_urban(:,ks) = alb_urban_nc(:)
+             ELSE 
+                alb_urban_c(:) = 0.19 ! Need to improve this part, better if can be in orchidee default and possibly changed in run.def
+                alb_urban(:,ks) = alb_urban_c(:)
+             ENDIF
+          ENDIF
+
           ! Soil albedo is weighed by fraction of bare soil          
           albedo(:,ks) = tot_bare_soil(:) * alb_bare(:,ks)
           
@@ -1787,5 +1806,127 @@ CONTAINS
 
   END SUBROUTINE condveg_z0cdrag_dyn
 
+
+  !! ================================================================================================================================
+  !! SUBROUTINE   : condveg_alb_urban
+  !!
+  !>\BRIEF        Function to read and interpolate urban albedo maps
+  !!
+  !! DESCRIPTION  : Function to read and interpolate urban albedo maps
+  !!
+  !! RECENT CHANGE(S): None
+  !!
+  !! MAIN OUTPUT VARIABLE(S): :: albedo_urban_nc (nc for non constant over gridcells)
+  !!
+  !! REFERENCE(S) : None
+  !!
+  !! FLOWCHART    : None
+  !! \n
+  !_ ================================================================================================================================
+
+
+  SUBROUTINE condveg_alb_urban(nbpt, lalo, neighbours,  resolution, contfrac, albedo_urban_nc)
+
+    USE interpweight
+
+    IMPLICIT NONE
+
+    !  0.1 INPUT
+    !
+    INTEGER(i_std), INTENT(in)                             :: nbpt            !! Number of points for which the data needs
+                                                                              !! to be interpolated
+    REAL(r_std), DIMENSION(nbpt,2), INTENT(in)             :: lalo            !! Vector of latitude and longitudes (beware of the order !)
+    INTEGER(i_std), DIMENSION(nbpt,NbNeighb), INTENT(in)   :: neighbours      !! Vector of neighbours for each grid point
+                                                                              !! (1=North and then clockwise)
+    REAL(r_std), DIMENSION(nbpt,2), INTENT(in)             :: resolution      !! The size in km of each grid-box in X and Y
+    REAL(r_std), DIMENSION(nbpt), INTENT(in)               :: contfrac        !! Fraction of continent in the grid
+    !
+    !  0.2 OUTPUT
+    !
+    REAL(r_std), DIMENSION(nbpt), INTENT(out)            :: albedo_urban_nc       !! buildings height per grid cell
+                                                                                ! 
+    !
+    !  0.3 LOCAL
+    CHARACTER(LEN=80) :: filename
+    INTEGER(i_std) :: ib
+    REAL(r_std), DIMENSION(nbpt)                         :: aalbedo_urban_nc      !! Availability of the buildings height interpolation
+    REAL(r_std)                                          :: vmin, vmax       !! min/max values to use for the renormalization
+    CHARACTER(LEN=80)                                    :: variablename     !! Variable to interpolate
+    CHARACTER(LEN=80)                                    :: lonname, latname !! lon, lat names in input file
+    REAL(r_std), DIMENSION(nvm)                          :: variabletypevals !! Values for all the types of the variable
+                                                                             !!   (variabletypevals(1) = -un, not used)
+    CHARACTER(LEN=50)                                    :: fractype         !! method of calculation of fraction
+                                                                             !!   'XYKindTime': Input values are kinds
+                                                                             !!     of something with a temporal
+                                                                             !!     evolution on the dx*dy matrix'
+    LOGICAL                                              :: nonegative       !! whether negative values should be removed
+    CHARACTER(LEN=50)                                    :: maskingtype      !! Type of masking
+                                                                             !!   'nomask': no-mask is applied
+                                                                             !!   'mbelow': take values below maskvals(1)
+                                                                             !!   'mabove': take values above maskvals(1)
+                                                                             !!   'msumrange': take values within 2 ranges;
+                                                                             !!      maskvals(2) <= SUM(vals(k)) <= maskvals(1)
+                                                                             !!      maskvals(1) < SUM(vals(k)) <= maskvals(3)
+                                                                             !!        (normalized by maskvals(3))
+                                                                             !!   'var': mask values are taken from a
+                                                                             !!     variable inside the file (>0)
+    REAL(r_std), DIMENSION(3)                            :: maskvals         !! values to use to mask (according to
+                                                                             !!   `maskingtype')
+    CHARACTER(LEN=250)                                   :: namemaskvar      !! name of the variable to use to mask
+    CHARACTER(LEN=250)                                   :: msg
+
+  !_ ================================================================================================================================
+
+    IF (printlev_loc >= 5) PRINT *,'  In slowproc_read albedo_urban_nc'
+
+    !
+    !Config Key   = URBAN_ALBEDO
+    !Config Desc  = Name of file with UrbanAlbedo
+    !Config If    = DO_ALB_URBAN
+    !Config Def   = UrbanAlbedo.nc
+    !Config Help  = The name of the file to be opened to read an UrbanAlbedo
+    !Config         map is to be given here.
+    !Config Units = [FILE]
+    !
+    filename = 'UrbanAlbedo.nc'
+    CALL getin_p('URBAN_ALBEDO',filename)
+    variablename = 'UrbanAlbedo' 
+
+    IF (printlev_loc >= 1) WRITE(numout,*) "condveg_alb_urban: Read and interpolate " &
+         // TRIM(filename) // " for variable " // TRIM(variablename)
+
+    ! Assigning values to vmin, vmax
+    vmin = 1.
+    vmax = 1.
+
+    variabletypevals = -un
+
+    !! Variables for interpweight
+    ! Type of calculation of cell fractions
+    fractype = 'default'
+    ! Name of the longitude and latitude in the input file
+    lonname = 'lon'
+    latname = 'lat'
+    ! Should negative values be set to zero from input file?
+    nonegative = .TRUE.
+    ! Type of mask to apply to the input data (see header for more details)
+    maskingtype = 'mabove'
+    ! Values to use for the masking
+    maskvals = (/ 0.05, 0.05 , un /)
+    ! Name of the variable with the values for the mask in the input file (only if maskkingtype='var') (here not used)
+    namemaskvar = ''
+
+    CALL interpweight_2Dcont(nbpt, 0, 0, lalo, resolution, neighbours,        &
+      contfrac, filename, variablename, lonname, latname, vmin, vmax, nonegative, maskingtype,        &
+      maskvals, namemaskvar, -1, fractype, 0., 0.,                                 &
+      albedo_urban_nc, aalbedo_urban_nc)
+
+    IF (printlev_loc >= 3) WRITE(numout,*) 'condveg_alb_urban ended'
+    DO ib=1,nbpt
+      albedo_urban_nc(ib) = MIN(albedo_urban_nc(ib), 0.99 )
+      albedo_urban_nc(ib) = MAX(albedo_urban_nc(ib), 0.01 )
+    ENDDO
+
+  END SUBROUTINE condveg_alb_urban 
 
 END MODULE condveg

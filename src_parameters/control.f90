@@ -137,6 +137,16 @@ CONTAINS
     do_height_building = .FALSE.
     CALL getin_p('DO_HEIGHT_BUILDING', do_height_building)
 
+   !Config Key   = DO_ALB_URBAN
+    !Config Desc  = Should we have gridcell dependent urban albedos
+    !Config If    =  
+    !Config Def   = n
+    !Config Help  = better representation of urban processes
+    !Config Units = [FLAG]
+    !
+    do_alb_urban = .FALSE.
+    CALL getin_p('DO_ALB_URBAN', do_alb_urban)
+
     !Config Key   = DO_FLOODPLAINS
     !Config Desc  = Should we include floodplains 
     !Config If    = RIVER_ROUTING 

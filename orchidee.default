@@ -132,6 +132,9 @@ DO_IRRIGATION =  n
 # DO_IMPERVIOUSNESS ([FLAG]) :  Activate imperviousness 	{OK_SECHIBA}
 DO_IMPERVIOUSNESS = n
 
+# DO_ALB_URBAN ([FLAG]) :  Activate gridcell dependent urban albedo 	{OK_SECHIBA}
+DO_ALB_URBAN = n
+
 # DO_HEIGHT_BUILDING ([FLAG]) :  Activate gridcell dependent buildings height 	{OK_SECHIBA}
 DO_HEIGHT_BUILDING = n
 
@@ -873,6 +876,9 @@ ALB_BARE_MODEL =  n
 # ALB_BG_MODIS ([FLAG]) :  Read bare soil albedo from file with background MODIS data 	{OK_SECHIBA}
 ALB_BG_MODIS =  y 
 
+# ALB_URBAN_MODIS ([FLAG]) :  Read urban soil albedo from file with background MODIS data 	{OK_SECHIBA}
+ALB_URBAN_MODIS =  y 
+
 # IMPOSE_AZE ([FLAG]) :  Should the surface parameters be prescribed 	{OK_SECHIBA}
 IMPOSE_AZE =  n 
 
@@ -1585,7 +1591,10 @@ FRACTION_AEI_SW_FILE =  AEI_SW_pct.nc
 FRACTION_IMPERVIOUSNESS = imperviousness.nc
 
 # BUILDING_HEIGHT ([FILE]) :  Name of file with buildings height 	{DO_HEIGHT_BUILDING}
-BUILDING_HEIGHT = Height_buildings.nc
+BUILDING_HEIGHT = UrbanAlbedo.nc
+
+# URBAN_ALBEDO ([FILE]) :  Name of file with urban albedos 	{DO_ALB_URBAN}
+URBAN_ALBEDO = Height_buildings.nc
 
 # SOILALB_FILE ([FILE]) :  Name of file from which the bare soil albedo 	{NOT(IMPOSE_AZE)}
 SOILALB_FILE =  soils_param.nc 

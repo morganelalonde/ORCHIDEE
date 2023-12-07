@@ -65,6 +65,8 @@ MODULE constantes_var
 !$OMP THREADPRIVATE(do_imperviousness)
   LOGICAL :: do_height_building      !! activate gridcell dependent buildings height
 !$OMP THREADPRIVATE(do_height_building)
+  LOGICAL :: do_alb_urban      !! activate gridcell dependent urban albedos
+!$OMP THREADPRIVATE(do_alb_urban)
   LOGICAL :: ok_sechiba         !! activate physic of the model
 !$OMP THREADPRIVATE(ok_sechiba)
   LOGICAL :: ok_stomate         !! activate carbon cycle
@@ -552,6 +554,10 @@ MODULE constantes_var
                                             !! albedo read from file
                                             !! (true/false)
 !$OMP THREADPRIVATE(alb_bg_modis)
+  LOGICAL, SAVE :: alb_urban_modis = .TRUE.    !! Switch for choosing values of urban soil 
+                                            !! albedo read from file
+                                            !! (true/false)
+!$OMP THREADPRIVATE(alb_urban_modis)
   LOGICAL, SAVE :: impaze = .FALSE.         !! Switch for choosing surface parameters
                                             !! (see header of subroutine).  
                                             !! (true/false)

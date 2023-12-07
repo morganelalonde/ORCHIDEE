@@ -567,6 +567,16 @@ CONTAINS
     !Config Units = [FLAG]
     CALL getin_p('ALB_BG_MODIS',alb_bg_modis)
     !
+    !Config Key   = ALB_URBAN_MODIS
+    !Config Desc  = Read urban soil albedo from file with background MODIS data
+    !Config Def   = y
+    !Config if    = OK_SECHIBA
+    !Config Help  = If TRUE, the urban soil albedo is read from file
+    !Config         based on background MODIS data.  
+    !Config         If FALSE, computaion depends on ALB_BARE_MODEL
+    !Config Units = [FLAG]
+    CALL getin_p('ALB_URBAN_MODIS',alb_urban_modis)
+    !
     !Config Key   = IMPOSE_AZE
     !Config Desc  = Should the surface parameters be prescribed
     !Config Def   = n
