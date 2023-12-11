@@ -5147,10 +5147,10 @@ CONTAINS
       height_buidings, aheight_buidings)
 
     IF (printlev_loc >= 3) WRITE(numout,*) 'slowproc_height_buidings ended'
-    DO ib=1,nbpt
-      height_buidings(ib) = MIN(height_buidings(ib), 0.99 )
-      height_buidings(ib) = MAX(height_buidings(ib), 0.01 )
-    ENDDO
+    ! DO ib=1,nbpt
+    !  height_buidings(ib) = MIN(height_buidings(ib), 0.99 )
+    !  height_buidings(ib) = MAX(height_buidings(ib), 0.01 )
+    ! ENDDO
 
 
 
