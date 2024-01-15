@@ -760,7 +760,7 @@ CONTAINS
                 CALL condveg_alb_urban(kjpindex, lalo, neighbours,  resolution, contfrac, alb_urban_nc)
                 alb_urban(:,ks) = alb_urban_nc(:)
              ELSE 
-                alb_urban_c(:) = 0.19 ! Need to improve this part, better if can be in orchidee default and possibly changed in run.def
+                alb_urban_c(:) = 0.15 ! Need to improve this part, better if can be in orchidee default and possibly changed in run.def
                 alb_urban(:,ks) = alb_urban_c(:)
              ENDIF
           ENDIF
@@ -782,6 +782,9 @@ CONTAINS
              ! Mean albedo of vegetation for visible and near-infrared range
              alb_veget(:,ks) = alb_veget(:,ks) + veget(:,jv)*alb_leaf_tmp(jv,ks)
           ENDDO ! Loop over # of PFTs
+          
+
+
           
        ENDDO
     END IF
