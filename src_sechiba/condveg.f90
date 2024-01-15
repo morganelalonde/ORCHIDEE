@@ -783,7 +783,8 @@ CONTAINS
              alb_veget(:,ks) = alb_veget(:,ks) + veget(:,jv)*alb_leaf_tmp(jv,ks)
           ENDDO ! Loop over # of PFTs
           
-
+          jv=16
+          albedo(:,ks) = albedo(:,ks) + veget(:,jv)*alb_urban(:,ks)
 
           
        ENDDO
