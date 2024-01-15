@@ -349,7 +349,7 @@
     <field id="ksref" name="ksref" long_name="Reference saturated hydraulic conductivity (before imposing a vertical profile)" unit="mm/d" operation="once" freq_offset="0ts" /> 
     <field id="frac_imperv" name="frac_imperv" long_name="the fraction of imperviousness (at each gridcell)" unit="fraction" operation="once" freq_offset="0ts" /> 
     <field id="coeff_imperv" name="coeff_imperv" long_name="impervious coeff to modify ks (at each gridcell)" unit="-" operation="once" freq_offset="0ts" /> 
-    <field id="height_buidings" name="height_buidings" long_name="height_buidings for pft 16" unit="m" operation="once" freq_offset="0ts" /> 
+    <field id="height_buildings" name="height_buildings" long_name="height_buildings for pft 16" unit="m" operation="once" freq_offset="0ts" /> 
     <field id="alphavg" name="alphavg" long_name="Van Genuchten alpha parameter (at each hydrologic node)" unit="m(-1)" grid_ref="grid_nslm" operation="once" freq_offset="0ts"/> 
     <field id="nvg" name="nvg" long_name="Van Genuchten n parameter (at each hydrologic node)" unit="-" grid_ref="grid_nslm" operation="once" freq_offset="0ts"/>
 

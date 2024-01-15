@@ -89,8 +89,8 @@ MODULE slowproc
 !$OMP THREADPRIVATE(imperviousness)
   REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: coeff_imperv      !! Imperviousness coefficient to modify Ks
 !$OMP THREADPRIVATE(imperviousness)
-  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: height_buidings      !! height_buidings
-!$OMP THREADPRIVATE(height_buidings)
+  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: height_buildings      !! height_buildings
+!$OMP THREADPRIVATE(height_buildings)
 
 CONTAINS
 
@@ -1097,8 +1097,8 @@ CONTAINS
     ALLOCATE(coeff_imperv(kjpindex), STAT=ier)
     IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable coeff_imperv','','')
         ! Allocation of the buildings heigh
-    ALLOCATE(height_buidings(kjpindex), STAT=ier)
-    IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable height_buidings','','')
+    ALLOCATE(height_buildings(kjpindex), STAT=ier)
+    IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable height_buildings','','')
     !! 2. Read soil related variables
     ! Following the trunk, we remove the dependance of impsoilt to impveg; impsoilt overrules the restart
 
@@ -1799,9 +1799,9 @@ CONTAINS
        ENDDO
        ! If urban config with wudapt info, update values for PFT16
        IF (DO_HEIGHT_BUILDING) THEN
-        CALL slowproc_height_buidings(kjpindex, lalo, neighbours,  resolution, contfrac, height_buidings)
         jv = 16
-        height(:,jv) = height_buidings(:)
+        CALL slowproc_height_buildings(kjpindex, lalo, neighbours,  resolution, contfrac, height_buildings)
+        height(:,jv) = height_buildings(:)
        ENDIF
 
     ENDIF
@@ -1933,7 +1933,7 @@ CONTAINS
     IF (ALLOCATED (frac_nobio_new)) DEALLOCATE (frac_nobio_new)
     IF (ALLOCATED (frac_imperv)) DEALLOCATE (frac_imperv)
     IF (ALLOCATED (coeff_imperv)) DEALLOCATE (coeff_imperv)
-    IF (ALLOCATED (height_buidings)) DEALLOCATE (height_buidings)
+    IF (ALLOCATED (height_buildings)) DEALLOCATE (height_buildings)
  ! 2. Clear all the variables in stomate 
 
     CALL stomate_clear 
@@ -2005,9 +2005,9 @@ CONTAINS
 
 ! If urban config with wudapt info, update values for PFT16
        IF (DO_HEIGHT_BUILDING) THEN
-        CALL slowproc_height_buidings(kjpindex, lalo, neighbours,  resolution, contfrac, height_buidings)
+        CALL slowproc_height_buildings(kjpindex, lalo, neighbours,  resolution, contfrac, height_buildings)
         jv = 16
-        height(:,jv) = height_buidings(:)
+        height(:,jv) = height_buildings(:)
        ENDIF
 
     !
@@ -5046,7 +5046,7 @@ CONTAINS
   END SUBROUTINE slowproc_imperviousness 
 
   !! ================================================================================================================================
-  !! SUBROUTINE   : slowproc_height_buidings
+  !! SUBROUTINE   : slowproc_height_buildings
   !!
   !>\BRIEF        Function to read and interpolate imperviousness maps
   !!
@@ -5054,7 +5054,7 @@ CONTAINS
   !!
   !! RECENT CHANGE(S): None
   !!
-  !! MAIN OUTPUT VARIABLE(S): :: frac_imperv
+  !! MAIN OUTPUT VARIABLE(S): :: height_buildings
   !!
   !! REFERENCE(S) : None
   !!
@@ -5063,7 +5063,7 @@ CONTAINS
   !_ ================================================================================================================================
 
 
-  SUBROUTINE slowproc_height_buidings(nbpt, lalo, neighbours,  resolution, contfrac, height_buidings)
+  SUBROUTINE slowproc_height_buildings(nbpt, lalo, neighbours,  resolution, contfrac, height_buildings)
 
     USE interpweight
 
@@ -5086,7 +5086,7 @@ CONTAINS
     !  0.3 LOCAL
     CHARACTER(LEN=80) :: filename
     INTEGER(i_std) :: ib
-    REAL(r_std), DIMENSION(nbpt)                         :: aheight_buidings      !! Availability of the buildings height interpolation
+    REAL(r_std), DIMENSION(nbpt)                         :: aheight_buildings      !! Availability of the buildings height interpolation
     REAL(r_std)                                          :: vmin, vmax       !! min/max values to use for the renormalization
     CHARACTER(LEN=80)                                    :: variablename     !! Variable to interpolate
     CHARACTER(LEN=80)                                    :: lonname, latname !! lon, lat names in input file
@@ -5129,7 +5129,7 @@ CONTAINS
     CALL getin_p('BUILDING_HEIGHT',filename)
     variablename = 'HeightBuild' 
 
-    IF (printlev_loc >= 1) WRITE(numout,*) "slowproc_height_buidings: Read and interpolate " &
+    IF (printlev_loc >= 1) WRITE(numout,*) "slowproc_height_buildings: Read and interpolate " &
          // TRIM(filename) // " for variable " // TRIM(variablename)
 
     ! Assigning values to vmin, vmax
@@ -5156,9 +5156,9 @@ CONTAINS
     CALL interpweight_2Dcont(nbpt, 0, 0, lalo, resolution, neighbours,        &
       contfrac, filename, variablename, lonname, latname, vmin, vmax, nonegative, maskingtype,        &
       maskvals, namemaskvar, -1, fractype, 0., 0.,                                 &
-      height_buidings, aheight_buidings)
+      height_buildings, aheight_buildings)
 
-    IF (printlev_loc >= 3) WRITE(numout,*) 'slowproc_height_buidings ended'
+    IF (printlev_loc >= 3) WRITE(numout,*) 'slowproc_height_buildings ended'
     ! DO ib=1,nbpt
     !  height_buidings(ib) = MIN(height_buidings(ib), 0.99 )
     !  height_buidings(ib) = MAX(height_buidings(ib), 0.01 )
@@ -5166,7 +5166,7 @@ CONTAINS
 
 
 
-  END SUBROUTINE slowproc_height_buidings 
+  END SUBROUTINE slowproc_height_buildings
 
 
 

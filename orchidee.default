@@ -1591,10 +1591,10 @@ FRACTION_AEI_SW_FILE =  AEI_SW_pct.nc
 FRACTION_IMPERVIOUSNESS = imperviousness.nc
 
 # BUILDING_HEIGHT ([FILE]) :  Name of file with buildings height 	{DO_HEIGHT_BUILDING}
-BUILDING_HEIGHT = UrbanAlbedo.nc
+BUILDING_HEIGHT = Height_buildings.nc
 
 # URBAN_ALBEDO ([FILE]) :  Name of file with urban albedos 	{DO_ALB_URBAN}
-URBAN_ALBEDO = Height_buildings.nc
+URBAN_ALBEDO = UrbanAlbedo.nc
 
 # SOILALB_FILE ([FILE]) :  Name of file from which the bare soil albedo 	{NOT(IMPOSE_AZE)}
 SOILALB_FILE =  soils_param.nc 
