@@ -1033,7 +1033,6 @@ CONTAINS
     REAL(r_std)                                           :: ks_default        !! Default  if impsoilt
     REAL(r_std)                                           :: clayfraction_default  !! Default  if impsoilt
     REAL(r_std)                                           :: sandfraction_default  !! Default  if impsoilt
-    REAL(r_std), DIMENSION(kjpindex)                      :: height_buidings       !! buildings height per grid cell
     CHARACTER(LEN=4)                                      :: laistring         !! Temporary character string
     CHARACTER(LEN=80)                                     :: var_name          !! To store variables names for I/O
     CHARACTER(LEN=30), SAVE                               :: veget_str         !! update frequency for landuse
@@ -1095,6 +1094,9 @@ CONTAINS
     ! Allocation of the coefficient of imperviousness to modify ks(texture )
     ALLOCATE(coeff_imperv(kjpindex), STAT=ier)
     IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable coeff_imperv','','')
+        ! Allocation of the buildings heigh
+    ALLOCATE(height_buidings(kjpindex), STAT=ier)
+    IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable height_buidings','','')
     !! 2. Read soil related variables
     ! Following the trunk, we remove the dependance of impsoilt to impveg; impsoilt overrules the restart
 
@@ -1929,6 +1931,7 @@ CONTAINS
     IF (ALLOCATED (frac_nobio_new)) DEALLOCATE (frac_nobio_new)
     IF (ALLOCATED (frac_imperv)) DEALLOCATE (frac_imperv)
     IF (ALLOCATED (coeff_imperv)) DEALLOCATE (coeff_imperv)
+    IF (ALLOCATED (height_buidings)) DEALLOCATE (height_buidings)
  ! 2. Clear all the variables in stomate 
 
     CALL stomate_clear 
@@ -5076,7 +5079,6 @@ CONTAINS
     !
     !  0.2 OUTPUT
     !
-    REAL(r_std), DIMENSION(nbpt), INTENT(out)            :: height_buidings       !! buildings height per grid cell
                                                                                 ! 
     !
     !  0.3 LOCAL
