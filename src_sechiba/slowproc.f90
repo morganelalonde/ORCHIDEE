@@ -89,8 +89,6 @@ MODULE slowproc
 !$OMP THREADPRIVATE(imperviousness)
   REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: coeff_imperv      !! Imperviousness coefficient to modify Ks
 !$OMP THREADPRIVATE(imperviousness)
-  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: height_buildings      !! height_buildings
-!$OMP THREADPRIVATE(height_buildings)
 
 CONTAINS
 
@@ -1038,6 +1036,7 @@ CONTAINS
     CHARACTER(LEN=4)                                      :: laistring         !! Temporary character string
     CHARACTER(LEN=80)                                     :: var_name          !! To store variables names for I/O
     CHARACTER(LEN=30), SAVE                               :: veget_str         !! update frequency for landuse
+    REAL(r_std), DIMENSION(kjpindex)                      :: height_buildings       !! buildings height per grid cell
 !$OMP THREADPRIVATE(veget_str)
     LOGICAL                                               :: get_slope
     LOGICAL                                               :: found_restart     !! found_restart=true if all 3 variables veget_max,  
@@ -1096,9 +1095,6 @@ CONTAINS
     ! Allocation of the coefficient of imperviousness to modify ks(texture )
     ALLOCATE(coeff_imperv(kjpindex), STAT=ier)
     IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable coeff_imperv','','')
-        ! Allocation of the buildings heigh
-    ALLOCATE(height_buildings(kjpindex), STAT=ier)
-    IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable height_buildings','','')
     !! 2. Read soil related variables
     ! Following the trunk, we remove the dependance of impsoilt to impveg; impsoilt overrules the restart
 
@@ -1933,7 +1929,6 @@ CONTAINS
     IF (ALLOCATED (frac_nobio_new)) DEALLOCATE (frac_nobio_new)
     IF (ALLOCATED (frac_imperv)) DEALLOCATE (frac_imperv)
     IF (ALLOCATED (coeff_imperv)) DEALLOCATE (coeff_imperv)
-    IF (ALLOCATED (height_buildings)) DEALLOCATE (height_buildings)
  ! 2. Clear all the variables in stomate 
 
     CALL stomate_clear 
@@ -1982,6 +1977,7 @@ CONTAINS
     !
     !! 0.3 Local declaration
     INTEGER(i_std)                                              :: jv             !! Local indices
+    REAL(r_std), DIMENSION(kjpindex)                      :: height_buildings       !! buildings height per grid cell
 !_ ================================================================================================================================
 
     !
@@ -5081,6 +5077,7 @@ CONTAINS
     !
     !  0.2 OUTPUT
     !
+    REAL(r_std), DIMENSION(nbpt), INTENT(out)            :: height_buildings       !! buildings height per grid cell
                                                                                 ! 
     !
     !  0.3 LOCAL
