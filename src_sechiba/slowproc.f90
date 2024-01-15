@@ -89,6 +89,8 @@ MODULE slowproc
 !$OMP THREADPRIVATE(imperviousness)
   REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: coeff_imperv      !! Imperviousness coefficient to modify Ks
 !$OMP THREADPRIVATE(imperviousness)
+  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: height_buidings      !! height_buidings
+!$OMP THREADPRIVATE(height_buidings)
 
 CONTAINS
 
