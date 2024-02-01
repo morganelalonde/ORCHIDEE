@@ -1928,10 +1928,10 @@ CONTAINS
       albedo_urban_nc, aalbedo_urban_nc)
 
     IF (printlev_loc >= 3) WRITE(numout,*) 'condveg_alb_urban ended'
-    !DO ib=1,nbpt
-      !albedo_urban_nc(ib) = MIN(albedo_urban_nc(ib), 0.99 )
-      !albedo_urban_nc(ib) = MAX(albedo_urban_nc(ib), 0.01 )
-    !ENDDO
+    DO ib=1,nbpt
+      albedo_urban_nc(ib) = MIN(albedo_urban_nc(ib), 0.99 )
+      albedo_urban_nc(ib) = MAX(albedo_urban_nc(ib), 0.01 )
+    ENDDO
 
   END SUBROUTINE condveg_alb_urban 
 
