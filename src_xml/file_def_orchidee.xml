@@ -58,7 +58,6 @@
     <field field_ref="ksref" level="1"/>
     <field field_ref="frac_imperv" level="1"/>
     <field field_ref="coeff_imperv" level="1"/>
-    <field field_ref="albedo_urban" level="1"/>
     <field field_ref="precip_rain" level="0" name="rain" unit="mm/d" > @precip_rain*86400  </field>
     <field field_ref="precip_snow" level="0" name="snowf" unit="mm/d" > @precip_snow*86400  </field>
     <field field_ref="netrad" level="1"/>
