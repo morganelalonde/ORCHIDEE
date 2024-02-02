@@ -765,7 +765,7 @@ CONTAINS
              ENDIF
           ENDIF
 
-          CALL xios_orchidee_send_field("alb_urban",alb_urban)
+          CALL xios_orchidee_send_field("albedo_urban",alb_urban)
 
           ! Soil albedo is weighed by fraction of bare soil          
           albedo(:,ks) = tot_bare_soil(:) * alb_bare(:,ks)
