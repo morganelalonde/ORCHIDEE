@@ -89,6 +89,7 @@
     <field field_ref="temp_air" level="0"/>
     <field field_ref="qair" level="2"/>
     <field field_ref="soilalb_bg" grid_ref="grid_albtyp_out" level="2"/>
+    <field field_ref="soilalb_urban" grid_ref="grid_albtyp_out" level="2"/>
     <field field_ref="albedo_vis" level="0"/>
     <field field_ref="albedo_nir" level="0"/>
     <field field_ref="soilalb_vis" level="2"/>
@@ -628,6 +629,7 @@
     <field field_ref="pondr" level="1"/>
     <field field_ref="albedo_glob" level="1"/>
     <field field_ref="soilalb_bg" grid_ref="grid_albtyp_out" name="Albedo_Background" level="1"/>
+    <field field_ref="soilalb_urban" grid_ref="grid_albtyp_out" name="Albedo_Urban" level="1"/>
     <field field_ref="SurfStor" level="1"/>
     <field field_ref="snow" name="SWE" long_name="Snow Water Equivalent" level="1"/>
     <field field_ref="soilwet" level="1"/>

@@ -39,7 +39,8 @@
     <field id="ptn" name="ptn" long_name="Deep ground temperature" unit="K" grid_ref="grid_ngrnd"/>
     <field id="npp" name="npp" long_name="Net Primary Production (positive from atm to land)" unit="gC/m^2/s" grid_ref="grid_nvm"/>
     <field id="q_cdrag" name="cdrag" long_name="Drag coefficient for LE and SH" unit="-"/>
-    <field id="soilalb_bg" name="soilalb_bg" long_name="Background bare soil albedo obained from MODIS related data-set" unit="1" grid_ref="grid_albtyp" operation="once" freq_offset="0ts"/>
+    <field id="soilalb_bg" name="soilalb_bg" long_name="Background bare soil albedo obained from WUDAPT" unit="1" grid_ref="grid_albtyp" operation="once" freq_offset="0ts"/>
+    <field id="soilalb_urban" name="soilalb_urban" long_name="Urban soil albedo obained from MODIS related data-set" unit="1" grid_ref="grid_albtyp" operation="once" freq_offset="0ts"/>
     <field id="soilalb_vis" name="soilalb_vis" long_name="Soil Albedo visible" unit="1"/>
     <field id="soilalb_nir" name="soilalb_nir" long_name="Soil Albedo near infrared" unit="1"/>
     <field id="vegalb_vis" name="vegalb_vis" long_name="Vegetation Albedo visible" unit="1"/>

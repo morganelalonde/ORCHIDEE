@@ -239,6 +239,7 @@ CONTAINS
           CALL condveg_alb_urban(kjpindex, lalo, neighbours,  resolution, contfrac)
        END IF
        CALL xios_orchidee_send_field("soilalb_urban",soilalb_urban)
+    END IF
 
 
 
@@ -1289,6 +1290,7 @@ CONTAINS
     REAL(r_std), ALLOCATABLE, DIMENSION(:,:)      :: mask_lu               !! Help variable to read file data and allocate memory
     INTEGER(i_std), ALLOCATABLE, DIMENSION(:,:)   :: mask
     REAL(r_std), ALLOCATABLE, DIMENSION(:,:)      :: soilalbedo_bg         !! Help variable to read file data and allocate memory
+    REAL(r_std), ALLOCATABLE, DIMENSION(:,:)      :: soilalbedo_urban      !! Help variable to read file data and allocate memory
     INTEGER                                       :: ALLOC_ERR             !! Help varialbe to count allocation error
     REAL(r_std)                                   :: vmin, vmax            !! min/max values to use for the 
                                                                            !!   renormalization
