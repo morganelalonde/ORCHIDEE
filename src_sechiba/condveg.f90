@@ -75,6 +75,8 @@ MODULE condveg
 !$OMP THREADPRIVATE(soilalb_moy)
   REAL(r_std), ALLOCATABLE, SAVE    :: soilalb_bg(:,:)                  !! Albedo values for the background bare soil (unitless)
 !$OMP THREADPRIVATE(soilalb_bg)
+  REAL(r_std), ALLOCATABLE, SAVE    :: soilalb_urban(:,:)               !! Albedo values for the urban soil (unitless)
+!$OMP THREADPRIVATE(soilalb_urban)
   INTEGER, SAVE                     :: printlev_loc                     !! Output debug level
 !$OMP THREADPRIVATE(printlev_loc)
   
@@ -222,6 +224,24 @@ CONTAINS
 
     !! 1. Allocate module variables and read from restart or initialize
     
+    IF(do_alb_urban) THEN
+       ! Allocate background soil albedo
+       ALLOCATE (soilalb_urban(kjpindex,2),stat=ier)
+       IF (ier /= 0) CALL ipslerr_p(3,'condveg_initialize','Pb in allocation for soilalb_urban','','')
+       
+       ! Read urban albedo from restart file
+       CALL ioconf_setatt_p('UNITS', '-')
+       CALL ioconf_setatt_p('LONG_NAME','Urban soil albedo for visible and near-infrared range')
+       CALL restget_p (rest_id, 'soilalbedo_urban', nbp_glo, 2, 1, kjit, .TRUE., soilalb_urban, "gather", nbp_glo, index_g)
+
+       ! Initialize by interpolating from file if the variable was not in restart file
+       IF ( ALL(soilalb_urban(:,:) == val_exp) ) THEN
+          CALL condveg_alb_urban(kjpindex, lalo, neighbours,  resolution, contfrac)
+       END IF
+       CALL xios_orchidee_send_field("soilalb_urban",soilalb_urban)
+
+
+
     IF (alb_bg_modis) THEN
        ! Allocate background soil albedo
        ALLOCATE (soilalb_bg(kjpindex,2),stat=ier)
@@ -552,6 +572,10 @@ CONTAINS
     CALL restput_p (rest_id, 'z0m', nbp_glo, 1, 1, kjit, z0m, 'scatter',  nbp_glo, index_g)
     CALL restput_p (rest_id, 'z0h', nbp_glo, 1, 1, kjit, z0h, 'scatter',  nbp_glo, index_g)
     CALL restput_p (rest_id, 'roughheight', nbp_glo, 1, 1, kjit, roughheight, 'scatter',  nbp_glo, index_g)
+
+    IF ( do_alb_urban ) THEN
+       CALL restput_p (rest_id, 'soilalbedo_urban', nbp_glo, 2, 1, kjit, soilalb_urban, 'scatter',  nbp_glo, index_g)
+    END IF
     
     IF ( alb_bg_modis ) THEN
        CALL restput_p (rest_id, 'soilalbedo_bg', nbp_glo, 2, 1, kjit, soilalb_bg, 'scatter',  nbp_glo, index_g)
@@ -591,6 +615,8 @@ CONTAINS
        IF (ALLOCATED(soilalb_moy))  DEALLOCATE (soilalb_moy)
        ! BG soil albedo
        IF (ALLOCATED(soilalb_bg))  DEALLOCATE (soilalb_bg)
+       ! urban soil albedo
+       IF (ALLOCATED(soilalb_urban))  DEALLOCATE (soilalb_urban)
 
   END SUBROUTINE condveg_clear
 
@@ -700,8 +726,6 @@ CONTAINS
                                                                            !!(unitless ratio)
     REAL(r_std), DIMENSION(kjpindex,2)                  :: alb_urban       !! Mean urban albedo for visible and near-infrared 
                                                                            !! range (unitless)
-    REAL(r_std), DIMENSION(kjpindex,2)                  :: alb_urban_nc    !! Mean urban non constant albedo for visible and near-infrared 
-                                                                           !! range (unitless)
     REAL(r_std), DIMENSION(kjpindex,2)                  :: alb_urban_c    ! ! Mean urban constant albedo for visible and near-infrared 
                                                                            !! range (unitless)
     REAL(r_std),DIMENSION (nvm,2)                       :: alb_leaf_tmp    !! Variables for albedo values for all PFTs and 
@@ -757,8 +781,7 @@ CONTAINS
              alb_urban(:,ks) = soilalb_bg(:,ks)
           ELSE 
              IF (do_alb_urban) THEN
-                CALL condveg_alb_urban(kjpindex, lalo, neighbours,  resolution, contfrac, alb_urban_nc)
-                alb_urban(:,ks) = alb_urban_nc(:,ks)
+                alb_urban(:,ks) = soilalb_urban(:,ks)
              ELSE 
                 alb_urban_c(:,ks) = 0.15 ! Need to improve this part, better if can be in orchidee default and possibly changed in run.def
                 alb_urban(:,ks) = alb_urban_c(:,ks)
@@ -1846,8 +1869,6 @@ CONTAINS
     REAL(r_std), DIMENSION(nbpt), INTENT(in)               :: contfrac        !! Fraction of continent in the grid
     !
     !  0.2 OUTPUT
-    !
-    REAL(r_std), DIMENSION(nbpt), INTENT(out)            :: albedo_urban_nc       !! buildings height per grid cell
                                                                                 ! 
     !
     !  0.3 LOCAL
@@ -1878,6 +1899,7 @@ CONTAINS
                                                                              !!   `maskingtype')
     CHARACTER(LEN=250)                                   :: namemaskvar      !! name of the variable to use to mask
     CHARACTER(LEN=250)                                   :: msg
+    REAL(r_std), DIMENSION(nbpt)                         :: albedo_urban_nc       !! buildings height per grid cell
 
   !_ ================================================================================================================================
 
@@ -1926,10 +1948,12 @@ CONTAINS
       albedo_urban_nc, aalbedo_urban_nc)
 
     IF (printlev_loc >= 3) WRITE(numout,*) 'condveg_alb_urban ended'
-    DO ib=1,nbpt
-      albedo_urban_nc(ib) = MIN(albedo_urban_nc(ib), 0.99 )
-      albedo_urban_nc(ib) = MAX(albedo_urban_nc(ib), 0.01 )
-    ENDDO
+    !DO ib=1,nbpt
+      !albedo_urban_nc(ib) = MIN(albedo_urban_nc(ib), 0.99 )
+      !albedo_urban_nc(ib) = MAX(albedo_urban_nc(ib), 0.01 )
+    !ENDDO
+
+    soilalb_urban(:,:) = albedo_urban_nc(:)
 
   END SUBROUTINE condveg_alb_urban 
 
