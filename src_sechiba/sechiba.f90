@@ -759,7 +759,7 @@ CONTAINS
  
     !! 4. Compute hydrology
     !! 4.1 Water balance from CWRR module (11 soil layers)
-    CALL hydrol_main (ks, nvan, avan, mcr, mcs, mcfc, mcw, kjit, kjpindex, &
+    CALL hydrol_main (ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, kjit, kjpindex, &
          & index, indexveg, indexsoil, indexlayer, indexnslm, &
          & temp_sol_new, floodout, runoff, drainage, frac_nobio, totfrac_nobio, vevapwet, veget, veget_max, njsc, &
          & qsintmax, qsintveg, vevapnu, vevapsno, vevapflo, snow, snow_age, snow_nobio, snow_nobio_age,  &

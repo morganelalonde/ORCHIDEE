@@ -3026,7 +3026,7 @@ CONTAINS
           ! We apply Van Genuchten equation for K(theta) based on Ks(z)=ks(ji) * kfact(jsl,ji)
           DO ii = imax,imin,-1
              frac=MIN(un,(mc_lin(ii,ji)-mcr(ji))/(mcs(ji)-mcr(ji)))
-             k_lin(ii,jsl,ji) = ks(ji) * kfact(jsl,ji)* kfact_urban(ji,jsl,ii) * (frac**0.5) * ( un - ( un - frac ** (un/m)) ** m )**2
+             k_lin(ii,jsl,ji) = ks(ji) * kfact(jsl,ji) * (frac**0.5) * ( un - ( un - frac ** (un/m)) ** m )**2
           ENDDO
 
           ! k_lin should not be zero, nor too small
