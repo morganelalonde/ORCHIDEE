@@ -1416,7 +1416,7 @@ CONTAINS
     CALL slowproc_finalize (kjit,       kjpindex,  rest_id,  index,      &
                             njsc,       lai,       height,   veget,      &
                             frac_nobio, veget_max, reinf_slope,          &
-                            ks,         kfact_urban, nvan,      avan,     mcr,        &
+                            ks,         nvan,      avan,     mcr,        &
                             mcs,        mcfc,      mcw,                  &
                             assim_param, frac_age, fraction_aeirrig_sw)
     
