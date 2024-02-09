@@ -1416,7 +1416,7 @@ CONTAINS
 
 
             DO jsl=1,nslm
-             kfact_urban(:,jsl,1) = coeff_imperv(:)
+             kfact_urban(:,jsl,1) = coeff_imperv(:) * (veget(:,16) / (veget(:,1) + veget(:,16)))
            END DO
 
      ENDIF
