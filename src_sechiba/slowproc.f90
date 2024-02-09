@@ -1389,7 +1389,6 @@ CONTAINS
 
 
     IF ( do_imperviousness ) THEN
-        var_name = 'frac_imperv'
            CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac)
      ENDIF
         
@@ -5025,7 +5024,7 @@ CONTAINS
         
         CALL xios_orchidee_send_field("coeff_imperv",coeff_imperv)
 
-    kfact_urban(:,:,:) = un
+    kfact_urban(:,:,:) = 1.
 
     kfact_urban(:,:,1) = coeff_imperv(:)
 
