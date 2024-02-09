@@ -4922,7 +4922,6 @@ CONTAINS
     !
     !  0.2 OUTPUT
     !
-    REAL(r_std), DIMENSION(kjpindex,nslm,nstm), INTENT(out)    :: kfact_urban        !! Fraction of continent in the grid
                                                                                 ! 
     !
     !  0.3 LOCAL
