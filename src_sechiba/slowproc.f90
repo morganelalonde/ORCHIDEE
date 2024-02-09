@@ -1012,7 +1012,7 @@ CONTAINS
     INTEGER(i_std), DIMENSION(kjpindex), INTENT(out)      :: njsc           !! Index of the dominant soil textural class in the grid cell (1-nscm, unitless)
     
     !! 0.3 Local variables
-    INTEGER(i_std)                                        :: ji, jv, ier,jst   !! Indices  
+    INTEGER(i_std)                                        :: ji, jv, ier, jst, jsl   !! Indices  
     INTEGER(i_std)                                        :: l, jf             !! Indices  
     INTEGER(i_std)                                        :: vtmp(1)           !! temporary variable
     INTEGER(i_std)                                        :: njsc_imp          !! njsc to impose nvan, ks etc. if impsoil
@@ -1400,7 +1400,6 @@ CONTAINS
 
         frac_imperv(:) = zero
         coeff_imperv(:) = un
-        kfact_urban(:,:,:) = un
 
     IF ( do_imperviousness ) THEN
         var_name = 'frac_imperv'
