@@ -121,6 +121,8 @@ MODULE sechiba
 !salma: adding soil hydraulic params
   REAL(r_std), ALLOCATABLE, SAVE, DIMENSION (:)     :: ks              !! Saturated soil conductivity (mm d^{-1})
 !$OMP THREADPRIVATE(ks)
+  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION (:,:,:) :: kfact_urban !! kfact_urban
+!$OMP THREADPRIVATE(kfact_urban)
   REAL(r_std), ALLOCATABLE, SAVE, DIMENSION (:)     :: nvan            !! Van Genushten n parameter (unitless)
 !$OMP THREADPRIVATE(nvan)
   REAL(r_std), ALLOCATABLE, SAVE, DIMENSION (:)     :: avan            !! Van Genushten alpha parameter (mm ^{-1})
@@ -465,7 +467,7 @@ CONTAINS
                               rest_id,       rest_id_stom, hist_id_stom,   hist_id_stom_IPCC, &
                               index,         indexveg,     lalo,           neighbours,        &
                               resolution,    contfrac,     temp_air,                          &
-                              soiltile,      reinf_slope,  ks,             nvan,              &
+                              soiltile,      reinf_slope,  ks,             kfact_urban, nvan, &
                               avan,          mcr,          mcs,            mcfc,              &
                               mcw,           deadleaf_cover,               assim_param,       &
                               lai,           frac_age,     height,         veget,             &
@@ -757,7 +759,7 @@ CONTAINS
  
     !! 4. Compute hydrology
     !! 4.1 Water balance from CWRR module (11 soil layers)
-    CALL hydrol_main (ks,  nvan, avan, mcr, mcs, mcfc, mcw, kjit, kjpindex, &
+    CALL hydrol_main (ks, nvan, avan, mcr, mcs, mcfc, mcw, kjit, kjpindex, &
          & index, indexveg, indexsoil, indexlayer, indexnslm, &
          & temp_sol_new, floodout, runoff, drainage, frac_nobio, totfrac_nobio, vevapwet, veget, veget_max, njsc, &
          & qsintmax, qsintveg, vevapnu, vevapsno, vevapflo, snow, snow_age, snow_nobio, snow_nobio_age,  &
@@ -1414,7 +1416,7 @@ CONTAINS
     CALL slowproc_finalize (kjit,       kjpindex,  rest_id,  index,      &
                             njsc,       lai,       height,   veget,      &
                             frac_nobio, veget_max, reinf_slope,          &
-                            ks,         nvan,      avan,     mcr,        &
+                            ks,         kfact_urban, nvan,      avan,     mcr,        &
                             mcs,        mcfc,      mcw,                  &
                             assim_param, frac_age, fraction_aeirrig_sw)
     
@@ -1580,6 +1582,9 @@ CONTAINS
     !salma: adding soil params
     ALLOCATE (ks(kjpindex),stat=ier)
     IF (ier /= 0) CALL ipslerr_p(3,'sechiba_init','Pb in alloc for ks','','')
+
+    ALLOCATE (kfact_urban(kjpindex,nslm,nstm),stat=ier)
+    IF (ier /= 0) CALL ipslerr_p(3,'sechiba_init','Pb in alloc for kfact_urban','','')
 
     ALLOCATE (nvan(kjpindex),stat=ier)
     IF (ier /= 0) CALL ipslerr_p(3,'sechiba_init','Pb in alloc for nvan ','','')
@@ -1968,6 +1973,7 @@ CONTAINS
 
     !salma: adding soil hydraulic params
     IF ( ALLOCATED (ks)) DEALLOCATE (ks)
+    IF ( ALLOCATED (kfact_urban)) DEALLOCATE (kfact_urban)
     IF ( ALLOCATED (nvan)) DEALLOCATE (nvan)
     IF ( ALLOCATED (avan)) DEALLOCATE (avan)
     IF ( ALLOCATED (mcr)) DEALLOCATE (mcr)

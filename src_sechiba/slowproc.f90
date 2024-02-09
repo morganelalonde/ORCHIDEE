@@ -289,7 +289,7 @@ CONTAINS
                                   rest_id,       rest_id_stom, hist_id_stom,   hist_id_stom_IPCC, &
                                   IndexLand,     indexveg,     lalo,           neighbours,        &
                                   resolution,    contfrac,     temp_air,                          &
-                                  soiltile,      reinf_slope,  ks,             nvan,              &
+                                  soiltile,      reinf_slope,  ks,             kfact_urban, nvan, &
                                   avan,          mcr,          mcs,            mcfc,              &
                                   mcw,           deadleaf_cover,               assim_param,       &
                                   lai,           frac_age,     height,         veget,             &
@@ -332,6 +332,7 @@ CONTAINS
    REAL(r_std),DIMENSION (kjpindex, nstm), INTENT(out)     :: reinf_slope_soil  !! slope coef for reinfiltration per soil tile
     !Salma: adding soil params
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: ks             !! Hydraulic conductivity at saturation (mm {-1})
+    REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: kfact_urban    !! kfact_urban
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: nvan           !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: avan           !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: mcr            !! Residual volumetric water content (m^{3} m^{-3})
@@ -356,7 +357,7 @@ CONTAINS
     !     Restart file read for Sechiba.
     CALL slowproc_init (kjit, kjpindex, IndexLand, lalo, neighbours, resolution, contfrac, &
          rest_id, lai, frac_age, veget, frac_nobio, totfrac_nobio, soiltile, fraclut, nwdfraclut, reinf_slope, &
-         ks,  nvan, avan, mcr, mcs, mcfc, mcw, &
+         ks,  kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, &
          veget_max, tot_bare_soil, njsc, &
          height, lcanop, veget_update, veget_year, fraction_aeirrig_sw)
     
@@ -962,7 +963,7 @@ CONTAINS
 
   SUBROUTINE slowproc_init (kjit, kjpindex, IndexLand, lalo, neighbours, resolution, contfrac, &
        rest_id, lai, frac_age, veget, frac_nobio, totfrac_nobio, soiltile, fraclut, nwdfraclut, reinf_slope, &
-       ks,  nvan, avan, mcr, mcs, mcfc, mcw, &
+       ks,  kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, &
        veget_max, tot_bare_soil, njsc, &
        height, lcanop, veget_update, veget_year, fraction_aeirrig_sw)
     
@@ -998,6 +999,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,nlut), INTENT(out)   :: nwdfraclut     !! Fraction of non woody vegetation in each landuse tile
     REAL(r_std), DIMENSION (kjpindex), INTENT(out)        :: reinf_slope    !! slope coef for reinfiltration 
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: ks             !! Hydraulic conductivity at saturation (mm {-1})
+    REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: kfact_urban    !! kfact_urban
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: nvan           !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: avan           !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: mcr            !! Residual volumetric water content (m^{3} m^{-3})
@@ -1398,6 +1400,7 @@ CONTAINS
 
         frac_imperv(:) = zero
         coeff_imperv(:) = un
+        kfact_urban(:,:,:) = un
 
     IF ( do_imperviousness ) THEN
         var_name = 'frac_imperv'
@@ -1410,7 +1413,7 @@ CONTAINS
         coeff_imperv(:) = -0.999999 * frac_imperv(:) + un
         
         CALL xios_orchidee_send_field("coeff_imperv",coeff_imperv)
-        ks(:) = ks(:)*coeff_imperv(:)
+        kfact_urban(:,:,1) = coeff_imperv(:)
      ENDIF
         
 
