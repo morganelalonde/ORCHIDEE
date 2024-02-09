@@ -1385,7 +1385,7 @@ CONTAINS
 
 
     IF ( do_imperviousness ) THEN
-           CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac)
+           CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac, kfact_urban)
      ENDIF
         
 
@@ -4899,7 +4899,7 @@ CONTAINS
   !_ ================================================================================================================================
 
 
-  SUBROUTINE slowproc_imperviousness(nbpt, lalo, neighbours,  resolution, contfrac)
+  SUBROUTINE slowproc_imperviousness(nbpt, lalo, neighbours,  resolution, contfrac, kfact_urban)
 
     USE interpweight
 
