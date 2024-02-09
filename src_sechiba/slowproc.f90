@@ -5025,8 +5025,10 @@ CONTAINS
         CALL xios_orchidee_send_field("coeff_imperv",coeff_imperv)
 
     kfact_urban(:,:,:) = 1.
-
-    kfact_urban(:,:,1) = coeff_imperv(:)
+    
+    DO jsl=1,nslm
+    kfact_urban(:,jsl,1) = coeff_imperv(:)
+    END DO
 
   END SUBROUTINE slowproc_imperviousness 
 
