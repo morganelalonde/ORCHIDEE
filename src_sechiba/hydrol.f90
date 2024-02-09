@@ -764,13 +764,6 @@ CONTAINS
     !
     !! 3.2 computes vegetations reservoirs  ==>hydrol_vegupd
     CALL hydrol_vegupd(kjpindex, veget, veget_max, soiltile, qsintveg, frac_bare, drain_upd, runoff_upd)
-
-
-
-
-        kfact_urban(:,:,:) = un
-
-
     
     !! Calculate kfact_root
     IF (kfact_root_const) THEN

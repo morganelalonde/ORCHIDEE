@@ -332,7 +332,7 @@ CONTAINS
    REAL(r_std),DIMENSION (kjpindex, nstm), INTENT(out)     :: reinf_slope_soil  !! slope coef for reinfiltration per soil tile
     !Salma: adding soil params
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: ks             !! Hydraulic conductivity at saturation (mm {-1})
-    REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: kfact_urban    !! kfact_urban
+    REAL(r_std),DIMENSION (kjpindex,nslm,nstm), INTENT (out)         :: kfact_urban    !! kfact_urban
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: nvan           !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: avan           !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: mcr            !! Residual volumetric water content (m^{3} m^{-3})
@@ -999,7 +999,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,nlut), INTENT(out)   :: nwdfraclut     !! Fraction of non woody vegetation in each landuse tile
     REAL(r_std), DIMENSION (kjpindex), INTENT(out)        :: reinf_slope    !! slope coef for reinfiltration 
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: ks             !! Hydraulic conductivity at saturation (mm {-1})
-    REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: kfact_urban    !! kfact_urban
+    REAL(r_std),DIMENSION (kjpindex,nslm,nstm), INTENT (out)         :: kfact_urban    !! kfact_urban
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: nvan           !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: avan           !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: mcr            !! Residual volumetric water content (m^{3} m^{-3})
@@ -1400,6 +1400,7 @@ CONTAINS
 
         frac_imperv(:) = zero
         coeff_imperv(:) = un
+        kfact_urban(:,:,:) = un
 
     IF ( do_imperviousness ) THEN
         var_name = 'frac_imperv'

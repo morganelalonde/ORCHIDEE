@@ -121,7 +121,7 @@ MODULE sechiba
 !salma: adding soil hydraulic params
   REAL(r_std), ALLOCATABLE, SAVE, DIMENSION (:)     :: ks              !! Saturated soil conductivity (mm d^{-1})
 !$OMP THREADPRIVATE(ks)
-  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION (:,:,:) :: kfact_urban !! kfact_urban
+  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION (:,:,:) :: kfact_urban     !! kfact_urban
 !$OMP THREADPRIVATE(kfact_urban)
   REAL(r_std), ALLOCATABLE, SAVE, DIMENSION (:)     :: nvan            !! Van Genushten n parameter (unitless)
 !$OMP THREADPRIVATE(nvan)
