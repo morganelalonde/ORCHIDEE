@@ -4914,6 +4914,7 @@ CONTAINS
                                                                               !! (1=North and then clockwise)
     REAL(r_std), DIMENSION(nbpt,2), INTENT(in)             :: resolution      !! The size in km of each grid-box in X and Y
     REAL(r_std), DIMENSION(nbpt), INTENT(in)               :: contfrac        !! Fraction of continent in the grid
+    REAL(r_std), DIMENSION(kjpindex,nslm,nstm), INTENT(inout)               :: kfact_urban        !! Fraction of continent in the grid
     !
     !  0.2 OUTPUT
     !
