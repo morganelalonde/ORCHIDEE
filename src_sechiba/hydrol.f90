@@ -802,7 +802,7 @@ CONTAINS
     !
     !! 3.5 computes soil hydrology ==>hydrol_soil
 
-    CALL hydrol_soil(ks, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, veget_max, soiltile, njsc, reinf_slope_soil,  &
+    CALL hydrol_soil(ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, veget_max, soiltile, njsc, reinf_slope_soil,  &
          transpir, vevapnu, evapot, evapot_penm, runoff, drainage, & 
          returnflow, reinfiltration, irrigation, &
          tot_melt,evap_bare_lim,evap_bare_lim_ns, shumdiag, shumdiag_perma, &
@@ -3664,7 +3664,7 @@ CONTAINS
 !! \n
 !_ ================================================================================================================================
 !_ hydrol_soil
-  SUBROUTINE hydrol_soil (ks, nvan, avan, mcr, mcs, mcfc, mcw, &
+  SUBROUTINE hydrol_soil (ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, &
        kjpindex, veget_max, soiltile, njsc, reinf_slope_soil, &
        & transpir, vevapnu, evapot, evapot_penm, runoff, drainage, &
        & returnflow, reinfiltration, irrigation, &
