@@ -490,7 +490,7 @@ CONTAINS
     
     
     !! 1.7 Initialize remaining hydrological variables
-    CALL hydrol_initialize (ks,  nvan, avan, mcr, mcs, mcfc, mcw,    &
+    CALL hydrol_initialize (ks,  kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw,    &
          kjit,           kjpindex,  index,         rest_id,          &
          njsc,           soiltile,  veget,         veget_max,        &
          humrel,         vegstress, drysoil_frac,                    &
