@@ -4044,7 +4044,7 @@ CONTAINS
        
        !! K and D are computed for the profile of mc before infiltration
        !! They depend on the fraction of soil ice, given by profil_froz_hydro_ns
-       CALL hydrol_soil_coef(mcr, mcs, kjpindex,jst,njsc)
+       CALL hydrol_soil_coef(mcr, mcs, kjpindex,jst,njsc,kfact_urban)
 
        !! Infiltration and surface runoff are computed
        !! Infiltration stems from comparing liquid water2infilt to initial total mc (liquid+ice)
@@ -4076,7 +4076,7 @@ CONTAINS
        
        !! 2.1 K and D are recomputed after infiltration
        !! They depend on the fraction of soil ice, still given by profil_froz_hydro_ns 
-       CALL hydrol_soil_coef(mcr, mcs,kjpindex,jst,njsc)
+       CALL hydrol_soil_coef(mcr, mcs,kjpindex,jst,njsc,kfact_urban)
  
        !! 2.2 Set the tridiagonal matrix coefficients for the diffusion/redistribution scheme
        !! This process will further act on mcl only, based on a, b, d from hydrol_soil_coef
@@ -4779,7 +4779,7 @@ CONTAINS
        ENDDO          
 
        !! 8.3 K and D are recomputed for the updated profile of mc/mcl
-       CALL hydrol_soil_coef(mcr, mcs, kjpindex,jst,njsc)
+       CALL hydrol_soil_coef(mcr, mcs, kjpindex,jst,njsc,kfact_urban)
 
        !! 8.4 Set the tridiagonal matrix coefficients for the diffusion/redistribution scheme
        CALL hydrol_soil_setup(kjpindex,jst)
@@ -5815,7 +5815,7 @@ CONTAINS
 !_ ================================================================================================================================
 !_ hydrol_soil_coef
 
-  SUBROUTINE hydrol_soil_coef(mcr, mcs, kjpindex,ins,njsc)
+  SUBROUTINE hydrol_soil_coef(mcr, mcs, kjpindex,ins,njsc,kfact_urban)
 
     IMPLICIT NONE
     !
