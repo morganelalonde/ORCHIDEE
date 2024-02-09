@@ -5828,7 +5828,7 @@ CONTAINS
                                                                           !! in the grid cell (1-nscm, unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)     :: mcr              !! Residual volumetric water content (m^{3} m^{-3})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)     :: mcs              !! Saturated volumetric water content (m^{3} m^{-3})
-
+    REAL(r_std),DIMENSION (kjpindex,nslm,nstm), INTENT (in)     :: kfact_urban 
     !! 0.2 Output variables
 
     !! 0.3 Modified variables
@@ -5861,10 +5861,10 @@ CONTAINS
              ! calcul de k based on mc_liq
              !
              i= MAX(imin, MIN(imax-1, INT(imin +(imax-imin)*(mc_used-mcr(ji))/(mcs(ji)-mcr(ji)))))
-             a(ji,jsl) = a_lin(i,jsl,ji) * kfact_root(ji,jsl,ins) ! in mm/d
-             b(ji,jsl) = b_lin(i,jsl,ji) * kfact_root(ji,jsl,ins) ! in mm/d
-             d(ji,jsl) = d_lin(i,jsl,ji) * kfact_root(ji,jsl,ins) ! in mm^2/d
-             k(ji,jsl) = kfact_root(ji,jsl,ins) * MAX(k_lin(imin+1,jsl,ji), &
+             a(ji,jsl) = a_lin(i,jsl,ji) * kfact_root(ji,jsl,ins) * kfact_urban(ji,jsl,ins)! in mm/d
+             b(ji,jsl) = b_lin(i,jsl,ji) * kfact_root(ji,jsl,ins) * kfact_urban(ji,jsl,ins)! in mm/d
+             d(ji,jsl) = d_lin(i,jsl,ji) * kfact_root(ji,jsl,ins) * kfact_urban(ji,jsl,ins) ! in mm^2/d
+             k(ji,jsl) = kfact_root(ji,jsl,ins) * kfact_urban(ji,jsl,ins) * MAX(k_lin(imin+1,jsl,ji), &
                   a_lin(i,jsl,ji) * mc_used + b_lin(i,jsl,ji)) ! in mm/d
           ENDDO ! loop on grid
        ENDDO
@@ -5878,10 +5878,10 @@ CONTAINS
              mc_ratio = MAX(mc(ji,jsl,ins)-mcr(ji), zero)/(mcs(ji)-mcr(ji))
              
              i= MAX(MIN(INT((imax-imin)*mc_ratio)+imin , imax-1), imin)
-             a(ji,jsl) = a_lin(i,jsl,ji) * kfact_root(ji,jsl,ins) ! in mm/d
-             b(ji,jsl) = b_lin(i,jsl,ji) * kfact_root(ji,jsl,ins) ! in mm/d
-             d(ji,jsl) = d_lin(i,jsl,ji) * kfact_root(ji,jsl,ins) ! in mm^2/d
-             k(ji,jsl) = kfact_root(ji,jsl,ins) * MAX(k_lin(imin+1,jsl,ji), &
+             a(ji,jsl) = a_lin(i,jsl,ji) * kfact_root(ji,jsl,ins) * kfact_urban(ji,jsl,ins) ! in mm/d
+             b(ji,jsl) = b_lin(i,jsl,ji) * kfact_root(ji,jsl,ins) * kfact_urban(ji,jsl,ins) ! in mm/d
+             d(ji,jsl) = d_lin(i,jsl,ji) * kfact_root(ji,jsl,ins) * kfact_urban(ji,jsl,ins) ! in mm^2/d
+             k(ji,jsl) = kfact_root(ji,jsl,ins) * kfact_urban(ji,jsl,ins) * MAX(k_lin(imin+1,jsl,ji), &
                   a_lin(i,jsl,ji) * mc(ji,jsl,ins) + b_lin(i,jsl,ji))  ! in mm/d
           END DO 
        END DO
