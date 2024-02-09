@@ -884,10 +884,6 @@ CONTAINS
           ENDIF
     ENDIF
 
-    IF ( do_imperviousness ) THEN
-          CALL restput_p (rest_id, 'frac_imperv', nbp_glo, 1, 1, kjit, frac_imperv, 'scatter',  nbp_glo, index_g)
-    ENDIF
-
     DO jf = 1, nleafages
        ! variable name is somewhat complicated as ioipsl does not allow 3d variables for the moment...
        WRITE(laistring,'(i4)') jf
@@ -5017,15 +5013,10 @@ CONTAINS
       !frac_imperv(ib) = MAX(frac_imperv(ib), 0.01 )
     !ENDDO
 
-        CALL xios_orchidee_send_field("frac_imperv",frac_imperv)
-
-        
         coeff_imperv(:) = -0.999999 * frac_imperv(:) + un
-        
-        CALL xios_orchidee_send_field("coeff_imperv",coeff_imperv)
 
     kfact_urban(:,:,:) = 1.
-    
+
     DO jsl=1,nslm
     kfact_urban(:,jsl,1) = coeff_imperv(:)
     END DO
