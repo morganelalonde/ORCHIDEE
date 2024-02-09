@@ -443,7 +443,7 @@ CONTAINS
 !! \n
 !_ ================================================================================================================================
 
-  SUBROUTINE hydrol_initialize ( ks,             nvan,      avan,          mcr,              &
+  SUBROUTINE hydrol_initialize ( ks,          kfact_urban,   nvan,      avan,          mcr,              &
                                  mcs,            mcfc,      mcw,           kjit,             &
                                  kjpindex,       index,     rest_id,                         &
                                  njsc,           soiltile,  veget,         veget_max,        &
@@ -465,6 +465,7 @@ CONTAINS
                                                                            !! grid cell (1-nscm, unitless)  
     ! 2D soil parameters
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: ks               !! Hydraulic conductivity at saturation (mm {-1})
+    REAL(r_std),DIMENSION (kjpindex,nslm,nstm), INTENT (in)      :: kfact_urban              !! Hydraulic conductivity at saturation (mm {-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: nvan             !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: avan             !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: mcr              !! Residual volumetric water content (m^{3} m^{-3})
@@ -509,7 +510,7 @@ CONTAINS
          snowdz, snowgrain, snowrho,    snowtemp,   snowheat, &
          drysoil_frac, evap_bare_lim, evap_bare_lim_ns)
     
-    CALL hydrol_var_init (ks, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, veget, veget_max, &
+    CALL hydrol_var_init (ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, veget, veget_max, &
          soiltile, njsc, mx_eau_var, shumdiag_perma, &
          drysoil_frac, qsintveg, mc_layh, mcl_layh) 
 
@@ -564,7 +565,7 @@ CONTAINS
 !! \n
 !_ ================================================================================================================================
 
-  SUBROUTINE hydrol_main (ks, nvan, avan, mcr, mcs, mcfc, mcw,  &
+  SUBROUTINE hydrol_main (ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw,  &
        & kjit, kjpindex, &
        & index, indexveg, indexsoil, indexlayer, indexnslm, &
        & temp_sol_new, floodout, runoff, drainage, frac_nobio, totfrac_nobio, vevapwet, veget, veget_max, njsc, &
@@ -2666,7 +2667,7 @@ CONTAINS
 !_ ================================================================================================================================
 !_ hydrol_var_init
 
-  SUBROUTINE hydrol_var_init (ks, nvan, avan, mcr, mcs, mcfc, mcw, &
+  SUBROUTINE hydrol_var_init (ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, &
        kjpindex, veget, veget_max, soiltile, njsc, &
        mx_eau_var, shumdiag_perma, &
        drysoil_frac, qsintveg, mc_layh, mcl_layh) 
@@ -4051,7 +4052,7 @@ CONTAINS
        !! Infiltration stems from comparing liquid water2infilt to initial total mc (liquid+ice)
        !! The conductivity comes from hydrol_soil_coef and relates to the liquid phase only
        !  This seems consistent with ok_freeze
-       CALL hydrol_soil_infilt(ks, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, jst, njsc, flux_infilt,  stempdiag, &
+       CALL hydrol_soil_infilt(ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, jst, njsc, flux_infilt,  stempdiag, &
 	                       qinfilt_ns, ru_infilt_ns, check_infilt_ns)
        ru_ns(:,jst) = ru_infilt_ns(:,jst) 
 
@@ -5059,7 +5060,7 @@ CONTAINS
 !_ ================================================================================================================================
 !_ hydrol_soil_infilt
 
-  SUBROUTINE hydrol_soil_infilt(ks, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, ins, njsc, flux_infilt, stempdiag, &
+  SUBROUTINE hydrol_soil_infilt(ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, ins, njsc, flux_infilt, stempdiag, &
                                 qinfilt_ns, ru_infilt, check)
 
     !! 0. Variable and parameter declaration
