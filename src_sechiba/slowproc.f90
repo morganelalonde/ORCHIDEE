@@ -5032,10 +5032,10 @@ CONTAINS
     !CALL xios_orchidee_send_field("aimperviousness",aimperviousness)
 
     IF (printlev_loc >= 3) WRITE(numout,*) 'slowproc_imperviousness ended'
-    DO ib=1,nbpt
-      frac_imperv(ib) = MIN(frac_imperv(ib), 0.99 )
-      frac_imperv(ib) = MAX(frac_imperv(ib), 0.01 )
-    ENDDO
+    !DO ib=1,nbpt
+      !frac_imperv(ib) = MIN(frac_imperv(ib), 0.99 )
+      !frac_imperv(ib) = MAX(frac_imperv(ib), 0.01 )
+    !ENDDO
 
 
 
