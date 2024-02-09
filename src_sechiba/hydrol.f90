@@ -443,7 +443,7 @@ CONTAINS
 !! \n
 !_ ================================================================================================================================
 
-  SUBROUTINE hydrol_initialize ( ks,             nvan,      avan,          mcr,              &
+  SUBROUTINE hydrol_initialize ( ks,          kfact_urban,   nvan,      avan,          mcr,              &
                                  mcs,            mcfc,      mcw,           kjit,             &
                                  kjpindex,       index,     rest_id,                         &
                                  njsc,           soiltile,  veget,         veget_max,        &
@@ -465,6 +465,7 @@ CONTAINS
                                                                            !! grid cell (1-nscm, unitless)  
     ! 2D soil parameters
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: ks               !! Hydraulic conductivity at saturation (mm {-1})
+    REAL(r_std),DIMENSION (kjpindex,nslm,nstm), INTENT (in)      :: kfact_urban              !! Hydraulic conductivity at saturation (mm {-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: nvan             !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: avan             !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: mcr              !! Residual volumetric water content (m^{3} m^{-3})
@@ -509,7 +510,7 @@ CONTAINS
          snowdz, snowgrain, snowrho,    snowtemp,   snowheat, &
          drysoil_frac, evap_bare_lim, evap_bare_lim_ns)
     
-    CALL hydrol_var_init (ks, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, veget, veget_max, &
+    CALL hydrol_var_init (ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, veget, veget_max, &
          soiltile, njsc, mx_eau_var, shumdiag_perma, &
          drysoil_frac, qsintveg, mc_layh, mcl_layh) 
 
@@ -564,7 +565,7 @@ CONTAINS
 !! \n
 !_ ================================================================================================================================
 
-  SUBROUTINE hydrol_main (ks, nvan, avan, mcr, mcs, mcfc, mcw,  &
+  SUBROUTINE hydrol_main (ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw,  &
        & kjit, kjpindex, &
        & index, indexveg, indexsoil, indexlayer, indexnslm, &
        & temp_sol_new, floodout, runoff, drainage, frac_nobio, totfrac_nobio, vevapwet, veget, veget_max, njsc, &
@@ -617,6 +618,7 @@ CONTAINS
     REAL(r_std),DIMENSION (kjpindex,nstm), INTENT (in) :: reinf_slope_soil !! Slope coef per soil tile
 
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: ks               !! Hydraulic conductivity at saturation (mm {-1})
+    REAL(r_std),DIMENSION (kjpindex, nslm, nstm), INTENT (in)      :: kfact_urban      !! urban coeff
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: nvan             !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: avan             !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: mcr              !! Residual volumetric water content (m^{3} m^{-3})
@@ -2665,7 +2667,7 @@ CONTAINS
 !_ ================================================================================================================================
 !_ hydrol_var_init
 
-  SUBROUTINE hydrol_var_init (ks, nvan, avan, mcr, mcs, mcfc, mcw, &
+  SUBROUTINE hydrol_var_init (ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, &
        kjpindex, veget, veget_max, soiltile, njsc, &
        mx_eau_var, shumdiag_perma, &
        drysoil_frac, qsintveg, mc_layh, mcl_layh) 
@@ -2685,6 +2687,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,nstm), INTENT (in) :: soiltile      !! Fraction of each soil tile within vegtot (0-1, unitless)
    
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: ks               !! Hydraulic conductivity at saturation (mm {-1})
+    REAL(r_std),DIMENSION (kjpindex,nslm,nstm), INTENT (in)      :: kfact_urban               !! Hydraulic conductivity at saturation (mm {-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: nvan             !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: avan             !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)      :: mcr              !! Residual volumetric water content (m^{3} m^{-3})
@@ -3023,7 +3026,7 @@ CONTAINS
           ! We apply Van Genuchten equation for K(theta) based on Ks(z)=ks(ji) * kfact(jsl,ji)
           DO ii = imax,imin,-1
              frac=MIN(un,(mc_lin(ii,ji)-mcr(ji))/(mcs(ji)-mcr(ji)))
-             k_lin(ii,jsl,ji) = ks(ji) * kfact(jsl,ji) * (frac**0.5) * ( un - ( un - frac ** (un/m)) ** m )**2
+             k_lin(ii,jsl,ji) = ks(ji) * kfact(jsl,ji)* kfact_urban(ji,jsl,ii) * (frac**0.5) * ( un - ( un - frac ** (un/m)) ** m )**2
           ENDDO
 
           ! k_lin should not be zero, nor too small
@@ -3685,6 +3688,7 @@ CONTAINS
                                                                                  !!   in the grid cell (1-nscm, unitless)
     
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)            :: ks               !! Hydraulic conductivity at saturation (mm {-1})
+    REAL(r_std),DIMENSION (kjpindex,nslm,nstm), INTENT (in)  :: kfact_urban               !! Hydraulic conductivity at saturation (mm {-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)            :: nvan             !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)            :: avan             !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)            :: mcr              !! Residual volumetric water content (m^{3} m^{-3})
@@ -4048,7 +4052,7 @@ CONTAINS
        !! Infiltration stems from comparing liquid water2infilt to initial total mc (liquid+ice)
        !! The conductivity comes from hydrol_soil_coef and relates to the liquid phase only
        !  This seems consistent with ok_freeze
-       CALL hydrol_soil_infilt(ks, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, jst, njsc, flux_infilt,  stempdiag, &
+       CALL hydrol_soil_infilt(ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, jst, njsc, flux_infilt,  stempdiag, &
 	                       qinfilt_ns, ru_infilt_ns, check_infilt_ns)
        ru_ns(:,jst) = ru_infilt_ns(:,jst) 
 
@@ -4666,7 +4670,7 @@ CONTAINS
        !  (In the output, done only once according to field_def_orchidee.xml; same averaging as for kk)
        DO jsl = 1, nslm
           ksat(:,jsl) = ksat(:,jsl) + soiltile(:,jst) * &
-               ( ks(:) * kfact(jsl,:) * kfact_root(:,jsl,jst) ) 
+               ( ks(:) * kfact(jsl,:) * kfact_root(:,jsl,jst) * kfact_urban(:,jsl,jst) ) 
        ENDDO
               
       IF (printlev>=3) WRITE (numout,*) ' prognostic/diagnostic part of hydrol_soil done for jst =', jst          
@@ -5056,7 +5060,7 @@ CONTAINS
 !_ ================================================================================================================================
 !_ hydrol_soil_infilt
 
-  SUBROUTINE hydrol_soil_infilt(ks, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, ins, njsc, flux_infilt, stempdiag, &
+  SUBROUTINE hydrol_soil_infilt(ks, kfact_urban, nvan, avan, mcr, mcs, mcfc, mcw, kjpindex, ins, njsc, flux_infilt, stempdiag, &
                                 qinfilt_ns, ru_infilt, check)
 
     !! 0. Variable and parameter declaration
@@ -5069,6 +5073,7 @@ CONTAINS
     INTEGER(i_std),DIMENSION (kjpindex), INTENT (in)  :: njsc            !! Index of the dominant soil textural class in the grid cell
                                                                          !!  (1-nscm, unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)     :: ks               !! Hydraulic conductivity at saturation (mm {-1})
+    REAL(r_std),DIMENSION (kjpindex, nslm, nstm), INTENT (in)     :: kfact_urban      !! Hydraulic conductivity at saturation (mm {-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)     :: nvan             !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)     :: avan             !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)     :: mcr              !! Residual volumetric water content (m^{3} m^{-3})
@@ -5141,7 +5146,7 @@ CONTAINS
           !! Infiltrability of each layer if under a saturated one
           ! This is computed by an simple arithmetic average because 
           ! the time step (30min) is not appropriate for a geometric average (advised by Haverkamp and Vauclin)
-          k_m = (k(ji,jsl) + ks(ji)*kfact(jsl-1,ji)*kfact_root(ji,jsl,ins)) / deux 
+          k_m = (k(ji,jsl) + ks(ji)*kfact(jsl-1,ji)*kfact_root(ji,jsl,ins)*kfact_urban(ji,jsl,ins)) / deux 
 
           IF (ok_freeze_cwrr) THEN
              IF (stempdiag(ji, jsl) .LT. ZeroCelsius) THEN
@@ -6435,7 +6440,7 @@ CONTAINS
     REAL(r_std),DIMENSION (kjpindex,nvm), INTENT (in)        :: veget_max       !! Max. vegetation type
     INTEGER(i_std),DIMENSION (kjpindex), INTENT (in)         :: njsc            !! Index of the dominant soil textural class in the grid cell (1-nscm, unitless)
     REAL(r_std), DIMENSION (kjpindex,nstm), INTENT (in)      :: soiltile        !! Fraction of each soil tile within vegtot (0-1, unitless)
-    REAL(r_std),DIMENSION (kjpindex), INTENT (in)            :: ks               !! Hydraulic conductivity at saturation (mm {-1})
+    REAL(r_std),DIMENSION (kjpindex), INTENT (in)            :: ks                
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)            :: nvan             !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)            :: avan             !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)            :: mcr              !! Residual volumetric water content (m^{3} m^{-3})

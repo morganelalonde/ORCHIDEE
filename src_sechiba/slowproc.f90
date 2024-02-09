@@ -85,10 +85,6 @@ MODULE slowproc
 !$OMP THREADPRIVATE(lcanop)
   INTEGER(i_std) , SAVE                              :: veget_year          !! year for vegetation update
 !$OMP THREADPRIVATE(veget_year)
-  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: frac_imperv         !! Imperviousness fraction of each gridcell
-!$OMP THREADPRIVATE(imperviousness)
-  REAL(r_std), ALLOCATABLE, SAVE, DIMENSION(:)       :: coeff_imperv      !! Imperviousness coefficient to modify Ks
-!$OMP THREADPRIVATE(imperviousness)
 
 CONTAINS
 
@@ -888,10 +884,6 @@ CONTAINS
           ENDIF
     ENDIF
 
-    IF ( do_imperviousness ) THEN
-          CALL restput_p (rest_id, 'frac_imperv', nbp_glo, 1, 1, kjit, frac_imperv, 'scatter',  nbp_glo, index_g)
-    ENDIF
-
     DO jf = 1, nleafages
        ! variable name is somewhat complicated as ioipsl does not allow 3d variables for the moment...
        WRITE(laistring,'(i4)') jf
@@ -998,6 +990,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,nlut), INTENT(out)   :: nwdfraclut     !! Fraction of non woody vegetation in each landuse tile
     REAL(r_std), DIMENSION (kjpindex), INTENT(out)        :: reinf_slope    !! slope coef for reinfiltration 
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: ks             !! Hydraulic conductivity at saturation (mm {-1})
+    REAL(r_std),DIMENSION (kjpindex,nslm,nstm), INTENT (out)   :: kfact_urban             !! Hydraulic conductivity at saturation (mm {-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: nvan           !! Van Genuchten coeficients n (unitless)
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: avan           !! Van Genuchten coeficients a (mm-1})
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)         :: mcr            !! Residual volumetric water content (m^{3} m^{-3})
@@ -1090,11 +1083,6 @@ CONTAINS
     ENDIF
 
     ! Allocation of impervious fraction
-    ALLOCATE(frac_imperv(kjpindex), STAT=ier)
-    IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable frac_imperv','','')
-    ! Allocation of the coefficient of imperviousness to modify ks(texture )
-    ALLOCATE(coeff_imperv(kjpindex), STAT=ier)
-    IF (ier /= 0) CALL ipslerr_p(3,'slowproc_init','Problem in allocation of variable coeff_imperv','','')
     !! 2. Read soil related variables
     ! Following the trunk, we remove the dependance of impsoilt to impveg; impsoilt overrules the restart
 
@@ -1396,21 +1384,8 @@ CONTAINS
 
 
 
-        frac_imperv(:) = zero
-        coeff_imperv(:) = un
-
     IF ( do_imperviousness ) THEN
-        var_name = 'frac_imperv'
-        CALL restget_p (rest_id, var_name, nbp_glo, 1, 1, kjit, .TRUE., frac_imperv, "gather", nbp_glo, index_g)
-        !IF ( ALL( frac_imperv(:) .EQ. val_exp ) ) THEN
-           CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac)
-           CALL xios_orchidee_send_field("frac_imperv",frac_imperv)
-        !ENDIF
-        
-        coeff_imperv(:) = -0.999999 * frac_imperv(:) + un
-        
-        CALL xios_orchidee_send_field("coeff_imperv",coeff_imperv)
-        ks(:) = ks(:)*coeff_imperv(:)
+           CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac, kfact_urban)
      ENDIF
         
 
@@ -1927,8 +1902,7 @@ CONTAINS
     IF (ALLOCATED (irrigated_new)) DEALLOCATE (irrigated_new)
     IF (ALLOCATED (woodharvest)) DEALLOCATE (woodharvest)
     IF (ALLOCATED (frac_nobio_new)) DEALLOCATE (frac_nobio_new)
-    IF (ALLOCATED (frac_imperv)) DEALLOCATE (frac_imperv)
-    IF (ALLOCATED (coeff_imperv)) DEALLOCATE (coeff_imperv)
+
  ! 2. Clear all the variables in stomate 
 
     CALL stomate_clear 
@@ -4925,7 +4899,7 @@ CONTAINS
   !_ ================================================================================================================================
 
 
-  SUBROUTINE slowproc_imperviousness(nbpt, lalo, neighbours,  resolution, contfrac)
+  SUBROUTINE slowproc_imperviousness(nbpt, lalo, neighbours,  resolution, contfrac, kfact_urban)
 
     USE interpweight
 
@@ -4940,6 +4914,7 @@ CONTAINS
                                                                               !! (1=North and then clockwise)
     REAL(r_std), DIMENSION(nbpt,2), INTENT(in)             :: resolution      !! The size in km of each grid-box in X and Y
     REAL(r_std), DIMENSION(nbpt), INTENT(in)               :: contfrac        !! Fraction of continent in the grid
+    REAL(r_std), DIMENSION(nbpt,nslm,nstm), INTENT(inout)               :: kfact_urban        !! Fraction of continent in the grid
     !
     !  0.2 OUTPUT
     !
@@ -4974,6 +4949,9 @@ CONTAINS
                                                                              !!   `maskingtype')
     CHARACTER(LEN=250)                                   :: namemaskvar      !! name of the variable to use to mask
     CHARACTER(LEN=250)                                   :: msg
+    REAL(r_std), DIMENSION(nbpt)                         :: frac_imperv        !! Imperviousness fraction
+    REAL(r_std), DIMENSION(nbpt)                         :: coeff_imperv       !! coefficient to change ks, ksat
+    INTEGER(i_std)                                      :: jsl !! Soiltile, Soil Texture, and Soil layer indices (1)
 
   !_ ================================================================================================================================
 
@@ -5037,7 +5015,13 @@ CONTAINS
       frac_imperv(ib) = MAX(frac_imperv(ib), 0.01 )
     ENDDO
 
+        coeff_imperv(:) = -0.999999 * frac_imperv(:) + un
 
+    kfact_urban(:,:,:) = 1.
+
+    DO jsl=1,nslm
+    kfact_urban(:,jsl,1) = coeff_imperv(:)
+    END DO
 
   END SUBROUTINE slowproc_imperviousness 
 
