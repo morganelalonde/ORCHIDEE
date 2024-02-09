@@ -4914,7 +4914,7 @@ CONTAINS
                                                                               !! (1=North and then clockwise)
     REAL(r_std), DIMENSION(nbpt,2), INTENT(in)             :: resolution      !! The size in km of each grid-box in X and Y
     REAL(r_std), DIMENSION(nbpt), INTENT(in)               :: contfrac        !! Fraction of continent in the grid
-    REAL(r_std), DIMENSION(kjpindex,nslm,nstm), INTENT(inout)               :: kfact_urban        !! Fraction of continent in the grid
+    REAL(r_std), DIMENSION(nbpt,nslm,nstm), INTENT(inout)               :: kfact_urban        !! Fraction of continent in the grid
     !
     !  0.2 OUTPUT
     !
@@ -4951,6 +4951,7 @@ CONTAINS
     CHARACTER(LEN=250)                                   :: msg
     REAL(r_std), DIMENSION(nbpt)                         :: frac_imperv        !! Imperviousness fraction
     REAL(r_std), DIMENSION(nbpt)                         :: coeff_imperv       !! coefficient to change ks, ksat
+    INTEGER(i_std)                                      :: jsl !! Soiltile, Soil Texture, and Soil layer indices (1)
 
   !_ ================================================================================================================================
 
