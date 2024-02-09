@@ -1390,10 +1390,7 @@ CONTAINS
 
     IF ( do_imperviousness ) THEN
         var_name = 'frac_imperv'
-        CALL restget_p (rest_id, var_name, nbp_glo, 1, 1, kjit, .TRUE., frac_imperv, "gather", nbp_glo, index_g)
-      
            CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac)
-
      ENDIF
         
 
