@@ -1415,9 +1415,9 @@ CONTAINS
         CALL xios_orchidee_send_field("coeff_imperv",coeff_imperv)
 
 
-            DO jsl=1,nslm
-             kfact_urban(:,jsl,1) = coeff_imperv(:) * (veget(:,16) / (veget(:,1) + veget(:,16)))
-           END DO
+            !DO jsl=1,nslm
+             kfact_urban(:,1,1) = coeff_imperv(:) * (veget(:,16) / (veget(:,1) + veget(:,16)))
+           !END DO
 
      ENDIF
         
