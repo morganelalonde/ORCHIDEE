@@ -1035,6 +1035,7 @@ CONTAINS
     REAL(r_std)                                           :: ks_default        !! Default  if impsoilt
     REAL(r_std)                                           :: clayfraction_default  !! Default  if impsoilt
     REAL(r_std)                                           :: sandfraction_default  !! Default  if impsoilt
+    REAL(r_std)                                           :: scaling_factor    !! To calculate kfact_urban
     CHARACTER(LEN=4)                                      :: laistring         !! Temporary character string
     CHARACTER(LEN=80)                                     :: var_name          !! To store variables names for I/O
     CHARACTER(LEN=30), SAVE                               :: veget_str         !! update frequency for landuse
@@ -1420,9 +1421,14 @@ CONTAINS
             !END DO
 
             ! Opt2
-            !DO jsl=1,nslm
-             kfact_urban(:,1,1) = coeff_imperv(:) * (veget(:,16) / (veget(:,1) + veget(:,16)))
-            !END DO
+            !kfact_urban(:,1,1) = coeff_imperv(:) * (veget(:,16) / (veget(:,1) + veget(:,16)))
+
+            ! Opt3
+             DO jsl=1,6
+             scaling_factor = (6.0 - jsl) / 5.0
+             kfact_urban(:,jsl,1) = (coeff_imperv(:) * scaling_factor) + (1.0 - scaling_factor)
+             END DO
+
 
      ENDIF
         
