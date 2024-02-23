@@ -1417,26 +1417,26 @@ CONTAINS
 
             ! Opt1
             !DO jsl=1,nslm
-            !kfact_urban(:,jsl,1) = coeff_imperv(:) * (veget(:,16) / (veget(:,1) + veget(:,16)))
+            !kfact_urban(:,jsl,1) = un - (un - coeff_imperv(:)) * (veget(:,16) / (veget(:,1) + veget(:,16)))
             !END DO
 
             ! Opt2
-            !kfact_urban(:,1,1) = coeff_imperv(:) * (veget(:,16) / (veget(:,1) + veget(:,16)))
+            !kfact_urban(:,1,1) =  un - (un - coeff_imperv(:)) * (veget(:,16) / (veget(:,1) + veget(:,16)))
 
             ! Opt3
             ! DO jsl=1,6
             ! scaling_factor = (6.0 - jsl) / 5.0
-            ! kfact_urban(:,jsl,1) = (coeff_imperv(:)* (veget(:,16) / (veget(:,1) + veget(:,16))) * scaling_factor) + (1.0 - scaling_factor)
+            ! kfact_urban(:,jsl,1) = ((un - (un - coeff_imperv(:)) * (veget(:,16) / (veget(:,1) + veget(:,16)))) * scaling_factor) + (1.0 - scaling_factor)
             ! END DO
 
             ! Opt4
               DO jsl=1,6
-              kfact_urban(:,jsl,1) = coeff_imperv(:) * (veget(:,16) / (veget(:,1) + veget(:,16)))
+              kfact_urban(:,jsl,1) = un - (un - coeff_imperv(:)) * (veget(:,16) / (veget(:,1) + veget(:,16)))
               END DO
 
               DO jsl=6,6
               scaling_factor = (6.0 - jsl) / 5.0
-              kfact_urban(:,jsl,1) = (coeff_imperv(:)* (veget(:,16) / (veget(:,1) + veget(:,16))) * scaling_factor) + (1.0 - scaling_factor)
+              kfact_urban(:,jsl,1) = ((un - (un - coeff_imperv(:)) * (veget(:,16) / (veget(:,1) + veget(:,16)))) * scaling_factor) + (1.0 - scaling_factor)
               END DO
 
      ENDIF
