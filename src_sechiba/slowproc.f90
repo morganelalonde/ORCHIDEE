@@ -1441,7 +1441,7 @@ CONTAINS
 
             ! Opt5 all will runoff
              DO jsl=1,nslm
-             kfact_urban(:,jsl,4) = zero
+             kfact_urban(:,jsl,4) = 0.111111
              END DO
 
 
