@@ -1811,7 +1811,7 @@ CONTAINS
          ENDDO
       ENDDO
 
-      CALL thermosoil_cond (kjpindex, njsc, mcs, mc_layt, QZ, mcl_layt, pkappa)
+      CALL thermosoil_cond (kjpindex, njsc, mcs, mc_layt, QZ, mcl_layt, pkappa, veget_max)
 
       IF (brk_flag == 1) THEN
         ! Bedrock flag is activated
