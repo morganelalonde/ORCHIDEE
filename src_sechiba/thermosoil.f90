@@ -165,6 +165,8 @@ MODULE thermosoil
 !$OMP THREADPRIVATE(tmc_layt)
   INTEGER(i_std), SAVE                            :: brk_flag = 0             !! Flag to consider bedrock: 0.no; 1.yes
 !$OMP THREADPRIVATE(brk_flag)
+  INTEGER(i_std), SAVE                            :: nvm2 = 16                !! number of PFTs
+!$OMP THREADPRIVATE(brk_flag)
 
 
 CONTAINS
@@ -257,7 +259,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in)   :: snowrho          !! Snow density
     REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in)   :: snowtemp         !! Snow temperature (K)
     REAL(r_std), DIMENSION (kjpindex), INTENT (in)        :: pb               !! Surface presure (hPa)
-    REAL(r_std), DIMENSION (kjpindex,nvm), INTENT (in)    :: veget       !! Fraction of PFT (unitless,0-1)
+    REAL(r_std), DIMENSION (kjpindex,nvm2), INTENT (in)    :: veget       !! Fraction of PFT (unitless,0-1) 01
 
     !! 0.2 Output variables
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)        :: soilcap          !! apparent surface heat capacity considering snow and soil surface (J m-2 K-1)
@@ -627,7 +629,7 @@ CONTAINS
     REAL(r_std),DIMENSION (kjpindex,nnobio), INTENT(in)   :: frac_snow_nobio  !! Snow cover fraction on non-vegeted area
     REAL(r_std),DIMENSION (kjpindex),INTENT(in)           :: totfrac_nobio    !! Total fraction of continental ice+lakes+cities+...
                                                                               !!(unitless,0-1)
-    REAL(r_std),DIMENSION (kjpindex,nvm),INTENT(in)           :: veget_out        !! Fraction of PFT (unitless,0-1)                                                                          
+    REAL(r_std),DIMENSION (kjpindex,nvm2),INTENT(in)           :: veget_out        !! Fraction of PFT (unitless,0-1)   2                                                                      
     REAL(r_std),DIMENSION (kjpindex), INTENT (inout)      :: temp_sol_add     !! additional surface temperature due to the melt of first layer
                                                                               !! at the present time-step @tex ($K$) @endtex
 
@@ -949,7 +951,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in)    :: snowrho         !! Snow density
     REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in)    :: snowtemp        !! Snow temperature (K)
     REAL(r_std), DIMENSION (kjpindex), INTENT (in)         :: pb              !! Surface presure (hPa)
-    REAL(r_std), DIMENSION (kjpindex,nvm), INTENT (in)         :: veget_out       !! Fraction of PFT (unitless,0-1)
+    REAL(r_std), DIMENSION (kjpindex,nvm2), INTENT (in)         :: veget_out       !! Fraction of PFT (unitless,0-1)   3
 
     !! 0.2 Output variables
 
@@ -1279,7 +1281,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,ngrnd), INTENT(IN)        :: smc           !! Volumetric Soil Moisture Content (m3/m3)
     REAL(r_std), DIMENSION (nscm), INTENT(IN)                  :: qz            !! Quartz Content (Soil Type Dependent) (0-1)
     REAL(r_std), DIMENSION (kjpindex,ngrnd), INTENT(IN)        :: sh2o          !! Unfrozen Soil Moisture Content; Frozen Soil Moisture = smc - sh2o
-    REAL(r_std), DIMENSION (kjpindex,nvm), INTENT (in)             :: veget_out       !! Fraction of PFT (unitless,0-1)
+    REAL(r_std), DIMENSION (kjpindex,nvm2), INTENT (in)             :: veget_out       !! Fraction of PFT (unitless,0-1)  4
     !! 0.2 Output variables
     REAL(r_std), DIMENSION (kjpindex,ngrnd), INTENT(OUT)       :: cnd           !! Soil Thermal Conductivity (W/m/k)
     
@@ -1641,7 +1643,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in) :: snowtemp   !! Snow temperature (K)
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)       :: pb         !! Surface pressure (hPa)
     REAL(r_std),DIMENSION(kjpindex,ngrnd),INTENT(in)	  :: ptn        !! Soil temperature profile
-    REAL(r_std), DIMENSION (kjpindex,nvm), INTENT (in)      :: veget_out  !! Fraction of PFT (unitless,0-1)  
+    REAL(r_std), DIMENSION (kjpindex,nvm2), INTENT (in)      :: veget_out  !! Fraction of PFT (unitless,0-1)  5
     !! 0.3 Local variables
     REAL						:: xx         !! Unfrozen fraction of the soil
     REAL(r_std), DIMENSION(kjpindex)             	:: snow_h
