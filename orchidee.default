@@ -448,7 +448,7 @@ EXT_COEFF_VEGETFRAC =  1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.
 HYDROL_HUMCSTE =  humcste_ref2m or humcste_ref4m depending on zmaxh 
 
 # PREF_SOIL_VEG ([-]        ) :  The soil tile number for each vegetation 	{OK_SECHIBA or OK_STOMATE}
-PREF_SOIL_VEG =  1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 1 
+PREF_SOIL_VEG =  1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4 
 
 # RSTRUCT_CONST ([s/m]) :  Structural resistance  	{OK_SECHIBA}
 RSTRUCT_CONST =  0.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0,  2.5,  2.0,  2.0,  2.0, 0.0 

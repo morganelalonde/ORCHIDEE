@@ -63,7 +63,7 @@ MODULE constantes_soil_var
   !! Number of soil classes
 
   INTEGER(i_std), PARAMETER :: ntext=3                  !! Number of soil textures (Silt, Sand, Clay)
-  INTEGER(i_std), PARAMETER :: nstm=3                   !! Number of soil tiles (unitless)
+  INTEGER(i_std), PARAMETER :: nstm=4                   !! Number of soil tiles (unitless)
   CHARACTER(LEN=30)         :: soil_classif             !! Type of classification used for the map of soil types.
                                                         !! It must be consistent with soil file given by 
                                                         !! SOILCLASS_FILE parameter.

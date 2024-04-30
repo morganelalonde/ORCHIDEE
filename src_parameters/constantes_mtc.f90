@@ -200,7 +200,7 @@ MODULE constantes_mtc
   !
   INTEGER(i_std), PARAMETER, DIMENSION(nvmc) :: pref_soil_veg_mtc  =  &       !! The soil tile number for each vegetation
   & (/ 1,   2,   2,   2,   2,   2,   2,  &                                    
-  &    2,   2,   3,   3,   3,   3,   1  /)                                         
+  &    2,   2,   3,   3,   3,   3,   4  /)                                         
 
 
   !
