@@ -416,7 +416,6 @@ CONTAINS
                                                                                   !! Boundary Layer
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)            :: pb                !! Surface pressure (hPa)
 
-
 !! 0.2 Output variables
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)           :: coastalflow       !! Outflow on coastal points by small basins.
                                                                                   !! This is the water which flows in a disperse 
@@ -518,7 +517,7 @@ CONTAINS
          gtemp,               &
          mc_layh,  mcl_layh,   soilmoist,       njsc ,     &
          frac_snow_veg,frac_snow_nobio,totfrac_nobio,     &
-         snowdz, snowrho, snowtemp, lambda_snow, cgrnd_snow, dgrnd_snow, pb)
+         snowdz, snowrho, snowtemp, lambda_snow, cgrnd_snow, dgrnd_snow, pb, veget)
 
 
     !! 1.12 Initialize river routing
