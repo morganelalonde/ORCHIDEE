@@ -2314,7 +2314,7 @@ CONTAINS
     !Config Key   = PREF_SOIL_VEG
     !Config Desc  = The soil tile number for each vegetation
     !Config if    = OK_SECHIBA or OK_STOMATE
-    !Config Def   = 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4
+    !Config Def   = 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 1
     !Config Help  = Gives the number of the soil tile on which we will
     !Config         put each vegetation. This allows to divide the hydrological column
     !Config Units = [-]        
