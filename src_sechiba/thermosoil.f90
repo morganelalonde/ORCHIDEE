@@ -1677,18 +1677,18 @@ CONTAINS
 	    profil_froz(ji,jg) = 1.
  	    pcappa_supp(ji,jg)= 0.
             pcapa(ji, jg) = so_capa_dry(jst) * (1-mcs(ji)) + so_capa_ice(ji) * tmc_layt(ji,jg) / mille / dlt(jg)
-             IF (veget_out(ji,16) > 0.5) THEN 
-               pcapa(ji,jg) = 1890000.
-             ENDIF
+             !IF (veget_out(ji,16) > 0.5) THEN 
+             !  pcapa(ji,jg) = 1890000.
+             !ENDIF
             rho_tot = rho_soil * (1-mcs(ji)) + rho_ice * tmc_layt(ji,jg) / mille / dlt(jg) 
             pcapa_spec(ji, jg) = pcapa(ji, jg) / rho_tot
 
      	 ELSEIF (ptn(ji,jg) .GT. ZeroCelsius+fr_dT/2.) THEN
 	    ! unfrozen soil	 
             pcapa(ji, jg) = pcapa_tmp(ji, jg)
-             IF (veget_out(ji,16) > 0.5) THEN 
-               pcapa(ji,jg) = 1890000.
-             ENDIF
+             !IF (veget_out(ji,16) > 0.5) THEN 
+             !  pcapa(ji,jg) = 1890000.
+             !ENDIF
 	    profil_froz(ji,jg) = 0.
  	    pcappa_supp(ji,jg)= 0.
             rho_tot = rho_soil * (1-mcs(ji)) + rho_water * tmc_layt(ji,jg)/mille/dlt(jg)
@@ -1703,16 +1703,16 @@ CONTAINS
                 water_capa * tmc_layt(ji,jg)/mille / dlt(jg) * xx + &
                 so_capa_ice(ji) * tmc_layt(ji,jg) / mille/dlt(jg) * (1.-xx) + &
                 shum_ngrnd_perma(ji,jg)*mcs(ji)*lhf*rho_water/fr_dT
-                 IF (veget_out(ji,16) > 0.5) THEN 
-               pcapa(ji,jg) = 1890000.
-             ENDIF
+                 !IF (veget_out(ji,16) > 0.5) THEN 
+                 !  pcapa(ji,jg) = 1890000.
+                 !ENDIF
 	   ELSE
               pcapa(ji, jg) = so_capa_dry(jst) * (1-mcs(ji)) + &
                 water_capa * tmc_layt(ji,jg)/mille / dlt(jg) * xx + &
                 so_capa_ice(ji) * tmc_layt(ji,jg) / mille/dlt(jg) * (1.-xx)
-                 IF (veget_out(ji,16) > 0.5) THEN 
-               pcapa(ji,jg) = 1890000.
-             ENDIF
+                 !IF (veget_out(ji,16) > 0.5) THEN 
+                 !  pcapa(ji,jg) = 1890000.
+                 !ENDIF
            ENDIF
 
            rho_tot =  rho_soil* (1-mcs(ji)) + &
@@ -1804,9 +1804,9 @@ CONTAINS
             jst = njsc(ji)
             pcapa_tmp(ji, jg) = so_capa_dry(jst) * (1-mcs(ji)) + water_capa * tmc_layt(ji,jg)/mille/dlt(jg)
             pcapa(ji,jg) = pcapa_tmp(ji, jg)
-             IF (veget_out(ji,16) > 0.5) THEN 
-               pcapa(ji,jg) = 1890000.
-             ENDIF
+             !IF (veget_out(ji,16) > 0.5) THEN 
+             !  pcapa(ji,jg) = 1890000.
+             !ENDIF
             pcapa_en(ji,jg) = pcapa_tmp(ji, jg)
          ENDDO
       ENDDO
