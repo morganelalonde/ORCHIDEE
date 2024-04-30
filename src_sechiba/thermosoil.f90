@@ -234,7 +234,7 @@ CONTAINS
                                     gtemp,                   &
                                     mc_layh,       mcl_layh,   tmc_layh,        njsc,     &
                                     frac_snow_veg,frac_snow_nobio,totfrac_nobio, &
-                                    snowdz, snowrho, snowtemp, lambda_snow, cgrnd_snow, dgrnd_snow, pb, veget_out)
+                                    snowdz, snowrho, snowtemp, lambda_snow, cgrnd_snow, dgrnd_snow, pb, veget)
 
     !! 0. Variable and parameter declaration
     !! 0.1 Input variables
@@ -257,7 +257,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in)   :: snowrho          !! Snow density
     REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in)   :: snowtemp         !! Snow temperature (K)
     REAL(r_std), DIMENSION (kjpindex), INTENT (in)        :: pb               !! Surface presure (hPa)
-    REAL(r_std), DIMENSION (kjpindex,nvm), INTENT (in)    :: veget_out       !! Fraction of PFT (unitless,0-1)
+    REAL(r_std), DIMENSION (kjpindex,nvm), INTENT (in)    :: veget       !! Fraction of PFT (unitless,0-1)
 
     !! 0.2 Output variables
     REAL(r_std),DIMENSION (kjpindex), INTENT (out)        :: soilcap          !! apparent surface heat capacity considering snow and soil surface (J m-2 K-1)
@@ -535,7 +535,7 @@ CONTAINS
             snowdz,        snowrho,         snowtemp,       pb,   &
             ptn,                                                  &
             soilcap,       soilflx,         cgrnd,          dgrnd,&
-	    lambda_snow,   cgrnd_snow,      dgrnd_snow, veget_out)
+	    lambda_snow,   cgrnd_snow,      dgrnd_snow, veget)
     END IF
 
   END SUBROUTINE thermosoil_initialize
