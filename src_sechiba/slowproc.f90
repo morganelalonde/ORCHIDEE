@@ -1421,7 +1421,7 @@ CONTAINS
             ! END DO
 
             ! Opt2
-            ! kfact_urban(:,1,4) =  un - (un - coeff_imperv(:))
+             kfact_urban(:,1,4) =  un - (un - coeff_imperv(:))
 
             ! Opt3
             ! DO jsl=1,6
@@ -1440,9 +1440,9 @@ CONTAINS
             !  END DO
 
             ! Opt5 all will runoff
-             DO jsl=1,nslm
-             kfact_urban(:,jsl,4) = 0.111111
-             END DO
+            ! DO jsl=1,nslm
+            ! kfact_urban(:,jsl,4) = 0.111111
+            ! END DO
 
 
 
