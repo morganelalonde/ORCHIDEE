@@ -1009,7 +1009,7 @@ CONTAINS
        CALL thermosoil_getdiff( kjpindex, snow, ptn, mcs, njsc, snowrho, snowtemp, pb, veget_out)
     ELSE
        ! Special case without soil freezing
-       CALL thermosoil_getdiff_old_thermix_without_snow( kjpindex, mcs, njsc, snowrho, snowtemp, pb )
+       CALL thermosoil_getdiff_old_thermix_without_snow( kjpindex, mcs, njsc, snowrho, snowtemp, pb, veget_out )
     ENDIF
 
     ! Energy conservation : Correction to make sure that the same latent heat is released and 
@@ -1769,7 +1769,7 @@ CONTAINS
 !! \n 
 !_ ================================================================================================================================
 
-    SUBROUTINE thermosoil_getdiff_old_thermix_without_snow( kjpindex, mcs, njsc, snowrho, snowtemp, pb )
+    SUBROUTINE thermosoil_getdiff_old_thermix_without_snow( kjpindex, mcs, njsc, snowrho, snowtemp, pb, veget_out )
 
    !! 0. Variables and parameter declaration
 
@@ -1780,7 +1780,7 @@ CONTAINS
       REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in) :: snowrho  !! Snow density
       REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in) :: snowtemp !! Snow temperature (K)
       REAL(r_std),DIMENSION (kjpindex), INTENT (in)       :: pb       !! Surface pressure (hPa)
-
+      REAL(r_std), DIMENSION (kjpindex,nvm2), INTENT (in)      :: veget_out  !! Fraction of PFT (unitless,0-1)  5
 
     !! 0.1 Local variables
       INTEGER(i_std)    				  :: ji,jg, jst     !! Index
