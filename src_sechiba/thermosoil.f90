@@ -1379,9 +1379,9 @@ CONTAINS
     DO ji = 1,kjpindex
      DO jg = 1,ngrnd 
 
-     IF (veget_out(ji,16) > 0.5) THEN 
-       cnd(ji,jg) = 3.24
-     ENDIF
+     !IF (veget_out(ji,16) > 0.5) THEN 
+     !  cnd(ji,jg) = 3.24
+     !ENDIF
 
      END DO
     END DO
