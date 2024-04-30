@@ -534,7 +534,7 @@ CONTAINS
             snowdz,        snowrho,         snowtemp,       pb,   &
             ptn,                                                  &
             soilcap,       soilflx,         cgrnd,          dgrnd,&
-	    lambda_snow,   cgrnd_snow,      dgrnd_snow)
+	    lambda_snow,   cgrnd_snow,      dgrnd_snow, veget_out)
     END IF
 
   END SUBROUTINE thermosoil_initialize
@@ -587,7 +587,7 @@ CONTAINS
        shumdiag_perma, stempdiag, ftempdiag, ptnlev1, rest_id, hist_id, hist2_id, &
        snowdz,snowrho,snowtemp,gtemp,pb,&
        mc_layh, mcl_layh, tmc_layh, njsc, frac_snow_veg,frac_snow_nobio,totfrac_nobio,temp_sol_add, &
-       lambda_snow, cgrnd_snow, dgrnd_snow)
+       lambda_snow, cgrnd_snow, dgrnd_snow, veget_out)
 
     !! 0. Variable and parameter declaration
 
@@ -626,6 +626,7 @@ CONTAINS
     REAL(r_std),DIMENSION (kjpindex,nnobio), INTENT(in)   :: frac_snow_nobio  !! Snow cover fraction on non-vegeted area
     REAL(r_std),DIMENSION (kjpindex),INTENT(in)           :: totfrac_nobio    !! Total fraction of continental ice+lakes+cities+...
                                                                               !!(unitless,0-1)
+    REAL(r_std),DIMENSION (kjpindex,nvm),INTENT(in)           :: veget_out        !! Fraction of PFT (unitless,0-1)                                                                          
     REAL(r_std),DIMENSION (kjpindex), INTENT (inout)      :: temp_sol_add     !! additional surface temperature due to the melt of first layer
                                                                               !! at the present time-step @tex ($K$) @endtex
 
@@ -762,7 +763,7 @@ CONTAINS
          snowdz,        snowrho,         snowtemp,     pb,   &
          ptn,                                                &
          soilcap,       soilflx,         cgrnd,        dgrnd,&
-         lambda_snow,   cgrnd_snow,      dgrnd_snow)
+         lambda_snow,   cgrnd_snow,      dgrnd_snow, veget_out)
          
 
     ! Save variables for explicit snow model
@@ -927,7 +928,7 @@ CONTAINS
                               snowdz,        snowrho,         snowtemp,       pb,   &
                               ptn,                                                  &
                               soilcap,       soilflx,         cgrnd,          dgrnd,&
-			      lambda_snow,   cgrnd_snow,      dgrnd_snow)
+			      lambda_snow,   cgrnd_snow,      dgrnd_snow, veget_out)
 
     !! 0. Variables and parameter declaration
 
@@ -947,6 +948,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in)    :: snowrho         !! Snow density
     REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in)    :: snowtemp        !! Snow temperature (K)
     REAL(r_std), DIMENSION (kjpindex), INTENT (in)         :: pb              !! Surface presure (hPa)
+    REAL(r_std), DIMENSION (kjpindex,nvm), INTENT (in)         :: veget_out       !! Fraction of PFT (unitless,0-1)
 
     !! 0.2 Output variables
 
@@ -1001,7 +1003,7 @@ CONTAINS
    
     ! Computation of the soil thermal properties; snow properties are also accounted for
     IF (ok_freeze_thermix) THEN
-       CALL thermosoil_getdiff( kjpindex, snow, ptn, mcs, njsc, snowrho, snowtemp, pb )
+       CALL thermosoil_getdiff( kjpindex, snow, ptn, mcs, njsc, snowrho, snowtemp, pb, veget_out)
     ELSE
        ! Special case without soil freezing
        CALL thermosoil_getdiff_old_thermix_without_snow( kjpindex, mcs, njsc, snowrho, snowtemp, pb )
@@ -1265,7 +1267,7 @@ CONTAINS
 !_
 !================================================================================================================================
 
-  SUBROUTINE thermosoil_cond (kjpindex, njsc, mcs, smc, qz, sh2o, cnd)
+  SUBROUTINE thermosoil_cond (kjpindex, njsc, mcs, smc, qz, sh2o, cnd, veget_out)
 
     !! 0. Variables and parameter declaration
 
@@ -1276,7 +1278,7 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,ngrnd), INTENT(IN)        :: smc           !! Volumetric Soil Moisture Content (m3/m3)
     REAL(r_std), DIMENSION (nscm), INTENT(IN)                  :: qz            !! Quartz Content (Soil Type Dependent) (0-1)
     REAL(r_std), DIMENSION (kjpindex,ngrnd), INTENT(IN)        :: sh2o          !! Unfrozen Soil Moisture Content; Frozen Soil Moisture = smc - sh2o
-    
+    REAL(r_std), DIMENSION (kjpindex,nvm), INTENT (in)             :: veget_out       !! Fraction of PFT (unitless,0-1)
     !! 0.2 Output variables
     REAL(r_std), DIMENSION (kjpindex,ngrnd), INTENT(OUT)       :: cnd           !! Soil Thermal Conductivity (W/m/k)
     
@@ -1369,7 +1371,18 @@ CONTAINS
       END DO ! DO jg = 1,ngrnd
 
     END DO !DO ji = 1,kjpindex
-    
+
+
+    DO ji = 1,kjpindex
+     DO jg = 1,ngrnd 
+
+     IF (veget_out(ji,16) > 0.5) THEN 
+       cnd(ji,jg) = 3.24
+     ENDIF
+
+     END DO
+    END DO
+
   END SUBROUTINE thermosoil_cond
 
 
@@ -1614,7 +1627,7 @@ CONTAINS
 !! \n 
 !_ ================================================================================================================================
 
-  SUBROUTINE thermosoil_getdiff( kjpindex, snow, ptn, mcs, njsc, snowrho, snowtemp, pb )
+  SUBROUTINE thermosoil_getdiff( kjpindex, snow, ptn, mcs, njsc, snowrho, snowtemp, pb, veget_out )
 
    !! 0. Variables and parameter declaration
 
@@ -1626,8 +1639,8 @@ CONTAINS
     REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in) :: snowrho    !! Snow density
     REAL(r_std), DIMENSION (kjpindex,nsnow), INTENT(in) :: snowtemp   !! Snow temperature (K)
     REAL(r_std),DIMENSION (kjpindex), INTENT (in)       :: pb         !! Surface pressure (hPa)
-    REAL(r_std),DIMENSION(kjpindex,ngrnd),INTENT(in)	:: ptn        !! Soil temperature profile
-
+    REAL(r_std),DIMENSION(kjpindex,ngrnd),INTENT(in)	  :: ptn        !! Soil temperature profile
+    REAL(r_std), DIMENSION (kjpindex,nvm), INTENT (in)      :: veget_out  !! Fraction of PFT (unitless,0-1)  
     !! 0.3 Local variables
     REAL						:: xx         !! Unfrozen fraction of the soil
     REAL(r_std), DIMENSION(kjpindex)             	:: snow_h
@@ -1719,9 +1732,9 @@ CONTAINS
     ! 3. Calculate the heat conductivity with allowance for permafrost
     !
     IF (ok_freeze_thaw_latent_heat) THEN
-    	CALL thermosoil_cond (kjpindex, njsc, mcs, mc_layt, QZ, mcl_layt*(1-profil_froz), pkappa)
+    	CALL thermosoil_cond (kjpindex, njsc, mcs, mc_layt, QZ, mcl_layt*(1-profil_froz), pkappa, veget_out)
     ELSE
-    	CALL thermosoil_cond (kjpindex, njsc, mcs, mc_layt, QZ, mcl_layt, pkappa)
+    	CALL thermosoil_cond (kjpindex, njsc, mcs, mc_layt, QZ, mcl_layt, pkappa, veget_out)
     ENDIF
 
     !! Computes snow heat capacity and conductivity    
@@ -1780,7 +1793,7 @@ CONTAINS
          ENDDO
       ENDDO
 
-      CALL thermosoil_cond (kjpindex, njsc, mcs, mc_layt, QZ, mcl_layt, pkappa)
+      CALL thermosoil_cond (kjpindex, njsc, mcs, mc_layt, QZ, mcl_layt, pkappa, veget_out)
 
       IF (brk_flag == 1) THEN
         ! Bedrock flag is activated
