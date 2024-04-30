@@ -517,7 +517,7 @@ CONTAINS
          gtemp,               &
          mc_layh,  mcl_layh,   soilmoist,       njsc ,     &
          frac_snow_veg,frac_snow_nobio,totfrac_nobio,     &
-         snowdz, snowrho, snowtemp, lambda_snow, cgrnd_snow, dgrnd_snow, pb)
+         snowdz, snowrho, snowtemp, lambda_snow, cgrnd_snow, dgrnd_snow, pb, veget_max)
 
 
     !! 1.12 Initialize river routing
@@ -791,7 +791,7 @@ CONTAINS
          shumdiag_perma, stempdiag, ftempdiag, ptnlev1, rest_id, hist_id, hist2_id, &
          snowdz,snowrho,snowtemp,gtemp,pb,&
          mc_layh, mcl_layh, soilmoist, njsc,frac_snow_veg,frac_snow_nobio,totfrac_nobio,temp_sol_add, &
-         lambda_snow, cgrnd_snow, dgrnd_snow)
+         lambda_snow, cgrnd_snow, dgrnd_snow, veget_max)
 
 
     !! 8. Compute river routing 
