@@ -1416,28 +1416,35 @@ CONTAINS
         CALL xios_orchidee_send_field("coeff_imperv",coeff_imperv)
 
             ! Opt1
-            !DO jsl=1,nslm
-            !kfact_urban(:,jsl,1) = un - (un - coeff_imperv(:)) * (veget(:,16) / (veget(:,1) + veget(:,16)))
-            !END DO
+            ! DO jsl=1,nslm
+            ! kfact_urban(:,jsl,4) = un - (un - coeff_imperv(:))
+            ! END DO
 
             ! Opt2
-            !kfact_urban(:,1,1) =  un - (un - coeff_imperv(:)) * (veget(:,16) / (veget(:,1) + veget(:,16)))
+            ! kfact_urban(:,1,4) =  un - (un - coeff_imperv(:))
 
             ! Opt3
             ! DO jsl=1,6
             ! scaling_factor = (6.0 - jsl) / 5.0
-            ! kfact_urban(:,jsl,1) = ((un - (un - coeff_imperv(:)) * (veget(:,16) / (veget(:,1) + veget(:,16)))) * scaling_factor) + (1.0 - scaling_factor)
+            ! kfact_urban(:,jsl,4) = ((un - (un - coeff_imperv(:))) * scaling_factor) + (1.0 - scaling_factor)
             ! END DO
 
             ! Opt4
-              DO jsl=1,6
-              kfact_urban(:,jsl,1) = un - (un - coeff_imperv(:)) * (veget(:,16) / (veget(:,1) + veget(:,16)))
-              END DO
+            !  DO jsl=1,6
+            !  kfact_urban(:,jsl,4) = un - (un - coeff_imperv(:)) 
+            !  END DO
 
-              DO jsl=6,6
-              scaling_factor = (6.0 - jsl) / 5.0
-              kfact_urban(:,jsl,1) = ((un - (un - coeff_imperv(:)) * (veget(:,16) / (veget(:,1) + veget(:,16)))) * scaling_factor) + (1.0 - scaling_factor)
-              END DO
+            !  DO jsl=6,6
+            !  scaling_factor = (6.0 - jsl) / 5.0
+            !  kfact_urban(:,jsl,4) = ((un - (un - coeff_imperv(:))) * scaling_factor) + (1.0 - scaling_factor)
+            !  END DO
+
+            ! Opt5 all will runoff
+             DO jsl=1,nslm
+             kfact_urban(:,jsl,4) = zero
+             END DO
+
+
 
      ENDIF
         
