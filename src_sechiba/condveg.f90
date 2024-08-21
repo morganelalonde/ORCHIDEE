@@ -1955,8 +1955,8 @@ CONTAINS
       !albedo_urban_nc(ib) = MAX(albedo_urban_nc(ib), 0.01 )
     !ENDDO
 
-    soilalb_urban(:,1) = albedo_urban_nc(:)*0.5
-    soilalb_urban(:,2) = albedo_urban_nc(:)*0.5
+    soilalb_urban(:,1) = albedo_urban_nc(:)
+    soilalb_urban(:,2) = albedo_urban_nc(:)
 
   END SUBROUTINE condveg_alb_urban 
 
