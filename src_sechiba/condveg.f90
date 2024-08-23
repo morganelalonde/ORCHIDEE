@@ -798,7 +798,7 @@ CONTAINS
           !    mean albedo of only vegetative PFTs over the grid cell
           alb_veget(:,ks) = zero
           
-          DO jv = 2, nvm  ! Loop over # of PFTs
+          DO jv = 2, (nvm-1)  ! Loop over # of PFTs
              
              ! Mean albedo of grid cell for visible and near-infrared range
              albedo(:,ks) = albedo(:,ks) + veget(:,jv)*alb_leaf_tmp(jv,ks)
