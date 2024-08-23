@@ -742,7 +742,7 @@ CONTAINS
 
     !! 6. Calculate tot_bare_soil needed in hydrol, diffuco and condveg (fraction in the mesh)
     tot_bare_soil(:) = veget_max(:,1)
-    DO jv = 2, nvm
+    DO jv = 2, (nvm-1)
        DO ji =1, kjpindex
           tot_bare_soil(ji) = tot_bare_soil(ji) + (veget_max(ji,jv) - veget(ji,jv))
        ENDDO
