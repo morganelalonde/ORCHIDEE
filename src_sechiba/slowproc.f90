@@ -1908,7 +1908,7 @@ CONTAINS
     ! Always calculate tot_bare_soil
     ! Fraction of bare soil in the mesh (bio+nobio) 
     tot_bare_soil(:) = veget_max(:,1)
-    DO jv = 2, nvm
+    DO jv = 2, (nvm-1)
        DO ji =1, kjpindex
           tot_bare_soil(ji) = tot_bare_soil(ji) + (veget_max(ji,jv) - veget(ji,jv))
        ENDDO
@@ -4566,7 +4566,7 @@ CONTAINS
     !!
     DO ji=1,nbpt
        totfrac = zero
-       DO jv=1,nvm
+       DO jv=1,(nvm-1)
           totfrac = totfrac + (veget_max(ji,jv) - veget(ji,jv))
        ENDDO
        ! add the bare soil fraction to totfrac
@@ -4647,7 +4647,7 @@ CONTAINS
     
     !! Calculate tot_bare_soil needed in hydrol, diffuco and condveg (fraction of bare soil in the mesh)
     tot_bare_soil(:) = veget_max(:,1)
-    DO jv = 2, nvm
+    DO jv = 2, (nvm-1)
        DO ji =1, kjpindex
           tot_bare_soil(ji) = tot_bare_soil(ji) + (veget_max(ji,jv) - veget(ji,jv))
        ENDDO
