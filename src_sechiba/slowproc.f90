@@ -1411,7 +1411,7 @@ CONTAINS
            CALL xios_orchidee_send_field("frac_imperv",frac_imperv)
         !ENDIF
         
-        coeff_imperv(:) = -0.999999 * frac_imperv(:) + un
+        coeff_imperv(:) = -0.9 * frac_imperv(:) + un
         
         CALL xios_orchidee_send_field("coeff_imperv",coeff_imperv)
 
@@ -1441,7 +1441,7 @@ CONTAINS
 
             ! Opt5 all will runoff
             ! DO jsl=1,nslm
-            ! kfact_urban(:,jsl,4) = 0.111111
+            ! kfact_urban(:,jsl,4) = 0.1
             ! END DO
 
 
