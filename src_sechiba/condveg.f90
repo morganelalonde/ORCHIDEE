@@ -808,7 +808,7 @@ CONTAINS
           ENDDO ! Loop over # of PFTs
           
           jv=16
-          albedo(:,ks) = albedo(:,ks) + veget(:,jv)*alb_urban(:,ks)
+          albedo(:,ks) = albedo(:,ks) + veget_max(:,jv)*alb_urban(:,ks)
 
           
        ENDDO
