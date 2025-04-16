@@ -1407,13 +1407,20 @@ CONTAINS
         var_name = 'frac_imperv'
         CALL restget_p (rest_id, var_name, nbp_glo, 1, 1, kjit, .TRUE., frac_imperv, "gather", nbp_glo, index_g)
         
-        ! IF (do_map_imperviousness) THEN
-        ! ENDIF
-        
-        !IF ( ALL( frac_imperv(:) .EQ. val_exp ) ) THEN
+         IF (do_map_imperviousness) THEN
+
+          !IF ( ALL( frac_imperv(:) .EQ. val_exp ) ) THEN
            CALL slowproc_imperviousness(kjpindex, lalo, neighbours,  resolution, contfrac)
            CALL xios_orchidee_send_field("frac_imperv",frac_imperv)
-        !ENDIF
+          !ENDIF
+         
+         ELSE
+
+          frac_imperv(:) = 0.5  ! Your fixed value here (e.g., 50% impervious)
+          CALL xios_orchidee_send_field("frac_imperv",frac_imperv)
+
+         ENDIF
+      
         
         coeff_imperv(:) = -0.9 * frac_imperv(:) + un
         

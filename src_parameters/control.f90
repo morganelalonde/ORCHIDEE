@@ -147,6 +147,36 @@ CONTAINS
     do_alb_urban = .FALSE.
     CALL getin_p('DO_ALB_URBAN', do_alb_urban)
 
+   !Config Key   = DO_MAP_IMPERVIOUSNESS
+    !Config Desc  = Should we read a map to have imperviousness value
+    !Config If    =  
+    !Config Def   = n
+    !Config Help  = better representation of urban processes
+    !Config Units = [FLAG]
+    !
+    do_map_imperviousness = .FALSE.
+    CALL getin_p('DO_MAP_IMPERVIOUSNESS', do_map_imperviousness)
+
+   !Config Key   = DO_URBAN_HEAT_CAPA_CONDUCT
+    !Config Desc  = Should we have urban values for heat conductivity and capacity
+    !Config If    =  
+    !Config Def   = n
+    !Config Help  = better representation of urban processes
+    !Config Units = [FLAG]
+    !
+    do_urban_heat_capa_conduct = .FALSE.
+    CALL getin_p('DO_URBAN_HEAT_CAPA_CONDUCT', do_urban_heat_capa_conduct)
+
+   !Config Key   = DO_16TH_PFT_IS_URBAN
+    !Config Desc  = Should we have urban values for heat conductivity and capacity
+    !Config If    =  
+    !Config Def   = n
+    !Config Help  = better representation of urban processes
+    !Config Units = [FLAG]
+    !
+    do_16th_pft_is_urban = .FALSE.
+    CALL getin_p('DO_16TH_PFT_IS_URBAN', do_16th_pft_is_urban)
+
     !Config Key   = DO_FLOODPLAINS
     !Config Desc  = Should we include floodplains 
     !Config If    = RIVER_ROUTING 

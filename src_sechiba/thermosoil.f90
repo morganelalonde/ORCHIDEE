@@ -1378,11 +1378,13 @@ CONTAINS
 
     DO ji = 1,kjpindex
      DO jg = 1,ngrnd 
-
+     
+     IF (DO_URBAN_HEAT_CAPA_CONDUCT) THEN 
      IF (veget_max(ji,16) > 0.5) THEN 
        cnd(ji,jg) = 3.24
      ENDIF
-
+     ENDIF
+     
      END DO
     END DO
 
@@ -1677,8 +1679,10 @@ CONTAINS
 	    profil_froz(ji,jg) = 1.
  	    pcappa_supp(ji,jg)= 0.
             pcapa(ji, jg) = so_capa_dry(jst) * (1-mcs(ji)) + so_capa_ice(ji) * tmc_layt(ji,jg) / mille / dlt(jg)
+             IF (DO_URBAN_HEAT_CAPA_CONDUCT) THEN
              IF (veget_max(ji,16) > 0.5) THEN 
                pcapa(ji,jg) = 1890000.
+             ENDIF
              ENDIF
             rho_tot = rho_soil * (1-mcs(ji)) + rho_ice * tmc_layt(ji,jg) / mille / dlt(jg) 
             pcapa_spec(ji, jg) = pcapa(ji, jg) / rho_tot
@@ -1686,8 +1690,10 @@ CONTAINS
      	 ELSEIF (ptn(ji,jg) .GT. ZeroCelsius+fr_dT/2.) THEN
 	    ! unfrozen soil	 
             pcapa(ji, jg) = pcapa_tmp(ji, jg)
+             IF (DO_URBAN_HEAT_CAPA_CONDUCT) THEN
              IF (veget_max(ji,16) > 0.5) THEN 
                pcapa(ji,jg) = 1890000.
+             ENDIF
              ENDIF
 	    profil_froz(ji,jg) = 0.
  	    pcappa_supp(ji,jg)= 0.
@@ -1703,15 +1709,19 @@ CONTAINS
                 water_capa * tmc_layt(ji,jg)/mille / dlt(jg) * xx + &
                 so_capa_ice(ji) * tmc_layt(ji,jg) / mille/dlt(jg) * (1.-xx) + &
                 shum_ngrnd_perma(ji,jg)*mcs(ji)*lhf*rho_water/fr_dT
+                 IF (DO_URBAN_HEAT_CAPA_CONDUCT) THEN
                  IF (veget_max(ji,16) > 0.5) THEN 
                    pcapa(ji,jg) = 1890000.
+                 ENDIF
                  ENDIF
 	   ELSE
               pcapa(ji, jg) = so_capa_dry(jst) * (1-mcs(ji)) + &
                 water_capa * tmc_layt(ji,jg)/mille / dlt(jg) * xx + &
                 so_capa_ice(ji) * tmc_layt(ji,jg) / mille/dlt(jg) * (1.-xx)
+                 IF (DO_URBAN_HEAT_CAPA_CONDUCT) THEN
                  IF (veget_max(ji,16) > 0.5) THEN 
                    pcapa(ji,jg) = 1890000.
+                 ENDIF
                  ENDIF
            ENDIF
 
@@ -1804,8 +1814,10 @@ CONTAINS
             jst = njsc(ji)
             pcapa_tmp(ji, jg) = so_capa_dry(jst) * (1-mcs(ji)) + water_capa * tmc_layt(ji,jg)/mille/dlt(jg)
             pcapa(ji,jg) = pcapa_tmp(ji, jg)
+             IF (DO_URBAN_HEAT_CAPA_CONDUCT) THEN
              IF (veget_max(ji,16) > 0.5) THEN 
                pcapa(ji,jg) = 1890000.
+             ENDIF
              ENDIF
             pcapa_en(ji,jg) = pcapa_tmp(ji, jg)
          ENDDO

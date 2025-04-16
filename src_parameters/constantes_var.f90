@@ -61,12 +61,20 @@ MODULE constantes_var
 !$OMP THREADPRIVATE(do_floodplains)
   LOGICAL :: do_irrigation      !! activate computation of irrigation flux
 !$OMP THREADPRIVATE(do_irrigation)
+
   LOGICAL :: do_imperviousness      !! activate representation of imperviousness
 !$OMP THREADPRIVATE(do_imperviousness)
   LOGICAL :: do_height_building      !! activate gridcell dependent buildings height
 !$OMP THREADPRIVATE(do_height_building)
   LOGICAL :: do_alb_urban      !! activate gridcell dependent urban albedos
 !$OMP THREADPRIVATE(do_alb_urban)
+  LOGICAL :: do_map_imperviousness      !! activate representation of imperviousness
+!$OMP THREADPRIVATE(do_map_imperviousness)
+  LOGICAL :: do_urban_heat_capa_conduct      !! activate gridcell dependent buildings height
+!$OMP THREADPRIVATE(do_urban_heat_capa_conduct)
+  LOGICAL :: do_16th_pft_is_urban      !! activate gridcell dependent buildings height
+!$OMP THREADPRIVATE(do_16th_pft_is_urban)
+
   LOGICAL :: ok_sechiba         !! activate physic of the model
 !$OMP THREADPRIVATE(ok_sechiba)
   LOGICAL :: ok_stomate         !! activate carbon cycle

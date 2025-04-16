@@ -138,6 +138,15 @@ DO_ALB_URBAN = n
 # DO_HEIGHT_BUILDING ([FLAG]) :  Activate gridcell dependent buildings height 	{OK_SECHIBA}
 DO_HEIGHT_BUILDING = n
 
+# DO_MAP_IMPERVIOUSNESS ([FLAG]) :  Activate map imperviousness 	{OK_SECHIBA}
+DO_MAP_IMPERVIOUSNESS = n
+
+# DO_URBAN_HEAT_CAPA_CONDUCT ([FLAG]) :  Activate urban heat capacity and conductivity 	{OK_SECHIBA}
+DO_URBAN_HEAT_CAPA_CONDUCT = n
+
+# DO_16TH_PFT_IS_URBAN ([FLAG]) :  Activate corrections on nvm-1 calculation 	{OK_SECHIBA}
+DO_16TH_PFT_IS_URBAN = n
+
 # DO_FLOODPLAINS ([FLAG]  ) :  Should we include floodplains  	{RIVER_ROUTING }
 DO_FLOODPLAINS =  n 
 
