@@ -798,7 +798,7 @@ CONTAINS
           !    mean albedo of only vegetative PFTs over the grid cell
           alb_veget(:,ks) = zero
           
-         IF (DO_16TH_PFT_IS_URBAN)
+         IF (DO_16TH_PFT_IS_URBAN) THEN
 
           DO jv = 2, (nvm-1)  ! Loop over # of PFTs
              

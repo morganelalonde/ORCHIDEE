@@ -743,7 +743,7 @@ CONTAINS
     !! 6. Calculate tot_bare_soil needed in hydrol, diffuco and condveg (fraction in the mesh)
     tot_bare_soil(:) = veget_max(:,1)
     
-    IF(DO_16TH_PFT_IS_URBAN)
+    IF(DO_16TH_PFT_IS_URBAN) THEN
     
     DO jv = 2, (nvm-1)
        DO ji =1, kjpindex
@@ -1931,7 +1931,7 @@ CONTAINS
     ! Fraction of bare soil in the mesh (bio+nobio) 
     tot_bare_soil(:) = veget_max(:,1)
 
-    IF(DO_16TH_PFT_IS_URBAN)
+    IF(DO_16TH_PFT_IS_URBAN) THEN
 
     DO jv = 2, (nvm-1)
        DO ji =1, kjpindex
@@ -4601,7 +4601,7 @@ CONTAINS
     DO ji=1,nbpt
        totfrac = zero
 
-      IF(DO_16TH_PFT_IS_URBAN)
+      IF(DO_16TH_PFT_IS_URBAN) THEN
 
        DO jv=1,(nvm-1)
           totfrac = totfrac + (veget_max(ji,jv) - veget(ji,jv))
@@ -4694,7 +4694,7 @@ CONTAINS
     !! Calculate tot_bare_soil needed in hydrol, diffuco and condveg (fraction of bare soil in the mesh)
     tot_bare_soil(:) = veget_max(:,1)
    
-   IF(DO_16TH_PFT_IS_URBAN)
+   IF(DO_16TH_PFT_IS_URBAN) THEN
    
     DO jv = 2, (nvm-1)
        DO ji =1, kjpindex
