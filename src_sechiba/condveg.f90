@@ -798,6 +798,8 @@ CONTAINS
           !    mean albedo of only vegetative PFTs over the grid cell
           alb_veget(:,ks) = zero
           
+         IF (DO_16TH_PFT_IS_URBAN)
+
           DO jv = 2, (nvm-1)  ! Loop over # of PFTs
              
              ! Mean albedo of grid cell for visible and near-infrared range
@@ -810,7 +812,21 @@ CONTAINS
           jv=16
           albedo(:,ks) = albedo(:,ks) + veget_max(:,jv)*alb_urban(:,ks)
 
-          
+          ELSE
+
+          DO jv = 2, (nvm)  ! Loop over # of PFTs
+             
+             ! Mean albedo of grid cell for visible and near-infrared range
+             albedo(:,ks) = albedo(:,ks) + veget(:,jv)*alb_leaf_tmp(jv,ks)
+             
+             ! Mean albedo of vegetation for visible and near-infrared range
+             alb_veget(:,ks) = alb_veget(:,ks) + veget(:,jv)*alb_leaf_tmp(jv,ks)
+          ENDDO ! Loop over # of PFTs
+
+          ENDIF
+
+
+
        ENDDO
     END IF
 
