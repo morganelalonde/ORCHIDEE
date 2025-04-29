@@ -1293,6 +1293,11 @@ CONTAINS
            &  chalev0 * rau(ji) * qc * (un - vbeta1(ji)) * (un - vbeta5(ji)) * vbeta(ji) * &
            & (qsol_sat_new(ji) - qair(ji))
       
+       PRINT *, 'DEBUG MORGANE 2 fluxlat: fluxlat=', fluxlat(ji), ' chalsu0=', chalsu0, ' chalev0=', chalev0
+       PRINT *, '  rau=', rau(ji), ' qc=', qc, ' vbeta1=', vbeta1(ji), ' vbeta5=', vbeta5(ji), ' vbeta=', vbeta(ji)
+       PRINT *, '  un=', un, ' qsol_sat_new=', qsol_sat_new(ji), ' qair=', qair(ji)
+
+
       !! The sublimination flux concerns is calculated using vbeta1, the snow resistance.
       !! \latexonly 
       !!     \input{enerbilflux11.tex}
@@ -1306,6 +1311,8 @@ CONTAINS
       !!     \input{enerbilflux12.tex}
       !! \endlatexonly
       fluxsens(ji) =  rau(ji) * qc * (psnew(ji) - epot_air(ji))
+
+      PRINT *, 'MORGANE TEST DEBUG 1: fluxsens=', fluxsens(ji), ' rau=', rau(ji), ' psnew=', psnew(ji), ' epot_air=', epot_air(ji)
       
       !! This is the net longwave downwards radiation.
       !! \latexonly 
