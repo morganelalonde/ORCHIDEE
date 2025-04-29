@@ -451,7 +451,7 @@ STRESS_GM =  1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.
 EXT_COEFF =  .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5 
 
 # EXT_COEFF_VEGETFRAC ([-]) :  extinction coefficient used for the calculation of the bare soil fraction  	{OK_SECHIBA or OK_STOMATE}
-EXT_COEFF_VEGETFRAC =  1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1. 
+EXT_COEFF_VEGETFRAC =  1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 0. 
 
 # HYDROL_HUMCSTE ([m]) :  Root profile 	{OK_SECHIBA}
 HYDROL_HUMCSTE =  humcste_ref2m or humcste_ref4m depending on zmaxh 
