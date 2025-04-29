@@ -2305,20 +2305,9 @@ CONTAINS
     DO ji = 1, kjpindex
        veget(ji,1)=veget_max(ji,1)
 
-       IF (DO_16TH_PFT_IS_URBAN) THEN
-       DO jv = 2, (nvm-1)
-          veget(ji,jv) = veget_max(ji,jv) * ( un - exp( - lai(ji,jv) * ext_coeff_vegetfrac(jv) ) )
-       ENDDO
-
-       veget(ji,16)=veget_max(ji,16)
-
-       ELSE
-
        DO jv = 2, nvm
           veget(ji,jv) = veget_max(ji,jv) * ( un - exp( - lai(ji,jv) * ext_coeff_vegetfrac(jv) ) )
        ENDDO
-
-       ENDIF
 
     ENDDO
 
