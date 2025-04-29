@@ -403,7 +403,7 @@ REAL(r_std), PARAMETER, DIMENSION(nvmc) :: Sco25_mtc  = &             !! Relativ
   &    0.5,   0.5,   0.5,   0.5,   0.5,   0.5,   0.5  /)
   REAL(r_std), PARAMETER, DIMENSION(nvmc) :: ext_coeff_vegetfrac_mtc  =  &     !! extinction coefficient used for defining the fraction
   & (/ 1.0,   1.0,   1.0,   1.0,   1.0,   1.0,   1.0,  &                       !!  of bare soil (unitless)
-  &    1.0,   1.0,   1.0,   1.0,   1.0,   1.0,   0.0  /)
+  &    1.0,   1.0,   1.0,   1.0,   1.0,   1.0,   1.0  /)
 
   !
   ! ALLOCATION (stomate)

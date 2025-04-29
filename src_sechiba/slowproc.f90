@@ -2309,6 +2309,10 @@ CONTAINS
           veget(ji,jv) = veget_max(ji,jv) * ( un - exp( - lai(ji,jv) * ext_coeff_vegetfrac(jv) ) )
        ENDDO
 
+       IF(DO_16TH_PFT_IS_URBAN) THEN
+          veget(ji,16) = veget_max(ji,16) 
+       ENDIF
+
     ENDDO
 
 
