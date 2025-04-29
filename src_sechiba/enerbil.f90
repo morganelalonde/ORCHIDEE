@@ -1293,9 +1293,9 @@ CONTAINS
            &  chalev0 * rau(ji) * qc * (un - vbeta1(ji)) * (un - vbeta5(ji)) * vbeta(ji) * &
            & (qsol_sat_new(ji) - qair(ji))
       
-       WRITE (numout,*) 'DEBUG MORGANE 2 fluxlat: fluxlat=', fluxlat(ji), ' chalsu0=', chalsu0, ' chalev0=', chalev0
-       WRITE (numout,*) '  rau=', rau(ji), ' qc=', qc, ' vbeta1=', vbeta1(ji), ' vbeta5=', vbeta5(ji), ' vbeta=', vbeta(ji)
-       WRITE (numout,*) '  un=', un, ' qsol_sat_new=', qsol_sat_new(ji), ' qair=', qair(ji)
+       WRITE (*,*) 'DEBUG MORGANE 2 fluxlat: fluxlat=', fluxlat(ji), ' chalsu0=', chalsu0, ' chalev0=', chalev0
+       WRITE (*,*) '  rau=', rau(ji), ' qc=', qc, ' vbeta1=', vbeta1(ji), ' vbeta5=', vbeta5(ji), ' vbeta=', vbeta(ji)
+       WRITE (*,*) '  un=', un, ' qsol_sat_new=', qsol_sat_new(ji), ' qair=', qair(ji)
 
 
       !! The sublimination flux concerns is calculated using vbeta1, the snow resistance.
@@ -1312,7 +1312,7 @@ CONTAINS
       !! \endlatexonly
       fluxsens(ji) =  rau(ji) * qc * (psnew(ji) - epot_air(ji))
 
-      WRITE (numout,*) 'MORGANE TEST DEBUG 1: fluxsens=', fluxsens(ji), ' rau=', rau(ji), ' psnew=', psnew(ji), ' epot_air=', epot_air(ji)
+      WRITE (*,*) 'MORGANE TEST DEBUG 1: fluxsens=', fluxsens(ji), ' rau=', rau(ji), ' psnew=', psnew(ji), ' epot_air=', epot_air(ji)
       
       !! This is the net longwave downwards radiation.
       !! \latexonly 
