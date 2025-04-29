@@ -4792,35 +4792,38 @@ CONTAINS
 
        DO ji = 1, kjpindex
           
-          IF (vegtot(ji).GT.min_sechiba) THEN
+          ! IF (vegtot(ji).GT.min_sechiba) THEN
              
              ! We calculate a reduced demand, by means of a soil resistance (Sellers et al., 1992)
              ! It is based on the liquid SM only, like for us and humrel
-             IF (do_rsoil) THEN
-                mc_rel(ji) = tmc_litter(ji,jst)/tmcs_litter(ji) ! tmc_litter based on mcl
+             ! IF (do_rsoil) THEN
+              !   mc_rel(ji) = tmc_litter(ji,jst)/tmcs_litter(ji) ! tmc_litter based on mcl
                 ! based on SM in the top 4 soil layers (litter) to smooth variability
-                r_soil_ns(ji,jst) = exp(8.206 - 4.255 * mc_rel(ji))
-             ELSE
+             !    r_soil_ns(ji,jst) = exp(8.206 - 4.255 * mc_rel(ji))
+           !   ELSE
                 r_soil_ns(ji,jst) = zero
-             ENDIF
+          !    ENDIF
 
              ! Aerodynamic resistance
-             speed = MAX(min_wind, SQRT (u(ji)*u(ji) + v(ji)*v(ji)))
-             IF (speed * tq_cdrag(ji) .GT. min_sechiba) THEN
-                ra = un / (speed * tq_cdrag(ji))
-                evap_soil(ji) = evapot_penm(ji) / (un + r_soil_ns(ji,jst)/ra)
-             ELSE
-                evap_soil(ji) = evapot_penm(ji)
-             ENDIF
+         !     speed = MAX(min_wind, SQRT (u(ji)*u(ji) + v(ji)*v(ji)))
+
+           !   IF (speed * tq_cdrag(ji) .GT. min_sechiba) THEN
+           !      ra = un / (speed * tq_cdrag(ji))
+          !       evap_soil(ji) = evapot_penm(ji) / (un + r_soil_ns(ji,jst)/ra)
+          !    ELSE
+
+           !      evap_soil(ji) = evapot_penm(ji)
+
+          !    ENDIF
                           
-             flux_top(ji) = evap_soil(ji) * &
-                  AINT(frac_bare_ns(ji,jst)+un-min_sechiba)
-          ELSE
+          !    flux_top(ji) = evap_soil(ji) * &
+          !         AINT(frac_bare_ns(ji,jst)+un-min_sechiba)
+        !   ELSE
              
              flux_top(ji) = zero
              r_soil_ns(ji,jst) = zero
              
-          ENDIF
+        !   ENDIF
        ENDDO
 
        ! We don't use rootsinks, because we assume there is no transpiration in the bare soil fraction (??)

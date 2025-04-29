@@ -1214,6 +1214,9 @@ CONTAINS
       !!     \input{enerbilflux2.tex}
       !! \endlatexonly
       qc = speed * q_cdrag(ji)
+
+      WRITE(*,*) 'DEBUG MORGANE qc =', qc, ' speed =', speed, ' q_cdrag =', q_cdrag(ji)
+
     
     !! 2. Calculation of the net upward flux of longwave radiation
       
@@ -1389,6 +1392,8 @@ CONTAINS
       !!     \input{enerbilflux17.tex}
       !! \endlatexonly 
       qc = speed * q_cdrag(ji)
+
+      WRITE(*,*) 'DEBUG MORGANE qc =', qc, ' speed =', speed, ' q_cdrag =', q_cdrag(ji)
        
       !! Derive the potential as defined by Penman & Monteith (Monteith, 1965) based on the correction 
       !! term developed by Chris Milly (1992).
