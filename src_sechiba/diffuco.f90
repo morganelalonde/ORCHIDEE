@@ -737,6 +737,10 @@ CONTAINS
        !! Sensible heat fluxes can therefore be reduced of ~1/3. Pomeroy et al., 1998
        cd_neut = ct_karman ** 2. / ( LOG( (zlev(ji) + roughheight(ji)) / z0m(ji) ) * LOG( (zlev(ji) + roughheight(ji)) / z0h(ji) ) )
        
+       WRITE(*,*) 'DEBUG MORGANE 01 cd_neut:', cd_neut, ' ct_karman=', ct_karman, ' zlev=', zlev(ji), &
+        ' roughheight=', roughheight(ji), ' z0m=', z0m(ji), ' z0h=', z0h(ji)
+
+
        !! 1a).7.1 - for the stable case (i.e $R_i$ $\geq$ 0)
        IF (zri .GE. zero) THEN
           
@@ -749,6 +753,14 @@ CONTAINS
           !!     \input{diffucoaero11.tex}
           !! \endlatexonly          
           cd_tmp=cd_neut/(un + trois * cb * zri * zscf)
+
+           WRITE(*,*) 'DEBUG cd_tmp (1st):', cd_tmp, ' cd_neut=', cd_neut, ' un=', un, &
+           ' trois=', trois, ' cb=', cb, ' zri=', zri, ' zscf=', zscf, &
+           ' trois*cb*zri*zscf=', trois * cb * zri * zscf, &
+           ' denom =', un + trois * cb * zri * zscf
+
+
+
        ELSE
           
           !! 1a).7.2 - for the unstable case (i.e. $R_i$ < 0)
@@ -762,6 +774,11 @@ CONTAINS
           !!     \input{diffucoaero13.tex}
           !! \endlatexonly               
           cd_tmp=cd_neut * (un - trois * cb * zri * zscf)
+
+            WRITE(*,*) 'DEBUG MORGANE cd_tmp (2nd):', cd_tmp, ' un=', un, &
+           ' trois=', trois, ' cb=', cb, ' zri=', zri, ' zscf=', zscf, &
+           ' trois*cb*zri*zscf=', trois * cb * zri * zscf
+
        ENDIF
        
        !! If the Drag Coefficient becomes too small than the surface may uncouple from the atmosphere.
@@ -772,6 +789,9 @@ CONTAINS
        !! \endlatexonly
        !!
        q_cdrag(ji) = MAX(cd_tmp, min_qc/MAX(speed,min_wind))
+
+       WRITE(*,*) 'DEBUG MORGANE q_cdrag =', q_cdrag(ji), ' cd_tmp =', cd_tmp, ' min_qc =', min_qc, ' speed =', speed, ' min_wind =', min_wind
+
 
        ! In some situations it might be useful to give an upper limit on the cdrag as well. 
        ! The line here should then be uncommented.
