@@ -3514,6 +3514,13 @@ CONTAINS
        ENDDO
     ENDDO
 
+    IF(DO_16TH_PFT_IS_URBAN) THEN
+       DO ji =1, kjpindex
+          frac_bare(ji,16) = un
+       ENDDO
+    ENDIF
+
+
     ! Tout dans cette routine est maintenant certainement obsolete (veget_max etant constant) en dehors des lignes 
     ! suivantes et le calcul de frac_bare:
     frac_bare_ns(:,:) = zero
