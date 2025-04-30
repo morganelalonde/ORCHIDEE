@@ -4603,6 +4603,14 @@ CONTAINS
        DO jv=1,(nvm)
           totfrac = totfrac + (veget_max(ji,jv) - veget(ji,jv))
        ENDDO
+
+       IF (DO_16TH_PFT_IS_URBAN) THEN
+     
+       DO ji =1, kjpindex
+       totfrac = totfrac + veget_max(ji,16)
+       ENDDO
+
+       ENDIF
        
        ! add the bare soil fraction to totfrac
        totfrac = totfrac + veget(ji,ibare_sechiba)
