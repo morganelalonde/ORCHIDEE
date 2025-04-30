@@ -2242,9 +2242,20 @@ CONTAINS
        CALL restget_p (rest_id, var_name, nbp_glo, 1, 1, kjit, .TRUE., evap_bare_lim, "gather", nbp_glo, index_g)
 
        ! Calculate evap_bare_lim if it was not found in the restart file.
+
+       WRITE(*,*) 'DEBUG MORGANE01 BEFORE IF: ji=', ji, ' evap_bare_lim=', evap_bare_lim(ji)
+
        IF ( ALL(evap_bare_lim(:) == val_exp) ) THEN
+
+       WRITE(*,*) 'DEBUG MORGANE02'
+
           DO ji = 1, kjpindex
              evap_bare_lim(ji) =  SUM(evap_bare_lim_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
+
+                   WRITE(*,*) 'DEBUG MORGANE05: ji=', ji, ' evap_bare_lim=', evap_bare_lim(ji), &
+                 ' vegtot=', vegtot(ji), ' evap_bare_lim_ns*soiltile=', &
+                 evap_bare_lim_ns(ji,:), soiltile(ji,:)
+                 
           ENDDO
        END IF
 
@@ -5002,6 +5013,16 @@ CONTAINS
     DO ji = 1, kjpindex
        evap_bare_lim(ji) =  SUM(evap_bare_lim_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
        r_soil(ji) =  SUM(r_soil_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
+
+     WRITE(*,*) 'DEBUG MORGANE06 ji=', ji
+     WRITE(*,*) '  vegtot=', vegtot(ji)
+     WRITE(*,*) '  soiltile(:)=', soiltile(ji,:)
+     WRITE(*,*) '  evap_bare_lim_ns(:)=', evap_bare_lim_ns(ji,:)
+     WRITE(*,*) '  r_soil_ns(:)=', r_soil_ns(ji,:)
+     WRITE(*,*) '  --> evap_bare_lim=', evap_bare_lim(ji)
+     WRITE(*,*) '  --> r_soil=', r_soil(ji)
+
+
     ENDDO
     ! si vegtot LE min_sechiba, evap_bare_lim_ns et evap_bare_lim valent zero
 
@@ -6216,6 +6237,13 @@ CONTAINS
        DO ji=1,kjpindex
           IF(evap_bare_lim(ji).GT.min_sechiba) THEN       
              ae_ns(ji,jst) = vevapnu(ji) * evap_bare_lim_ns(ji,jst)/evap_bare_lim(ji)
+
+         WRITE(*,*) 'DEBUG MORGANE04 ji=', ji, ' jst=', jst
+         WRITE(*,*) '  vevapnu=', vevapnu(ji)
+         WRITE(*,*) '  evap_bare_lim_ns=', evap_bare_lim_ns(ji,jst)
+         WRITE(*,*) '  evap_bare_lim=', evap_bare_lim(ji)
+         WRITE(*,*) '  --> ae_ns=', ae_ns(ji,jst)
+
           ENDIF
        ENDDO
     ENDDO

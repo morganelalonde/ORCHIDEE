@@ -1309,7 +1309,7 @@ SUBROUTINE diffuco_snow (kjpindex, qair, qsatt, rau, u, v,q_cdrag, &
              ! We now have to redefine evap_bare_lim & evap_bare_lim_ns 
              IF (evap_bare_lim(ji) .GT. min_sechiba) THEN 
                 evap_bare_lim_ns(ji,:) = evap_bare_lim_ns(ji,:) * vbeta4(ji) / evap_bare_lim(ji) 
-             ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles              
+             ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles       
                 evap_bare_lim_ns(ji,:) = tot_bare_soil(ji)/vegtot(ji) 
              ENDIF
 	 
