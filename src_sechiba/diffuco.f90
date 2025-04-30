@@ -2566,6 +2566,9 @@ END SUBROUTINE diffuco_trans_co2
 
           vbeta1(ji) = zero
           vegtot(ji) = SUM(veget_max(ji,:))
+            
+            WRITE(*,*) '  vegtot(ji)  is', vegtot(ji)
+            WRITE(*,*) '  tot_bare_soil(ji)  is', tot_bare_soil(ji)
 
           IF ( (tot_bare_soil(ji) .GT. min_sechiba) .AND. (vegtot(ji).GT. min_sechiba) ) THEN
              
@@ -2583,12 +2586,17 @@ END SUBROUTINE diffuco_trans_co2
              ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles  
                 WRITE(*,*) '  MORGANE11'           
                 evap_bare_lim_ns(ji,:) = tot_bare_soil(ji)/vegtot(ji)               
+                WRITE(*,*) '  evap_bare_lim_ns(ji,:) is', evap_bare_lim_ns(ji,:)
+                WRITE(*,*) '  tot_bare_soil(ji) is', tot_bare_soil(ji)
+                WRITE(*,*) '  vegtot(ji)  is', vegtot(ji) 
              ENDIF
-
+             WRITE(*,*) '  MORGANE111' 
              WRITE(*,*) '  vbeta4(ji) is', vbeta4(ji)
              WRITE(*,*) '  evap_bare_lim(ji) is', evap_bare_lim(ji)
 
              evap_bare_lim(ji) = vbeta4(ji)
+
+             WRITE(*,*) '  evap_bare_lim_ns(ji,:) is', evap_bare_lim_ns(ji,:)
              ! consistent with evap_bare_lim(ji) = SUM(evap_bare_lim_ns(ji,:)*soiltile(ji,:)*vegtot(ji))
              ! as SUM(soiltile(ji,:)) = 1
 

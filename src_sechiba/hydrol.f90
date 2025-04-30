@@ -3521,7 +3521,18 @@ CONTAINS
        DO jv = 1, nvm
           DO ji =1, kjpindex
              IF(vegtot(ji) .GT. min_sechiba) THEN
+
+                          WRITE(*,*) 'MORGANE40'
+                          WRITE(*,*) 'DEBUG frac_bare_ns -- ji=', ji, ' jst=', jst, ' jv=', jv
+                          WRITE(*,*) '  frac_bare_ns (before)   =', frac_bare_ns(ji,jst)
+                          WRITE(*,*) '  vegetmax_soil           =', vegetmax_soil(ji,jv,jst)
+                          WRITE(*,*) '  frac_bare               =', frac_bare(ji,jv)
+                          WRITE(*,*) '  vegtot                  =', vegtot(ji)
+
                 frac_bare_ns(ji,jst) = frac_bare_ns(ji,jst) + vegetmax_soil(ji,jv,jst) * frac_bare(ji,jv) / vegtot(ji)
+
+                          WRITE(*,*) '  frac_bare_ns (after)    =', frac_bare_ns(ji,jst)
+
              ENDIF
           END DO
        ENDDO
@@ -4974,7 +4985,12 @@ CONTAINS
           WRITE(*,*) 'MORGANE17'
           WRITE(*,*) '  evap_bare_lim_ns(ji,jst)            =', evap_bare_lim_ns(ji,jst)
           WRITE(*,*) '  frac_bare_ns(ji,jst)          =', frac_bare_ns(ji,jst)
+
+
              evap_bare_lim_ns(ji,jst) = evap_bare_lim_ns(ji,jst) * frac_bare_ns(ji,jst)
+
+
+
           ELSE
              WRITE(*,*) 'MORGANE18'
              evap_bare_lim_ns(ji,jst) = 0.
@@ -4999,6 +5015,7 @@ CONTAINS
              IF ((evapot(ji).GT.min_sechiba) .AND. &
                   (tmc_litter(ji,jst).GT.(tmc_litter_wilt(ji,jst)))) THEN
           WRITE(*,*) 'MORGANE30'
+          WRITE(*,*) 'jst is', jst
           WRITE(*,*) '  evap_bare_lim_ns(ji,jst)            =', evap_bare_lim_ns(ji,jst)
           WRITE(*,*) '  evapot(ji)          =', evapot(ji)
 
@@ -5013,6 +5030,7 @@ CONTAINS
                 evap_bare_lim_ns(ji,jst) = zero
              END IF
                        WRITE(*,*) 'MORGANE33'
+                       WRITE(*,*) 'jst is', jst
              evap_bare_lim_ns(ji,jst)=MAX(MIN(evap_bare_lim_ns(ji,jst),1.),0.)
           END DO
        ENDIF
@@ -5039,6 +5057,10 @@ CONTAINS
 
     !! 9. evap_bar_lim is the grid-cell scale beta
     DO ji = 1, kjpindex
+
+
+     WRITE(*,*) '  evap_bare_lim_ns(ji,:)=', evap_bare_lim_ns(ji,:)
+
        evap_bare_lim(ji) =  SUM(evap_bare_lim_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
        r_soil(ji) =  SUM(r_soil_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
 
