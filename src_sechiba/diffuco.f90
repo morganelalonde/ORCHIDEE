@@ -1309,8 +1309,15 @@ SUBROUTINE diffuco_snow (kjpindex, qair, qsatt, rau, u, v,q_cdrag, &
              ! We now have to redefine evap_bare_lim & evap_bare_lim_ns 
              IF (evap_bare_lim(ji) .GT. min_sechiba) THEN 
                 evap_bare_lim_ns(ji,:) = evap_bare_lim_ns(ji,:) * vbeta4(ji) / evap_bare_lim(ji) 
-             ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles       
+             ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles      
+
+                 WRITE(*,*) '  evap_bare_lim_ns(ji,:) is', evap_bare_lim_ns(ji,:)
+
                 evap_bare_lim_ns(ji,:) = tot_bare_soil(ji)/vegtot(ji) 
+                 WRITE(*,*) '  MORGANE07'
+                 WRITE(*,*) '  evap_bare_lim_ns(ji,:) is', evap_bare_lim_ns(ji,:)
+                 WRITE(*,*) '  tot_bare_soil(ji) is', tot_bare_soil(ji)
+                 WRITE(*,*) '  vegtot(ji)  is', vegtot(ji) 
              ENDIF
 	 
              evap_bare_lim(ji) = vbeta4(ji) 
@@ -2555,25 +2562,38 @@ END SUBROUTINE diffuco_trans_co2
 
        IF ( toveg(ji) ) THEN
 
+                 WRITE(*,*) '  MORGANE08'
+
           vbeta1(ji) = zero
           vegtot(ji) = SUM(veget_max(ji,:))
 
           IF ( (tot_bare_soil(ji) .GT. min_sechiba) .AND. (vegtot(ji).GT. min_sechiba) ) THEN
              
+                 WRITE(*,*) '  MORGANE09'
+
+             WRITE(*,*) '  vbeta4(ji) is', vbeta4(ji)
+             WRITE(*,*) '  tot_bare_soil(ji) is', tot_bare_soil(ji)
+
              vbeta4(ji) = tot_bare_soil(ji)
              
              ! We now have to redefine evap_bare_lim & evap_bare_lim_ns
-             IF (evap_bare_lim(ji) .GT. min_sechiba) THEN               
+             IF (evap_bare_lim(ji) .GT. min_sechiba) THEN  
+                WRITE(*,*) '  MORGANE10'             
                 evap_bare_lim_ns(ji,:) = evap_bare_lim_ns(ji,:) * vbeta4(ji) / evap_bare_lim(ji)
-             ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles             
+             ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles  
+                WRITE(*,*) '  MORGANE11'           
                 evap_bare_lim_ns(ji,:) = tot_bare_soil(ji)/vegtot(ji)               
              ENDIF
+
+             WRITE(*,*) '  vbeta4(ji) is', vbeta4(ji)
+             WRITE(*,*) '  evap_bare_lim(ji) is', evap_bare_lim(ji)
 
              evap_bare_lim(ji) = vbeta4(ji)
              ! consistent with evap_bare_lim(ji) = SUM(evap_bare_lim_ns(ji,:)*soiltile(ji,:)*vegtot(ji))
              ! as SUM(soiltile(ji,:)) = 1
 
           ELSE          
+             WRITE(*,*) '  MORGANE12' 
              vbeta4(ji) = zero
              evap_bare_lim_ns(ji,:) = zero
              evap_bare_lim(ji) = zero

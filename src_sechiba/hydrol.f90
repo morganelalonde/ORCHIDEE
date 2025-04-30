@@ -4761,6 +4761,8 @@ CONTAINS
     evap_bare_lim(:) = zero
     evap_bare_lim_ns(:,:) = zero
 
+     WRITE(*,*) '  MORGANE15' 
+
     ! Loop on soil tiles  
     DO jst = 1,nstm
 
@@ -4947,15 +4949,34 @@ CONTAINS
        DO ji = 1, kjpindex
           evap_bare_lim_ns(ji,jst) = mask_soiltile(ji,jst) * &
                (tmcint(ji)-tmc(ji,jst)-flux_bottom(ji))
+
+               WRITE(*,*) 'DEBUG MORGANE16 evap_bare_lim_ns ji=', ji, ' jst=', jst
+               WRITE(*,*) '  mask_soiltile =', mask_soiltile(ji,jst)
+               WRITE(*,*) '  tmcint        =', tmcint(ji)
+               WRITE(*,*) '  tmc           =', tmc(ji,jst)
+               WRITE(*,*) '  flux_bottom   =', flux_bottom(ji)
+               WRITE(*,*) '  --> evap_bare_lim_ns =', evap_bare_lim_ns(ji,jst)
+
        END DO
 
        !! 8.10 evap_bare_lim_ns is turned from an evaporation rate to a beta
        DO ji = 1, kjpindex
           ! Here we weight evap_bare_lim_ns by the fraction of bare evaporating soil. 
           ! This is given by frac_bare_ns, taking into account bare soil under vegetation
+
+                 WRITE(*,*) 'DEBUG MORGANE19 evap_bare_lim weighting -- ji =', ji, ' jst =', jst
+                 WRITE(*,*) '  vegtot            =', vegtot(ji)
+                 WRITE(*,*) '  min_sechiba       =', min_sechiba
+                 WRITE(*,*) '  frac_bare_ns      =', frac_bare_ns(ji,jst)
+                 WRITE(*,*) '  evap_bare_lim_ns (before) =', evap_bare_lim_ns(ji,jst)
+
           IF(vegtot(ji) .GT. min_sechiba) THEN
+          WRITE(*,*) 'MORGANE17'
+          WRITE(*,*) '  evap_bare_lim_ns(ji,jst)            =', evap_bare_lim_ns(ji,jst)
+          WRITE(*,*) '  frac_bare_ns(ji,jst)          =', frac_bare_ns(ji,jst)
              evap_bare_lim_ns(ji,jst) = evap_bare_lim_ns(ji,jst) * frac_bare_ns(ji,jst)
           ELSE
+             WRITE(*,*) 'MORGANE18'
              evap_bare_lim_ns(ji,jst) = 0.
           ENDIF
        END DO
@@ -4977,14 +4998,21 @@ CONTAINS
           DO ji=1,kjpindex
              IF ((evapot(ji).GT.min_sechiba) .AND. &
                   (tmc_litter(ji,jst).GT.(tmc_litter_wilt(ji,jst)))) THEN
+          WRITE(*,*) 'MORGANE30'
+          WRITE(*,*) '  evap_bare_lim_ns(ji,jst)            =', evap_bare_lim_ns(ji,jst)
+          WRITE(*,*) '  evapot(ji)          =', evapot(ji)
+
                 evap_bare_lim_ns(ji,jst) = evap_bare_lim_ns(ji,jst) / evapot(ji)
              ELSEIF((evapot(ji).GT.min_sechiba).AND. &
                   (tmc_litter(ji,jst).GT.(tmc_litter_res(ji,jst)))) THEN
+                            WRITE(*,*) 'MORGANE31'
                 evap_bare_lim_ns(ji,jst) =  (un/deux) * evap_bare_lim_ns(ji,jst) / evapot(ji)
                 ! This is very arbitrary, with no justification from the literature
              ELSE
+                       WRITE(*,*) 'MORGANE32'
                 evap_bare_lim_ns(ji,jst) = zero
              END IF
+                       WRITE(*,*) 'MORGANE33'
              evap_bare_lim_ns(ji,jst)=MAX(MIN(evap_bare_lim_ns(ji,jst),1.),0.)
           END DO
        ENDIF
