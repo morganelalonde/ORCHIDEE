@@ -1286,6 +1286,19 @@ CONTAINS
       !! \latexonly 
       !!     \input{enerbilflux10.tex}
       !! \endlatexonly
+
+
+      WRITE(*,*) 'DEBUG FLUXLAT -- ji=', ji
+      WRITE(*,*) '  chalsu0           =', chalsu0
+      WRITE(*,*) '  chalev0           =', chalev0
+      WRITE(*,*) '  rau               =', rau(ji)
+      WRITE(*,*) '  qc                =', qc
+      WRITE(*,*) '  vbeta1            =', vbeta1(ji)
+      WRITE(*,*) '  vbeta5            =', vbeta5(ji)
+      WRITE(*,*) '  vbeta             =', vbeta(ji)
+      WRITE(*,*) '  qsol_sat_new      =', qsol_sat_new(ji)
+      WRITE(*,*) '  qair              =', qair(ji)
+
       fluxlat(ji) = chalsu0 * rau(ji) * qc * vbeta1(ji) * (un - vbeta5(ji)) * &
            & (qsol_sat_new(ji) - qair(ji)) + &
            &  chalev0 * rau(ji) * qc * vbeta5(ji) *&
@@ -1293,6 +1306,9 @@ CONTAINS
            &  chalev0 * rau(ji) * qc * (un - vbeta1(ji)) * (un - vbeta5(ji)) * vbeta(ji) * &
            & (qsol_sat_new(ji) - qair(ji))
 
+
+      WRITE(*,*) '  fluxlat           =', fluxlat(ji)
+      
       !! The sublimination flux concerns is calculated using vbeta1, the snow resistance.
       !! \latexonly 
       !!     \input{enerbilflux11.tex}
