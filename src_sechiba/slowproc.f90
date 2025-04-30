@@ -752,7 +752,7 @@ CONTAINS
      IF (DO_16TH_PFT_IS_URBAN) THEN
      
      DO ji =1, kjpindex
-       tot_bare_soil(ji) = tot_bare_soil(ji) + veget_max(:,16)
+       tot_bare_soil(ji) = tot_bare_soil(ji) + veget_max(ji,16)
      ENDDO
 
      ENDIF
@@ -1937,7 +1937,7 @@ CONTAINS
      IF (DO_16TH_PFT_IS_URBAN) THEN
      
      DO ji =1, kjpindex
-       tot_bare_soil(ji) = tot_bare_soil(ji) + veget_max(:,16)
+       tot_bare_soil(ji) = tot_bare_soil(ji) + veget_max(ji,16)
      ENDDO
 
      ENDIF
@@ -4692,7 +4692,7 @@ CONTAINS
      IF (DO_16TH_PFT_IS_URBAN) THEN
      
      DO ji =1, kjpindex
-       tot_bare_soil(ji) = tot_bare_soil(ji) + veget_max(:,16)
+       tot_bare_soil(ji) = tot_bare_soil(ji) + veget_max(ji,16)
      ENDDO
 
      ENDIF
