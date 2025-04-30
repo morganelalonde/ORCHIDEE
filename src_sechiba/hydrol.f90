@@ -2246,7 +2246,18 @@ CONTAINS
        IF ( ALL(evap_bare_lim(:) == val_exp) ) THEN
 
           DO ji = 1, kjpindex
+          
+          WRITE(*,*) '             '
+          WRITE(*,*) '        --MORGANE02--           '
+          WRITE(*,*) 'DEBUG evap_bare_lim - ji =', ji
+          WRITE(*,*) '  vegtot(ji)           =', vegtot(ji)
+          WRITE(*,*) '  soiltile(ji,:)       =', soiltile(ji,:)
+          WRITE(*,*) '  evap_bare_lim_ns(ji,:)=', evap_bare_lim_ns(ji,:)
+
              evap_bare_lim(ji) =  SUM(evap_bare_lim_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
+
+          WRITE(*,*) '  evap_bare_lim(ji)    =', evap_bare_lim(ji)
+
           ENDDO
        END IF
 
@@ -5010,11 +5021,22 @@ CONTAINS
     !! 9. evap_bar_lim is the grid-cell scale beta
     DO ji = 1, kjpindex
 
-
-     WRITE(*,*) '  evap_bare_lim_ns(ji,:)=', evap_bare_lim_ns(ji,:)
+        WRITE(*,*) '             '
+        WRITE(*,*) '        --MORGANE01--           '
+        WRITE(*,*) 'DEBUG ji =', ji
+        WRITE(*,*) '  vegtot           =', vegtot(ji)
+        WRITE(*,*) '  soiltile         =', soiltile(ji,:)
+        WRITE(*,*) '  evap_bare_lim_ns =', evap_bare_lim_ns(ji,:)
+        WRITE(*,*) '  r_soil_ns        =', r_soil_ns(ji,:)
 
        evap_bare_lim(ji) =  SUM(evap_bare_lim_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
        r_soil(ji) =  SUM(r_soil_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
+
+        WRITE(*,*) '             '
+        WRITE(*,*) '  evap_bare_lim    =', evap_bare_lim(ji)
+        WRITE(*,*) '  r_soil           =', r_soil(ji)
+        WRITE(*,*) '             '
+
     ENDDO
     ! si vegtot LE min_sechiba, evap_bare_lim_ns et evap_bare_lim valent zero
 

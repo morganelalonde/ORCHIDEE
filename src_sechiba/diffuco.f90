@@ -1266,6 +1266,11 @@ SUBROUTINE diffuco_snow (kjpindex, qair, qsatt, rau, u, v,q_cdrag, &
        !!     \input{diffucobare3.tex}
        !! \endlatexonly
 
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE05--           '
+                WRITE(*,*) '  evap_bare_lim       =', evap_bare_lim(ji)
+                WRITE(*,*) '             '
+
        IF ( (evap_bare_lim(ji) .GT. min_sechiba) .AND. &  
             ! in this case we can't have vegtot LE min_sechina, cf hydrol_soil
             (un - SUM(vbeta2(ji,:)+vbeta3(ji,:)) .GT. min_sechiba) ) THEN 
@@ -1282,6 +1287,9 @@ SUBROUTINE diffuco_snow (kjpindex, qair, qsatt, rau, u, v,q_cdrag, &
           IF (evap_bare_lim(ji) < (un - SUM(vbeta2(ji,:)+vbeta3(ji,:)))) THEN 
              ! Standard case 
              vbeta4(ji) = evap_bare_lim(ji) 
+
+             WRITE(*,*) '             '
+             WRITE(*,*) '        --MORGANE06--           '
              WRITE(*,*) '  vbeta4 1st set to:', vbeta4(ji)
 
           ELSE 
@@ -1290,7 +1298,17 @@ SUBROUTINE diffuco_snow (kjpindex, qair, qsatt, rau, u, v,q_cdrag, &
 
              ! We now have to redefine evap_bare_lim & evap_bare_lim_ns 
              IF (evap_bare_lim(ji) .GT. min_sechiba) THEN 
+
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE03--           '
+                WRITE(*,*) 'DEBUG evap_bare_lim_ns scaling - ji =', ji
+                WRITE(*,*) '  vbeta4              =', vbeta4(ji)
+                WRITE(*,*) '  evap_bare_lim       =', evap_bare_lim(ji)
+                WRITE(*,*) '  evap_bare_lim_ns(:) =', evap_bare_lim_ns(ji,:)
+
                 evap_bare_lim_ns(ji,:) = evap_bare_lim_ns(ji,:) * vbeta4(ji) / evap_bare_lim(ji) 
+                WRITE(*,*) '  evap_bare_lim_ns(:) =', evap_bare_lim_ns(ji,:)
+
              ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles      
 
                  WRITE(*,*) '  evap_bare_lim_ns(ji,:) is', evap_bare_lim_ns(ji,:)
@@ -1299,6 +1317,12 @@ SUBROUTINE diffuco_snow (kjpindex, qair, qsatt, rau, u, v,q_cdrag, &
              ENDIF
 	 
              evap_bare_lim(ji) = vbeta4(ji) 
+
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE04--           '
+                WRITE(*,*) '  evap_bare_lim       =', evap_bare_lim(ji)
+                WRITE(*,*) '  vbeta4              =', vbeta4(ji)
+
              ! consistent with evap_bare_lim(ji) = 
              ! SUM(evap_bare_lim_ns(ji,:)*soiltile(ji,:)*vegtot(ji)) 
              ! as SUM(soiltile(ji,:)) = 1 
