@@ -736,10 +736,6 @@ CONTAINS
        !! Snow induces low levels of turbulence.
        !! Sensible heat fluxes can therefore be reduced of ~1/3. Pomeroy et al., 1998
        cd_neut = ct_karman ** 2. / ( LOG( (zlev(ji) + roughheight(ji)) / z0m(ji) ) * LOG( (zlev(ji) + roughheight(ji)) / z0h(ji) ) )
-       
-       WRITE(*,*) 'DEBUG MORGANE 01 cd_neut:', cd_neut, ' ct_karman=', ct_karman, ' zlev=', zlev(ji), &
-        ' roughheight=', roughheight(ji), ' z0m=', z0m(ji), ' z0h=', z0h(ji)
-
 
        !! 1a).7.1 - for the stable case (i.e $R_i$ $\geq$ 0)
        IF (zri .GE. zero) THEN
@@ -775,10 +771,6 @@ CONTAINS
           !! \endlatexonly               
           cd_tmp=cd_neut * (un - trois * cb * zri * zscf)
 
-            WRITE(*,*) 'DEBUG MORGANE cd_tmp (2nd):', cd_tmp, ' un=', un, &
-           ' trois=', trois, ' cb=', cb, ' zri=', zri, ' zscf=', zscf, &
-           ' trois*cb*zri*zscf=', trois * cb * zri * zscf
-
        ENDIF
        
        !! If the Drag Coefficient becomes too small than the surface may uncouple from the atmosphere.
@@ -789,9 +781,6 @@ CONTAINS
        !! \endlatexonly
        !!
        q_cdrag(ji) = MAX(cd_tmp, min_qc/MAX(speed,min_wind))
-
-       WRITE(*,*) 'DEBUG MORGANE q_cdrag =', q_cdrag(ji), ' cd_tmp =', cd_tmp, ' min_qc =', min_qc, ' speed =', speed, ' min_wind =', min_wind
-
 
        ! In some situations it might be useful to give an upper limit on the cdrag as well. 
        ! The line here should then be uncommented.
@@ -1277,13 +1266,6 @@ SUBROUTINE diffuco_snow (kjpindex, qair, qsatt, rau, u, v,q_cdrag, &
        !!     \input{diffucobare3.tex}
        !! \endlatexonly
 
-       WRITE(*,*) 'DEBUG MORGANE BARE EVAP CHECK at ji=', ji
-       WRITE(*,*) '  evap_bare_lim=', evap_bare_lim(ji)
-       WRITE(*,*) '  min_sechiba=', min_sechiba
-       WRITE(*,*) '  vbeta2+vbeta3 sum =', SUM(vbeta2(ji,:) + vbeta3(ji,:))
-       WRITE(*,*) '  (un - SUM) =', un - SUM(vbeta2(ji,:) + vbeta3(ji,:))
-
-       
        IF ( (evap_bare_lim(ji) .GT. min_sechiba) .AND. &  
             ! in this case we can't have vegtot LE min_sechina, cf hydrol_soil
             (un - SUM(vbeta2(ji,:)+vbeta3(ji,:)) .GT. min_sechiba) ) THEN 
@@ -1314,10 +1296,6 @@ SUBROUTINE diffuco_snow (kjpindex, qair, qsatt, rau, u, v,q_cdrag, &
                  WRITE(*,*) '  evap_bare_lim_ns(ji,:) is', evap_bare_lim_ns(ji,:)
 
                 evap_bare_lim_ns(ji,:) = tot_bare_soil(ji)/vegtot(ji) 
-                 WRITE(*,*) '  MORGANE07'
-                 WRITE(*,*) '  evap_bare_lim_ns(ji,:) is', evap_bare_lim_ns(ji,:)
-                 WRITE(*,*) '  tot_bare_soil(ji) is', tot_bare_soil(ji)
-                 WRITE(*,*) '  vegtot(ji)  is', vegtot(ji) 
              ENDIF
 	 
              evap_bare_lim(ji) = vbeta4(ji) 
@@ -2562,8 +2540,6 @@ END SUBROUTINE diffuco_trans_co2
 
        IF ( toveg(ji) ) THEN
 
-                 WRITE(*,*) '  MORGANE08'
-
           vbeta1(ji) = zero
           vegtot(ji) = SUM(veget_max(ji,:))
             
@@ -2571,37 +2547,21 @@ END SUBROUTINE diffuco_trans_co2
             WRITE(*,*) '  tot_bare_soil(ji)  is', tot_bare_soil(ji)
 
           IF ( (tot_bare_soil(ji) .GT. min_sechiba) .AND. (vegtot(ji).GT. min_sechiba) ) THEN
-             
-                 WRITE(*,*) '  MORGANE09'
-
-             WRITE(*,*) '  vbeta4(ji) is', vbeta4(ji)
-             WRITE(*,*) '  tot_bare_soil(ji) is', tot_bare_soil(ji)
 
              vbeta4(ji) = tot_bare_soil(ji)
              
              ! We now have to redefine evap_bare_lim & evap_bare_lim_ns
-             IF (evap_bare_lim(ji) .GT. min_sechiba) THEN  
-                WRITE(*,*) '  MORGANE10'             
+             IF (evap_bare_lim(ji) .GT. min_sechiba) THEN           
                 evap_bare_lim_ns(ji,:) = evap_bare_lim_ns(ji,:) * vbeta4(ji) / evap_bare_lim(ji)
-             ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles  
-                WRITE(*,*) '  MORGANE11'           
+             ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles          
                 evap_bare_lim_ns(ji,:) = tot_bare_soil(ji)/vegtot(ji)               
-                WRITE(*,*) '  evap_bare_lim_ns(ji,:) is', evap_bare_lim_ns(ji,:)
-                WRITE(*,*) '  tot_bare_soil(ji) is', tot_bare_soil(ji)
-                WRITE(*,*) '  vegtot(ji)  is', vegtot(ji) 
              ENDIF
-             WRITE(*,*) '  MORGANE111' 
-             WRITE(*,*) '  vbeta4(ji) is', vbeta4(ji)
-             WRITE(*,*) '  evap_bare_lim(ji) is', evap_bare_lim(ji)
 
              evap_bare_lim(ji) = vbeta4(ji)
-
-             WRITE(*,*) '  evap_bare_lim_ns(ji,:) is', evap_bare_lim_ns(ji,:)
              ! consistent with evap_bare_lim(ji) = SUM(evap_bare_lim_ns(ji,:)*soiltile(ji,:)*vegtot(ji))
              ! as SUM(soiltile(ji,:)) = 1
 
           ELSE          
-             WRITE(*,*) '  MORGANE12' 
              vbeta4(ji) = zero
              evap_bare_lim_ns(ji,:) = zero
              evap_bare_lim(ji) = zero

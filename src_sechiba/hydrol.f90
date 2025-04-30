@@ -2243,19 +2243,10 @@ CONTAINS
 
        ! Calculate evap_bare_lim if it was not found in the restart file.
 
-       WRITE(*,*) 'DEBUG MORGANE01 BEFORE IF: ji=', ji, ' evap_bare_lim=', evap_bare_lim(ji)
-
        IF ( ALL(evap_bare_lim(:) == val_exp) ) THEN
-
-       WRITE(*,*) 'DEBUG MORGANE02'
 
           DO ji = 1, kjpindex
              evap_bare_lim(ji) =  SUM(evap_bare_lim_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
-
-                   WRITE(*,*) 'DEBUG MORGANE05: ji=', ji, ' evap_bare_lim=', evap_bare_lim(ji), &
-                 ' vegtot=', vegtot(ji), ' evap_bare_lim_ns*soiltile=', &
-                 evap_bare_lim_ns(ji,:), soiltile(ji,:)
-                 
           ENDDO
        END IF
 
@@ -3514,7 +3505,7 @@ CONTAINS
        ENDDO
     ENDDO
 
-    IF(DO_16TH_PFT_IS_URBAN) THEN
+    IF(DO_16TH_PFT_IS_URBAN) THEN  ! necessary to fix no Qle in 1D sim (urban pft evap through baresoil)
        DO ji =1, kjpindex
           frac_bare(ji,16) = un
        ENDDO
@@ -3528,18 +3519,7 @@ CONTAINS
        DO jv = 1, nvm
           DO ji =1, kjpindex
              IF(vegtot(ji) .GT. min_sechiba) THEN
-
-                          WRITE(*,*) 'MORGANE40'
-                          WRITE(*,*) 'DEBUG frac_bare_ns -- ji=', ji, ' jst=', jst, ' jv=', jv
-                          WRITE(*,*) '  frac_bare_ns (before)   =', frac_bare_ns(ji,jst)
-                          WRITE(*,*) '  vegetmax_soil           =', vegetmax_soil(ji,jv,jst)
-                          WRITE(*,*) '  frac_bare               =', frac_bare(ji,jv)
-                          WRITE(*,*) '  vegtot                  =', vegtot(ji)
-
                 frac_bare_ns(ji,jst) = frac_bare_ns(ji,jst) + vegetmax_soil(ji,jv,jst) * frac_bare(ji,jv) / vegtot(ji)
-
-                          WRITE(*,*) '  frac_bare_ns (after)    =', frac_bare_ns(ji,jst)
-
              ENDIF
           END DO
        ENDDO
@@ -4779,8 +4759,6 @@ CONTAINS
     evap_bare_lim(:) = zero
     evap_bare_lim_ns(:,:) = zero
 
-     WRITE(*,*) '  MORGANE15' 
-
     ! Loop on soil tiles  
     DO jst = 1,nstm
 
@@ -4967,39 +4945,15 @@ CONTAINS
        DO ji = 1, kjpindex
           evap_bare_lim_ns(ji,jst) = mask_soiltile(ji,jst) * &
                (tmcint(ji)-tmc(ji,jst)-flux_bottom(ji))
-
-               WRITE(*,*) 'DEBUG MORGANE16 evap_bare_lim_ns ji=', ji, ' jst=', jst
-               WRITE(*,*) '  mask_soiltile =', mask_soiltile(ji,jst)
-               WRITE(*,*) '  tmcint        =', tmcint(ji)
-               WRITE(*,*) '  tmc           =', tmc(ji,jst)
-               WRITE(*,*) '  flux_bottom   =', flux_bottom(ji)
-               WRITE(*,*) '  --> evap_bare_lim_ns =', evap_bare_lim_ns(ji,jst)
-
        END DO
 
        !! 8.10 evap_bare_lim_ns is turned from an evaporation rate to a beta
        DO ji = 1, kjpindex
           ! Here we weight evap_bare_lim_ns by the fraction of bare evaporating soil. 
           ! This is given by frac_bare_ns, taking into account bare soil under vegetation
-
-                 WRITE(*,*) 'DEBUG MORGANE19 evap_bare_lim weighting -- ji =', ji, ' jst =', jst
-                 WRITE(*,*) '  vegtot            =', vegtot(ji)
-                 WRITE(*,*) '  min_sechiba       =', min_sechiba
-                 WRITE(*,*) '  frac_bare_ns      =', frac_bare_ns(ji,jst)
-                 WRITE(*,*) '  evap_bare_lim_ns (before) =', evap_bare_lim_ns(ji,jst)
-
           IF(vegtot(ji) .GT. min_sechiba) THEN
-          WRITE(*,*) 'MORGANE17'
-          WRITE(*,*) '  evap_bare_lim_ns(ji,jst)            =', evap_bare_lim_ns(ji,jst)
-          WRITE(*,*) '  frac_bare_ns(ji,jst)          =', frac_bare_ns(ji,jst)
-
-
              evap_bare_lim_ns(ji,jst) = evap_bare_lim_ns(ji,jst) * frac_bare_ns(ji,jst)
-
-
-
           ELSE
-             WRITE(*,*) 'MORGANE18'
              evap_bare_lim_ns(ji,jst) = 0.
           ENDIF
        END DO
@@ -5021,23 +4975,14 @@ CONTAINS
           DO ji=1,kjpindex
              IF ((evapot(ji).GT.min_sechiba) .AND. &
                   (tmc_litter(ji,jst).GT.(tmc_litter_wilt(ji,jst)))) THEN
-          WRITE(*,*) 'MORGANE30'
-          WRITE(*,*) 'jst is', jst
-          WRITE(*,*) '  evap_bare_lim_ns(ji,jst)            =', evap_bare_lim_ns(ji,jst)
-          WRITE(*,*) '  evapot(ji)          =', evapot(ji)
-
                 evap_bare_lim_ns(ji,jst) = evap_bare_lim_ns(ji,jst) / evapot(ji)
              ELSEIF((evapot(ji).GT.min_sechiba).AND. &
                   (tmc_litter(ji,jst).GT.(tmc_litter_res(ji,jst)))) THEN
-                            WRITE(*,*) 'MORGANE31'
                 evap_bare_lim_ns(ji,jst) =  (un/deux) * evap_bare_lim_ns(ji,jst) / evapot(ji)
                 ! This is very arbitrary, with no justification from the literature
              ELSE
-                       WRITE(*,*) 'MORGANE32'
                 evap_bare_lim_ns(ji,jst) = zero
              END IF
-                       WRITE(*,*) 'MORGANE33'
-                       WRITE(*,*) 'jst is', jst
              evap_bare_lim_ns(ji,jst)=MAX(MIN(evap_bare_lim_ns(ji,jst),1.),0.)
           END DO
        ENDIF
@@ -5070,16 +5015,6 @@ CONTAINS
 
        evap_bare_lim(ji) =  SUM(evap_bare_lim_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
        r_soil(ji) =  SUM(r_soil_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
-
-     WRITE(*,*) 'DEBUG MORGANE06 ji=', ji
-     WRITE(*,*) '  vegtot=', vegtot(ji)
-     WRITE(*,*) '  soiltile(:)=', soiltile(ji,:)
-     WRITE(*,*) '  evap_bare_lim_ns(:)=', evap_bare_lim_ns(ji,:)
-     WRITE(*,*) '  r_soil_ns(:)=', r_soil_ns(ji,:)
-     WRITE(*,*) '  --> evap_bare_lim=', evap_bare_lim(ji)
-     WRITE(*,*) '  --> r_soil=', r_soil(ji)
-
-
     ENDDO
     ! si vegtot LE min_sechiba, evap_bare_lim_ns et evap_bare_lim valent zero
 
@@ -6294,13 +6229,6 @@ CONTAINS
        DO ji=1,kjpindex
           IF(evap_bare_lim(ji).GT.min_sechiba) THEN       
              ae_ns(ji,jst) = vevapnu(ji) * evap_bare_lim_ns(ji,jst)/evap_bare_lim(ji)
-
-         WRITE(*,*) 'DEBUG MORGANE04 ji=', ji, ' jst=', jst
-         WRITE(*,*) '  vevapnu=', vevapnu(ji)
-         WRITE(*,*) '  evap_bare_lim_ns=', evap_bare_lim_ns(ji,jst)
-         WRITE(*,*) '  evap_bare_lim=', evap_bare_lim(ji)
-         WRITE(*,*) '  --> ae_ns=', ae_ns(ji,jst)
-
           ENDIF
        ENDDO
     ENDDO
