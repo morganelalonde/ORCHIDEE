@@ -1276,19 +1276,36 @@ SUBROUTINE diffuco_snow (kjpindex, qair, qsatt, rau, u, v,q_cdrag, &
        !! \latexonly 
        !!     \input{diffucobare3.tex}
        !! \endlatexonly
+
+       WRITE(*,*) 'DEBUG MORGANE BARE EVAP CHECK at ji=', ji
+       WRITE(*,*) '  evap_bare_lim=', evap_bare_lim(ji)
+       WRITE(*,*) '  min_sechiba=', min_sechiba
+       WRITE(*,*) '  vbeta2+vbeta3 sum =', SUM(vbeta2(ji,:) + vbeta3(ji,:))
+       WRITE(*,*) '  (un - SUM) =', un - SUM(vbeta2(ji,:) + vbeta3(ji,:))
+
        
        IF ( (evap_bare_lim(ji) .GT. min_sechiba) .AND. &  
             ! in this case we can't have vegtot LE min_sechina, cf hydrol_soil
             (un - SUM(vbeta2(ji,:)+vbeta3(ji,:)) .GT. min_sechiba) ) THEN 
           ! eventually, none of the left-hand term is close to zero
 
+          WRITE(*,*) '  Condition passed. Setting vegtot and vbeta4...'
+
+
           vegtot(ji) = SUM(veget_max(ji,:)) 
+
+          WRITE(*,*) '  evap_bare_lim < (un - sum):', evap_bare_lim(ji) < (un - SUM(vbeta2(ji,:) + vbeta3(ji,:)))
+
+
           IF (evap_bare_lim(ji) < (un - SUM(vbeta2(ji,:)+vbeta3(ji,:)))) THEN 
              ! Standard case 
              vbeta4(ji) = evap_bare_lim(ji) 
+             WRITE(*,*) '  vbeta4 1st set to:', vbeta4(ji)
+
           ELSE 
              vbeta4(ji) = un - SUM(vbeta2(ji,:)+vbeta3(ji,:)) 
-             
+             WRITE(*,*) '  vbeta4 2nd set to:', vbeta4(ji)
+
              ! We now have to redefine evap_bare_lim & evap_bare_lim_ns 
              IF (evap_bare_lim(ji) .GT. min_sechiba) THEN 
                 evap_bare_lim_ns(ji,:) = evap_bare_lim_ns(ji,:) * vbeta4(ji) / evap_bare_lim(ji) 
@@ -1303,6 +1320,7 @@ SUBROUTINE diffuco_snow (kjpindex, qair, qsatt, rau, u, v,q_cdrag, &
           END IF
           
        ELSE ! instead of having very small vbeta4, we set everything to zero
+          WRITE(*,*) '  entering the else putting everything to zero'
           vbeta4(ji) = zero
           evap_bare_lim(ji) = zero
           evap_bare_lim_ns(ji,:) = zero
