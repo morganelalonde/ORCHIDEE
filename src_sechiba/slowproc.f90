@@ -749,6 +749,15 @@ CONTAINS
        ENDDO
      END DO
 
+     IF (DO_16TH_PFT_IS_URBAN) THEN
+     
+     DO ji =1, kjpindex
+       tot_bare_soil(ji) = tot_bare_soil(ji) + veget_max(:,16)
+     ENDDO
+
+     ENDIF
+
+
     !! 6.1. Call to interpolation of dynamic irrigation map, if time to do so (as for vegetmax interpolation)
     !! Important difference: veget map is updated every veget_update years. Irrig map_pft
     !! is updated every year for now
@@ -1924,6 +1933,14 @@ CONTAINS
           tot_bare_soil(ji) = tot_bare_soil(ji) + (veget_max(ji,jv) - veget(ji,jv))
        ENDDO
     END DO
+
+     IF (DO_16TH_PFT_IS_URBAN) THEN
+     
+     DO ji =1, kjpindex
+       tot_bare_soil(ji) = tot_bare_soil(ji) + veget_max(:,16)
+     ENDDO
+
+     ENDIF
 
     !! Calculate fraction of landuse tiles to be used only for diagnostic variables
     fraclut(:,:)=0
@@ -4671,6 +4688,14 @@ CONTAINS
           tot_bare_soil(ji) = tot_bare_soil(ji) + (veget_max(ji,jv) - veget(ji,jv))
        ENDDO
     END DO
+
+     IF (DO_16TH_PFT_IS_URBAN) THEN
+     
+     DO ji =1, kjpindex
+       tot_bare_soil(ji) = tot_bare_soil(ji) + veget_max(:,16)
+     ENDDO
+
+     ENDIF
 
     !! Do some basic tests on the surface fractions updated above 
     CALL slowproc_checkveget(kjpindex, frac_nobio, veget_max, veget, tot_bare_soil, soiltile)
