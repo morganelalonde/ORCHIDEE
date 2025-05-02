@@ -2560,25 +2560,52 @@ END SUBROUTINE diffuco_trans_co2
           vbeta1(ji) = zero
           vegtot(ji) = SUM(veget_max(ji,:))
             
+            WRITE(*,*) '             '
+            WRITE(*,*) '        --MORGANE15--           '
+            WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
             WRITE(*,*) '  vegtot(ji)  is', vegtot(ji)
             WRITE(*,*) '  tot_bare_soil(ji)  is', tot_bare_soil(ji)
 
           IF ( (tot_bare_soil(ji) .GT. min_sechiba) .AND. (vegtot(ji).GT. min_sechiba) ) THEN
 
+            WRITE(*,*) '             '
+            WRITE(*,*) '        --MORGANE16--           '
+
              vbeta4(ji) = tot_bare_soil(ji)
              
+            WRITE(*,*) '  vbeta4(ji)  is', vbeta4(ji)
+            WRITE(*,*) '  evap_bare_lim(ji)  is', evap_bare_lim(ji)
+
              ! We now have to redefine evap_bare_lim & evap_bare_lim_ns
              IF (evap_bare_lim(ji) .GT. min_sechiba) THEN           
+
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE17--           '
+
                 evap_bare_lim_ns(ji,:) = evap_bare_lim_ns(ji,:) * vbeta4(ji) / evap_bare_lim(ji)
+
+                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
+
              ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles          
-                evap_bare_lim_ns(ji,:) = tot_bare_soil(ji)/vegtot(ji)               
+
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE18--           '
+
+                evap_bare_lim_ns(ji,:) = tot_bare_soil(ji)/vegtot(ji)    
+
+                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
+
              ENDIF
 
              evap_bare_lim(ji) = vbeta4(ji)
              ! consistent with evap_bare_lim(ji) = SUM(evap_bare_lim_ns(ji,:)*soiltile(ji,:)*vegtot(ji))
              ! as SUM(soiltile(ji,:)) = 1
 
-          ELSE          
+          ELSE    
+
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE19--           '
+
              vbeta4(ji) = zero
              evap_bare_lim_ns(ji,:) = zero
              evap_bare_lim(ji) = zero
