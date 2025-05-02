@@ -4817,7 +4817,7 @@ CONTAINS
              ! We calculate a reduced demand, by means of a soil resistance (Sellers et al., 1992)
              ! It is based on the liquid SM only, like for us and humrel
               IF (do_rsoil) THEN
-              !   mc_rel(ji) = tmc_litter(ji,jst)/tmcs_litter(ji) ! tmc_litter based on mcl
+                 mc_rel(ji) = tmc_litter(ji,jst)/tmcs_litter(ji) ! tmc_litter based on mcl
                 ! based on SM in the top 4 soil layers (litter) to smooth variability
                  r_soil_ns(ji,jst) = exp(8.206 - 4.255 * mc_rel(ji))
               ELSE
