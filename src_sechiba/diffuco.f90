@@ -2562,7 +2562,7 @@ END SUBROUTINE diffuco_trans_co2
             
             WRITE(*,*) '             '
             WRITE(*,*) '        --MORGANE15--           '
-            WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
+            WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,:)
             WRITE(*,*) '  vegtot(ji)  is', vegtot(ji)
             WRITE(*,*) '  tot_bare_soil(ji)  is', tot_bare_soil(ji)
 
@@ -2584,7 +2584,7 @@ END SUBROUTINE diffuco_trans_co2
 
                 evap_bare_lim_ns(ji,:) = evap_bare_lim_ns(ji,:) * vbeta4(ji) / evap_bare_lim(ji)
 
-                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
+                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,:)
 
              ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles          
 
@@ -2593,7 +2593,7 @@ END SUBROUTINE diffuco_trans_co2
 
                 evap_bare_lim_ns(ji,:) = tot_bare_soil(ji)/vegtot(ji)    
 
-                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
+                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,:)
 
              ENDIF
 
