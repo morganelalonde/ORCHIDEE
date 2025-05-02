@@ -5038,8 +5038,6 @@ CONTAINS
        !! 8.11 Set evap_bare_lim_ns to zero if is_under_mcr at the end of the prognostic loop
        !!      (cf us, humrelv, vegstressv in 5.2)
        WHERE (is_under_mcr(:,jst))
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE14--           '
           evap_bare_lim_ns(:,jst) = zero
        ENDWHERE
 
