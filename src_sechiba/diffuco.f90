@@ -1259,62 +1259,62 @@ SUBROUTINE diffuco_snow (kjpindex, qair, qsatt, rau, u, v,q_cdrag, &
        !!     \input{diffucobare3.tex}
        !! \endlatexonly
 
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE05--           '
-                WRITE(*,*) '  evap_bare_lim       =', evap_bare_lim(ji)
-                WRITE(*,*) '             '
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE05--           '
+                ! WRITE(*,*) '  evap_bare_lim       =', evap_bare_lim(ji)
+                ! WRITE(*,*) '             '
 
        IF ( (evap_bare_lim(ji) .GT. min_sechiba) .AND. &  
             ! in this case we can't have vegtot LE min_sechina, cf hydrol_soil
             (un - SUM(vbeta2(ji,:)+vbeta3(ji,:)) .GT. min_sechiba) ) THEN 
           ! eventually, none of the left-hand term is close to zero
 
-          WRITE(*,*) '  Condition passed. Setting vegtot and vbeta4...'
+          ! WRITE(*,*) '  Condition passed. Setting vegtot and vbeta4...'
 
 
           vegtot(ji) = SUM(veget_max(ji,:)) 
 
-          WRITE(*,*) '  evap_bare_lim < (un - sum):', evap_bare_lim(ji) < (un - SUM(vbeta2(ji,:) + vbeta3(ji,:)))
+          ! WRITE(*,*) '  evap_bare_lim < (un - sum):', evap_bare_lim(ji) < (un - SUM(vbeta2(ji,:) + vbeta3(ji,:)))
 
 
           IF (evap_bare_lim(ji) < (un - SUM(vbeta2(ji,:)+vbeta3(ji,:)))) THEN 
              ! Standard case 
              vbeta4(ji) = evap_bare_lim(ji) 
 
-             WRITE(*,*) '             '
-             WRITE(*,*) '        --MORGANE06--           '
-             WRITE(*,*) '  vbeta4 1st set to:', vbeta4(ji)
+             ! WRITE(*,*) '             '
+             ! WRITE(*,*) '        --MORGANE06--           '
+             ! WRITE(*,*) '  vbeta4 1st set to:', vbeta4(ji)
 
           ELSE 
              vbeta4(ji) = un - SUM(vbeta2(ji,:)+vbeta3(ji,:)) 
-             WRITE(*,*) '  vbeta4 2nd set to:', vbeta4(ji)
+             ! WRITE(*,*) '  vbeta4 2nd set to:', vbeta4(ji)
 
              ! We now have to redefine evap_bare_lim & evap_bare_lim_ns 
              IF (evap_bare_lim(ji) .GT. min_sechiba) THEN 
 
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE03--           '
-                WRITE(*,*) 'DEBUG evap_bare_lim_ns scaling - ji =', ji
-                WRITE(*,*) '  vbeta4              =', vbeta4(ji)
-                WRITE(*,*) '  evap_bare_lim       =', evap_bare_lim(ji)
-                WRITE(*,*) '  evap_bare_lim_ns(:) =', evap_bare_lim_ns(ji,:)
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE03--           '
+                ! WRITE(*,*) 'DEBUG evap_bare_lim_ns scaling - ji =', ji
+                ! WRITE(*,*) '  vbeta4              =', vbeta4(ji)
+                ! WRITE(*,*) '  evap_bare_lim       =', evap_bare_lim(ji)
+                ! WRITE(*,*) '  evap_bare_lim_ns(:) =', evap_bare_lim_ns(ji,:)
 
                 evap_bare_lim_ns(ji,:) = evap_bare_lim_ns(ji,:) * vbeta4(ji) / evap_bare_lim(ji) 
-                WRITE(*,*) '  evap_bare_lim_ns(:) =', evap_bare_lim_ns(ji,:)
+                ! WRITE(*,*) '  evap_bare_lim_ns(:) =', evap_bare_lim_ns(ji,:)
 
              ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles      
 
-                 WRITE(*,*) '  evap_bare_lim_ns(ji,:) is', evap_bare_lim_ns(ji,:)
+                 ! WRITE(*,*) '  evap_bare_lim_ns(ji,:) is', evap_bare_lim_ns(ji,:)
 
                 evap_bare_lim_ns(ji,:) = tot_bare_soil(ji)/vegtot(ji) 
              ENDIF
 	 
              evap_bare_lim(ji) = vbeta4(ji) 
 
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE04--           '
-                WRITE(*,*) '  evap_bare_lim       =', evap_bare_lim(ji)
-                WRITE(*,*) '  vbeta4              =', vbeta4(ji)
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE04--           '
+                ! WRITE(*,*) '  evap_bare_lim       =', evap_bare_lim(ji)
+                ! WRITE(*,*) '  vbeta4              =', vbeta4(ji)
 
              ! consistent with evap_bare_lim(ji) = 
              ! SUM(evap_bare_lim_ns(ji,:)*soiltile(ji,:)*vegtot(ji)) 
@@ -1322,7 +1322,7 @@ SUBROUTINE diffuco_snow (kjpindex, qair, qsatt, rau, u, v,q_cdrag, &
           END IF
           
        ELSE ! instead of having very small vbeta4, we set everything to zero
-          WRITE(*,*) '  entering the else putting everything to zero'
+          ! WRITE(*,*) '  entering the else putting everything to zero'
           vbeta4(ji) = zero
           evap_bare_lim(ji) = zero
           evap_bare_lim_ns(ji,:) = zero
@@ -2560,40 +2560,40 @@ END SUBROUTINE diffuco_trans_co2
           vbeta1(ji) = zero
           vegtot(ji) = SUM(veget_max(ji,:))
             
-            WRITE(*,*) '             '
-            WRITE(*,*) '        --MORGANE15--           '
-            WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,:)
-            WRITE(*,*) '  vegtot(ji)  is', vegtot(ji)
-            WRITE(*,*) '  tot_bare_soil(ji)  is', tot_bare_soil(ji)
+            ! WRITE(*,*) '             '
+            ! WRITE(*,*) '        --MORGANE15--           '
+            ! WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,:)
+            ! WRITE(*,*) '  vegtot(ji)  is', vegtot(ji)
+            ! WRITE(*,*) '  tot_bare_soil(ji)  is', tot_bare_soil(ji)
 
           IF ( (tot_bare_soil(ji) .GT. min_sechiba) .AND. (vegtot(ji).GT. min_sechiba) ) THEN
 
-            WRITE(*,*) '             '
-            WRITE(*,*) '        --MORGANE16--           '
+            ! WRITE(*,*) '             '
+            ! WRITE(*,*) '        --MORGANE16--           '
 
              vbeta4(ji) = tot_bare_soil(ji)
              
-            WRITE(*,*) '  vbeta4(ji)  is', vbeta4(ji)
-            WRITE(*,*) '  evap_bare_lim(ji)  is', evap_bare_lim(ji)
+            ! WRITE(*,*) '  vbeta4(ji)  is', vbeta4(ji)
+            ! WRITE(*,*) '  evap_bare_lim(ji)  is', evap_bare_lim(ji)
 
              ! We now have to redefine evap_bare_lim & evap_bare_lim_ns
              IF (evap_bare_lim(ji) .GT. min_sechiba) THEN           
 
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE17--           '
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE17--           '
 
                 evap_bare_lim_ns(ji,:) = evap_bare_lim_ns(ji,:) * vbeta4(ji) / evap_bare_lim(ji)
 
-                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,:)
+                ! WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,:)
 
              ELSE ! we must re-invent evap_bare_lim_ns => uniform across soiltiles          
 
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE18--           '
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE18--           '
 
                 evap_bare_lim_ns(ji,:) = tot_bare_soil(ji)/vegtot(ji)    
 
-                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,:)
+                ! WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,:)
 
              ENDIF
 
@@ -2603,8 +2603,8 @@ END SUBROUTINE diffuco_trans_co2
 
           ELSE    
 
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE19--           '
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE19--           '
 
              vbeta4(ji) = zero
              evap_bare_lim_ns(ji,:) = zero

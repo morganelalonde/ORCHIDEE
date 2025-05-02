@@ -2247,16 +2247,16 @@ CONTAINS
 
           DO ji = 1, kjpindex
           
-          WRITE(*,*) '             '
-          WRITE(*,*) '        --MORGANE02--           '
-          WRITE(*,*) 'DEBUG evap_bare_lim - ji =', ji
-          WRITE(*,*) '  vegtot(ji)           =', vegtot(ji)
-          WRITE(*,*) '  soiltile(ji,:)       =', soiltile(ji,:)
-          WRITE(*,*) '  evap_bare_lim_ns(ji,:)=', evap_bare_lim_ns(ji,:)
+          ! WRITE(*,*) '             '
+          ! WRITE(*,*) '        --MORGANE02--           '
+          ! WRITE(*,*) 'DEBUG evap_bare_lim - ji =', ji
+          ! WRITE(*,*) '  vegtot(ji)           =', vegtot(ji)
+          ! WRITE(*,*) '  soiltile(ji,:)       =', soiltile(ji,:)
+          ! WRITE(*,*) '  evap_bare_lim_ns(ji,:)=', evap_bare_lim_ns(ji,:)
 
              evap_bare_lim(ji) =  SUM(evap_bare_lim_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
 
-          WRITE(*,*) '  evap_bare_lim(ji)    =', evap_bare_lim(ji)
+          ! WRITE(*,*) '  evap_bare_lim(ji)    =', evap_bare_lim(ji)
 
           ENDDO
        END IF
@@ -4954,16 +4954,20 @@ CONTAINS
        ! The numerical errors of tridiag close to saturation cannot be simply solved here,
        ! we can only hope they are not too large because we don't add water at this stage... 
        DO ji = 1, kjpindex
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE07--           '
-                WRITE(*,*) 'DEBUG evap_bare_lim_ns calc: ji =', ji, ' jst =', jst
-                WRITE(*,*) '  mask_soiltile     =', mask_soiltile(ji,jst)
-                WRITE(*,*) '  tmcint            =', tmcint(ji)
-                WRITE(*,*) '  tmc               =', tmc(ji,jst)
-                WRITE(*,*) '  flux_bottom       =', flux_bottom(ji)
-                WRITE(*,*) '  evap_bare_lim_ns  =', evap_bare_lim_ns(ji,jst)
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE07--           '
+                ! WRITE(*,*) 'DEBUG evap_bare_lim_ns calc: ji =', ji, ' jst =', jst
+                ! WRITE(*,*) '  mask_soiltile     =', mask_soiltile(ji,jst)
+                ! WRITE(*,*) '  tmcint            =', tmcint(ji)
+                ! WRITE(*,*) '  tmc               =', tmc(ji,jst)
+                ! WRITE(*,*) '  flux_bottom       =', flux_bottom(ji)
+                ! WRITE(*,*) '  evap_bare_lim_ns  before =', evap_bare_lim_ns(ji,jst)
+
           evap_bare_lim_ns(ji,jst) = mask_soiltile(ji,jst) * &
                (tmcint(ji)-tmc(ji,jst)-flux_bottom(ji))
+                ! WRITE(*,*) '  evap_bare_lim_ns  before =', evap_bare_lim_ns(ji,jst)
+
+
        END DO
 
        !! 8.10 evap_bare_lim_ns is turned from an evaporation rate to a beta
@@ -4971,15 +4975,17 @@ CONTAINS
           ! Here we weight evap_bare_lim_ns by the fraction of bare evaporating soil. 
           ! This is given by frac_bare_ns, taking into account bare soil under vegetation
           IF(vegtot(ji) .GT. min_sechiba) THEN
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE08--           '
-                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
-                WRITE(*,*) '  frac_bare_ns  =', frac_bare_ns(ji,jst)
-                WRITE(*,*) '  vegtot  =', vegtot(ji)
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE08--           '
+                ! WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
+                ! WRITE(*,*) '  frac_bare_ns  =', frac_bare_ns(ji,jst)
+                ! WRITE(*,*) '  vegtot  =', vegtot(ji)
              evap_bare_lim_ns(ji,jst) = evap_bare_lim_ns(ji,jst) * frac_bare_ns(ji,jst)
+                ! WRITE(*,*) '  evap_bare_lim_ns after =', evap_bare_lim_ns(ji,jst)
+
           ELSE
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE09--           '
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE09--           '
              evap_bare_lim_ns(ji,jst) = 0.
           ENDIF
        END DO
@@ -5002,35 +5008,38 @@ CONTAINS
              IF ((evapot(ji).GT.min_sechiba) .AND. &
                   (tmc_litter(ji,jst).GT.(tmc_litter_wilt(ji,jst)))) THEN
 
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE10--           '
-                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE10--           '
+                ! WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
+                ! WRITE(*,*) '  evapot(ji) =', evapot(ji)
 
                 evap_bare_lim_ns(ji,jst) = evap_bare_lim_ns(ji,jst) / evapot(ji)
+
+                ! WRITE(*,*) '  evap_bare_lim_ns after, evap_bare_lim_ns(ji,jst)
 
              ELSEIF((evapot(ji).GT.min_sechiba).AND. &
                   (tmc_litter(ji,jst).GT.(tmc_litter_res(ji,jst)))) THEN
 
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE11--           '
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE11--           '
 
                 evap_bare_lim_ns(ji,jst) =  (un/deux) * evap_bare_lim_ns(ji,jst) / evapot(ji)
                 ! This is very arbitrary, with no justification from the literature
 
              ELSE
 
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE12--           '
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE12--           '
 
                 evap_bare_lim_ns(ji,jst) = zero
 
              END IF
 
-                WRITE(*,*) '             '
-                WRITE(*,*) '        --MORGANE13--           '
-                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
+                ! WRITE(*,*) '             '
+                ! WRITE(*,*) '        --MORGANE13--           '
+                ! WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
              evap_bare_lim_ns(ji,jst)=MAX(MIN(evap_bare_lim_ns(ji,jst),1.),0.)
-                WRITE(*,*) '  evap_bare_lim_ns after =', evap_bare_lim_ns(ji,jst)
+                ! WRITE(*,*) '  evap_bare_lim_ns after =', evap_bare_lim_ns(ji,jst)
 
           END DO
        ENDIF
@@ -5058,21 +5067,21 @@ CONTAINS
     !! 9. evap_bar_lim is the grid-cell scale beta
     DO ji = 1, kjpindex
 
-        WRITE(*,*) '             '
-        WRITE(*,*) '        --MORGANE01--           '
-        WRITE(*,*) 'DEBUG ji =', ji
-        WRITE(*,*) '  vegtot           =', vegtot(ji)
-        WRITE(*,*) '  soiltile         =', soiltile(ji,:)
-        WRITE(*,*) '  evap_bare_lim_ns =', evap_bare_lim_ns(ji,:)
-        WRITE(*,*) '  r_soil_ns        =', r_soil_ns(ji,:)
+        ! WRITE(*,*) '             '
+        ! WRITE(*,*) '        --MORGANE01--           '
+        ! WRITE(*,*) 'DEBUG ji =', ji
+        ! WRITE(*,*) '  vegtot           =', vegtot(ji)
+        ! WRITE(*,*) '  soiltile         =', soiltile(ji,:)
+        ! WRITE(*,*) '  evap_bare_lim_ns =', evap_bare_lim_ns(ji,:)
+        ! WRITE(*,*) '  r_soil_ns        =', r_soil_ns(ji,:)
 
        evap_bare_lim(ji) =  SUM(evap_bare_lim_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
        r_soil(ji) =  SUM(r_soil_ns(ji,:)*vegtot(ji)*soiltile(ji,:))
 
-        WRITE(*,*) '             '
-        WRITE(*,*) '  evap_bare_lim    =', evap_bare_lim(ji)
-        WRITE(*,*) '  r_soil           =', r_soil(ji)
-        WRITE(*,*) '             '
+        ! WRITE(*,*) '             '
+        ! WRITE(*,*) '  evap_bare_lim    =', evap_bare_lim(ji)
+        ! WRITE(*,*) '  r_soil           =', r_soil(ji)
+        ! WRITE(*,*) '             '
 
     ENDDO
     ! si vegtot LE min_sechiba, evap_bare_lim_ns et evap_bare_lim valent zero
