@@ -4812,38 +4812,38 @@ CONTAINS
 
        DO ji = 1, kjpindex
           
-          ! IF (vegtot(ji).GT.min_sechiba) THEN
+           IF (vegtot(ji).GT.min_sechiba) THEN
              
              ! We calculate a reduced demand, by means of a soil resistance (Sellers et al., 1992)
              ! It is based on the liquid SM only, like for us and humrel
-             ! IF (do_rsoil) THEN
+              IF (do_rsoil) THEN
               !   mc_rel(ji) = tmc_litter(ji,jst)/tmcs_litter(ji) ! tmc_litter based on mcl
                 ! based on SM in the top 4 soil layers (litter) to smooth variability
-             !    r_soil_ns(ji,jst) = exp(8.206 - 4.255 * mc_rel(ji))
-           !   ELSE
+                 r_soil_ns(ji,jst) = exp(8.206 - 4.255 * mc_rel(ji))
+              ELSE
                 r_soil_ns(ji,jst) = zero
-          !    ENDIF
+              ENDIF
 
              ! Aerodynamic resistance
-         !     speed = MAX(min_wind, SQRT (u(ji)*u(ji) + v(ji)*v(ji)))
+              speed = MAX(min_wind, SQRT (u(ji)*u(ji) + v(ji)*v(ji)))
 
-           !   IF (speed * tq_cdrag(ji) .GT. min_sechiba) THEN
-           !      ra = un / (speed * tq_cdrag(ji))
-          !       evap_soil(ji) = evapot_penm(ji) / (un + r_soil_ns(ji,jst)/ra)
-          !    ELSE
+              IF (speed * tq_cdrag(ji) .GT. min_sechiba) THEN
+                 ra = un / (speed * tq_cdrag(ji))
+                 evap_soil(ji) = evapot_penm(ji) / (un + r_soil_ns(ji,jst)/ra)
+              ELSE
 
-           !      evap_soil(ji) = evapot_penm(ji)
+                 evap_soil(ji) = evapot_penm(ji)
 
-          !    ENDIF
+              ENDIF
                           
-          !    flux_top(ji) = evap_soil(ji) * &
-          !         AINT(frac_bare_ns(ji,jst)+un-min_sechiba)
-        !   ELSE
+             flux_top(ji) = evap_soil(ji) * &
+                   AINT(frac_bare_ns(ji,jst)+un-min_sechiba)
+          ELSE
              
              flux_top(ji) = zero
              r_soil_ns(ji,jst) = zero
              
-        !   ENDIF
+           ENDIF
        ENDDO
 
        ! We don't use rootsinks, because we assume there is no transpiration in the bare soil fraction (??)
@@ -4954,6 +4954,14 @@ CONTAINS
        ! The numerical errors of tridiag close to saturation cannot be simply solved here,
        ! we can only hope they are not too large because we don't add water at this stage... 
        DO ji = 1, kjpindex
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE07--           '
+                WRITE(*,*) 'DEBUG evap_bare_lim_ns calc: ji =', ji, ' jst =', jst
+                WRITE(*,*) '  mask_soiltile     =', mask_soiltile(ji,jst)
+                WRITE(*,*) '  tmcint            =', tmcint(ji)
+                WRITE(*,*) '  tmc               =', tmc(ji,jst)
+                WRITE(*,*) '  flux_bottom       =', flux_bottom(ji)
+                WRITE(*,*) '  evap_bare_lim_ns  =', evap_bare_lim_ns(ji,jst)
           evap_bare_lim_ns(ji,jst) = mask_soiltile(ji,jst) * &
                (tmcint(ji)-tmc(ji,jst)-flux_bottom(ji))
        END DO
@@ -4963,8 +4971,15 @@ CONTAINS
           ! Here we weight evap_bare_lim_ns by the fraction of bare evaporating soil. 
           ! This is given by frac_bare_ns, taking into account bare soil under vegetation
           IF(vegtot(ji) .GT. min_sechiba) THEN
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE08--           '
+                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
+                WRITE(*,*) '  frac_bare_ns  =', frac_bare_ns(ji,jst)
+                WRITE(*,*) '  vegtot  =', vegtot(ji)
              evap_bare_lim_ns(ji,jst) = evap_bare_lim_ns(ji,jst) * frac_bare_ns(ji,jst)
           ELSE
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE09--           '
              evap_bare_lim_ns(ji,jst) = 0.
           ENDIF
        END DO
@@ -4986,15 +5001,37 @@ CONTAINS
           DO ji=1,kjpindex
              IF ((evapot(ji).GT.min_sechiba) .AND. &
                   (tmc_litter(ji,jst).GT.(tmc_litter_wilt(ji,jst)))) THEN
+
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE10--           '
+                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
+
                 evap_bare_lim_ns(ji,jst) = evap_bare_lim_ns(ji,jst) / evapot(ji)
+
              ELSEIF((evapot(ji).GT.min_sechiba).AND. &
                   (tmc_litter(ji,jst).GT.(tmc_litter_res(ji,jst)))) THEN
+
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE11--           '
+
                 evap_bare_lim_ns(ji,jst) =  (un/deux) * evap_bare_lim_ns(ji,jst) / evapot(ji)
                 ! This is very arbitrary, with no justification from the literature
+
              ELSE
+
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE12--           '
+
                 evap_bare_lim_ns(ji,jst) = zero
+
              END IF
+
+                WRITE(*,*) '             '
+                WRITE(*,*) '        --MORGANE13--           '
+                WRITE(*,*) '  evap_bare_lim_ns before =', evap_bare_lim_ns(ji,jst)
              evap_bare_lim_ns(ji,jst)=MAX(MIN(evap_bare_lim_ns(ji,jst),1.),0.)
+                WRITE(*,*) '  evap_bare_lim_ns after =', evap_bare_lim_ns(ji,jst)
+
           END DO
        ENDIF
 

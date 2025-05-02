@@ -750,13 +750,6 @@ CONTAINS
           !! \endlatexonly          
           cd_tmp=cd_neut/(un + trois * cb * zri * zscf)
 
-           WRITE(*,*) 'DEBUG cd_tmp (1st):', cd_tmp, ' cd_neut=', cd_neut, ' un=', un, &
-           ' trois=', trois, ' cb=', cb, ' zri=', zri, ' zscf=', zscf, &
-           ' trois*cb*zri*zscf=', trois * cb * zri * zscf, &
-           ' denom =', un + trois * cb * zri * zscf
-
-
-
        ELSE
           
           !! 1a).7.2 - for the unstable case (i.e. $R_i$ < 0)
