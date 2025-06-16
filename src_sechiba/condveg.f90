@@ -784,7 +784,7 @@ CONTAINS
              IF (do_alb_urban) THEN
                 alb_urban(:,ks) = soilalb_urban(:,ks)
              ELSE 
-                alb_urban_c(:,ks) = 0.15 ! Need to improve this part, better if can be in orchidee default and possibly changed in run.def
+                alb_urban_c(:,ks) = mean_alb_urban 
                 alb_urban(:,ks) = alb_urban_c(:,ks)
              ENDIF
           ENDIF

@@ -535,6 +535,14 @@ CONTAINS
     !Config Units = [-]  
     CALL getin_p('ALB_ICE',alb_ice)
     !
+    !Config Key   = MEAN_ALB_URBAN
+    !Config Desc  = mean urban albedo
+    !Config If    = OK_SECHIBA 
+    !Config Def   = 0.136
+    !Config Help  = 
+    !Config Units = [-]  
+    CALL getin_p('MEAN_ALB_URBAN',mean_alb_urban)
+    !
     ! Get the fixed snow albedo if needed
     !
     !Config Key   = CONDVEG_SNOWA

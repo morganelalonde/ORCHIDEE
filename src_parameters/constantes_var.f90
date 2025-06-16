@@ -323,6 +323,12 @@ MODULE constantes_var
                                                      !! This variable will be set to false for teststomate. 
 !$OMP THREADPRIVATE(allow_forcing_write)
 
+                         !------------------------!
+                         !  URBAN PARAMETERS    !
+                         !------------------------!
+
+REAL(r_std), SAVE :: mean_alb_urban = 0.136      !! mean urban albedo (-)
+!$OMP THREADPRIVATE(mean_alb_urban)
 
 
                          !------------------------!

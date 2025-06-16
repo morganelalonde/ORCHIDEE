@@ -1815,3 +1815,6 @@ XIOS_REMAP_OUTPUT =  True
 # DT_STOMATE ([seconds]) :  Time step of STOMATE and other slow processes 	{OK_STOMATE}
 DT_STOMATE =  86400. 
 
+# ALB_URBAN_C ([-]) :  Time step of STOMATE and other slow processes 	{OK_STOMATE}
+MEAN_ALB_URBAN =  0.136 
+
