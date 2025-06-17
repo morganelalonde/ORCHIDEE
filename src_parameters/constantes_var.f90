@@ -329,7 +329,8 @@ MODULE constantes_var
 
 REAL(r_std), SAVE :: mean_alb_urban = 0.136      !! mean urban albedo (-)
 !$OMP THREADPRIVATE(mean_alb_urban)
-
+REAL(r_std), SAVE :: mean_building_height = 10      !! mean building height (m)
+!$OMP THREADPRIVATE(mean_building_height)
 
                          !------------------------!
                          !  SECHIBA PARAMETERS    !

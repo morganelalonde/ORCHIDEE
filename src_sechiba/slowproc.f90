@@ -1848,6 +1848,10 @@ CONTAINS
           height(:,jv) = height_presc(jv)
        ENDDO
        ! If urban config with wudapt info, update values for PFT16
+       IF(DO_16TH_PFT_IS_URBAN) THEN
+        height(:,16) = mean_building_height
+       ENDIF
+
        IF (DO_HEIGHT_BUILDING) THEN
         jv = 16
         CALL slowproc_height_buildings(kjpindex, lalo, neighbours,  resolution, contfrac, height_buildings)

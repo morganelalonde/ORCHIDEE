@@ -1875,7 +1875,7 @@ CONTAINS
     !Config Key   = SLOWPROC_HEIGHT
     !Config Desc  = prescribed height of vegetation 
     !Config if    = OK_SECHIBA
-    !Config Def   = 0., 30., 30., 20., 20., 20., 15., 15., 15., .5, .6, 1., 1., 0.
+    !Config Def   = 0., 30., 30., 20., 20., 20., 15., 15., 15., .5, .6, 1., 1., 10.
     !Config Help  =
     !Config Units = [m] 
     CALL getin_p('SLOWPROC_HEIGHT',height_presc)

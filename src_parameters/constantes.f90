@@ -543,6 +543,14 @@ CONTAINS
     !Config Units = [-]  
     CALL getin_p('MEAN_ALB_URBAN',mean_alb_urban)
     !
+    !Config Key   = MEAN_BUILDING_HEIGHT
+    !Config Desc  = mean building height
+    !Config If    = OK_SECHIBA 
+    !Config Def   = 0.136
+    !Config Help  = 
+    !Config Units = [-]  
+    CALL getin_p('MEAN_BUILDING_HEIGHT',mean_building_height)
+    !
     ! Get the fixed snow albedo if needed
     !
     !Config Key   = CONDVEG_SNOWA

@@ -108,7 +108,7 @@ MODULE constantes_mtc
 
   REAL(r_std), PARAMETER, DIMENSION(nvmc) :: height_presc_mtc  =  &     !! prescribed height of vegetation (m)
   & (/  0.0,   30.0,   30.0,   20.0,   20.0,   20.0,   15.0,  &         !! Value for height_presc : one for each vegetation type
-  &    15.0,   15.0,    0.5,    0.6,    1.0,    1.0,   0.0  /)
+  &    15.0,   15.0,    0.5,    0.6,    1.0,    1.0,   10.0  /)
 
   REAL(r_std), PARAMETER, DIMENSION(nvmc) :: z0_over_height_mtc = &         !! Factor to calculate roughness height from 
   & (/  0.0, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625, 0.0625,  &         !! vegetation height (unitless)   
